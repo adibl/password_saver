@@ -1,0 +1,49 @@
+title REST API
+
+actor client
+
+participant authentication_server
+database authentication_database
+
+participant resorce_server
+database resorce_database
+
+
+group autentication
+client->authentication_server: autentication cradentials
+activate authentication_server
+authentication_server->authentication_database: autentication
+activate authentication_database
+authentication_server <<--authentication_database: valid or not
+deactivate authentication_database
+client <<-- authentication_server: JWT token or eror
+deactivate authentication_server
+end
+space 
+group recovery
+client ->authentication_server: ask for recovery question
+client <<--authentication_server: recovery qestion
+client ->authentication_server: ansear to recovery question + username
+activate authentication_server
+authentication_server ->authentication_database: get user ansear
+authentication_server <<--authentication_database: user ansear
+authentication_server ->>client: SMS to phone with recovery link
+client <<--authentication_server: prosses completed
+deactivate authentication_server
+space 
+
+client ->>authentication_server: recovery data
+activate authentication_server
+authentication_server ->authentication_database: update password and username
+authentication_server <<--authentication_database: done
+deactivate authentication_server
+end 
+space 
+group passwords API
+client ->resorce_server: API request + token
+activate resorce_server
+resorce_server ->resorce_database: sql reqest
+resorce_server <<--resorce_database: 200 or data
+client <<--resorce_server: 200 + data
+deactivate resorce_server
+end 
