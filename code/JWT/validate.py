@@ -15,18 +15,9 @@ def decrypte(Token, key):
     return ET.claims
 
 
-def validate(Token):
+def validate(Token, key):
+    Token = decrypte(Token, key)
     Token = ast.literal_eval(Token)
-    print Token
-    print Token['iat']
-    print database.read_iss(Token['iss'])
     if Token['iat'] > database.read_iss(Token['iss']):
         return True
     return False
-
-
-
-
-if __name__ == '__main__':
-    database.write_iss('safdfs', int(time.time()))
-    print validate(decrypte(*create.create('aa')))

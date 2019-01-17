@@ -5,6 +5,10 @@ description
 """
 import __validate
 
+import logging
+from code import setup_logging
+setup_logging()
+
 def handle_client(data):
     """
     :param data:

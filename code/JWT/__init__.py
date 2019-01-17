@@ -3,11 +3,9 @@ name:
 date:
 description
 """
+import sys
 
+sys.path.insert(0, "D:/adi/Documents/password_saver/code/JWT")  # FIXME: make this unesesery
 
-def main():
-    pass
-
-
-if __name__ == '__main__':
-    main()
+from create import create
+from validate import validate

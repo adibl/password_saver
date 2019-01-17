@@ -3,18 +3,22 @@ name:
 date:
 description
 """
-import logging
+import logging, logging.config
 import socket
 import threading
-
+import os
 import sys
 sys.path.insert(0, "D:/adi/Documents/password_saver/code/Resorce") #FIXME: make this unesesery
 import Resorce
+
+import __logs
+__logs.setup_logging()
 
 
 HOST = '127.0.0.1'
 PORT = 50007
 CONN_LOG = "connect IP:{0} PORT:{1}"
+
 
 def lisening():
     """
@@ -25,7 +29,7 @@ def lisening():
     s.listen(5)
     while True:
         conn, addr = s.accept()
-        logger.log(logging.INFO, CONN_LOG.format(addr[0], str(addr[1])))
+        logging.info(CONN_LOG.format(addr[0], str(addr[1])))
         threading.Thread(target=handle_client, args=(conn,)).start()
 
 
@@ -36,9 +40,10 @@ def handle_client(conn):
     :return:
     """
     data = conn.recv(1024)
-    logger.log(logging.INFO, "RECV:" + data)
+    logging.debug("recv:" + data)
     responce = Resorce.process_request(data)
     conn.sendall(responce)
+    logging.debug('sent:' + data)
     conn.close()
 
 def main():
@@ -46,20 +51,4 @@ def main():
 
 
 if __name__ == '__main__':
-    global logger
-    logger = logging.getLogger('simple_example')
-    logger.setLevel(logging.DEBUG)
-
-    # create console handler and set level to debug
-    fh = logging.FileHandler('spam.log')
-    fh.setLevel(logging.DEBUG)
-
-    # create formatter
-    formatter = logging.Formatter('%(thread)d-%(levelname)s-%(message)s')
-
-    # add formatter to ch
-    fh.setFormatter(formatter)
-
-    # add ch to logger
-    logger.addHandler(fh)
     main()
