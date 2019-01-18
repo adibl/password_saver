@@ -1,9 +1,9 @@
 """
 name: adi bleyer
 date: =30.12.18
-the API of the resorce server, wrap everything.
-get REST API request and return the response.
-support multi ?????????
+validate the request with re.
+have defs to extract the data from the request.
+
 """
 import re
 # regex
@@ -26,7 +26,7 @@ def validate_request(request):
     :param request: the client request
     :return: True if the request is valid and false otherwise
     """
-    if __validate_URI(request) and __validate_JWT(request) and __validate_content_type(request):
+    if __validate_URI(request) and __validate_Authentication(request) and __validate_content_type(request):
         uri = get_URI(request)
         verb = get_verb(request)
         jwt = get_JWT(request)
@@ -40,34 +40,61 @@ def validate_request(request):
             return NOT_FOUND
 
     else:
-        print __validate_URI(request)
-        print __validate_JWT(request)
-        print __validate_content_type(request)
         return BAD_REQUEST
 
 
 def get_verb(request):
+    """
+    return the http verb of the request
+    :param str request: the client request
+    :return: the client request HTTP verb
+    :rtype: str
+    """
     return RE_URI.search(request).group(1)
 
 
 def __validate_content_type(request):
+    """
+    validate the request content type is existing an matching
+    :param str request: the client request
+    :return: True if request have valid content type, False otherwise
+    """
     return bool(RE_CONTENT_TYPE.search(request))
 
 
 def __validate_URI(request):
+    """
+    validate the URI structure
+    :param str request: the client request
+    :return: True if the structure is valid, False otherwise
+    """
     return bool(RE_URI.search(request))
 
 def get_URI(request):
+    """
+    get the request URL
+    :param str request: the client request
+    :return: the request URI
+    :rtype: str
+    """
     return RE_URI.search(request).group(2)
 
-def __validate_JWT(request):
+def __validate_Authentication(request):
+    """
+    validate Autentication header structure
+    :param str request: the client request
+    :return: True if structure is valid, false otherwise
+    """
     return bool(RE_JWT.search(request))
 
 
 def get_JWT(request):
     """
     :param request: the client full request
-    :return: string of the JWT if fount False otherwise
+    :return: JWT if fount False otherwise
+    :rtype: str
     """
-    return RE_JWT.search(request).group(1)
+    if RE_JWT.search(request):
+        return RE_JWT.search(request).group(1)
+    return False
 

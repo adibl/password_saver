@@ -5,14 +5,10 @@ description
 """
 import __validate
 
-import logging
-from code import setup_logging
-setup_logging()
-
 def handle_client(data):
     """
-    :param data:
-    :return:
+    :param data: the client request
+    :return: the needed responce
     """
     data = data.replace('\r\n', '\n')
     code = __validate.validate_request(data)

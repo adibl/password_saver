@@ -22,7 +22,7 @@ import __validate as validate
 ])
 def test_valid_JWT(packege, is_valid):
 
-    assert validate.__validate_JWT(packege) == is_valid
+    assert validate.__validate_Authentication(packege) == is_valid
 
 
 @pytest.mark.parametrize("packege,JWT", [

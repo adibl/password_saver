@@ -10,8 +10,8 @@ import logging.config
 import yaml
 
 def setup_logging(env_key='LOG_CFG'):
-    """Setup logging configuration
-
+    """
+    Setup logging configuration
     """
     path = CONF_FILE
     value = os.getenv(env_key, None)
