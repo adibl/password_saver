@@ -6,10 +6,11 @@ description
 from jwcrypto import jwt, jwe, jwk
 import time
 from jwcrypto.common import json_decode
+import os
 
-with open('public_signing.pem', 'rb') as f: #FIXME: take files from other directory
+with open(os.path.join(os.path.dirname(__file__), 'public_signing.pem'), 'rb') as f: #FIXME: take files from other directory
     KEY = json_decode(f.read())
-with open('public_encrypte_public.pem', 'rb') as f:
+with open(os.path.join(os.path.dirname(__file__), 'public_encrypte_public.pem'), 'rb') as f:
     ENC_KEY = json_decode(f.read())
 def create(userID, timeout=25):
     """
@@ -41,5 +42,5 @@ def create(userID, timeout=25):
     E = jwe.JWE(plaintext=signed_token, protected=eprot, recipient=jwk.JWK(**ENC_KEY))
     # encrypt with a public key
     # serialize it
-    encrypted_signed_token = E.serialize()
+    encrypted_signed_token = E.serialize(compact=True)
     return encrypted_signed_token

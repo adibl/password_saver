@@ -10,7 +10,7 @@ from Autentication.JWT import validate
 # regex
 URI_PREMITED_LIST = {"/client/try": ["GET", "POST"]} # TODO: add security level to premited actions
 RE_URI = re.compile(r"^(GET|PUT|POST|PUTCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
-RE_JWT = re.compile(r"^Authorization: Bearer (\w+\.\w+\.\w+\w)$", re.M)
+RE_JWT = re.compile(r"^Authorization: Bearer (.*)$", re.M)
 RE_CONTENT_TYPE = re.compile("^Content-Type: (application/json|application/xml)$", re.M)
 OK = 200
 METHOD_NOT_ALLOWED = 405
