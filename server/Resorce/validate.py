@@ -6,6 +6,7 @@ have defs to extract the data from the request.
 
 """
 import re
+from Autentication.JWT import validate
 # regex
 URI_PREMITED_LIST = {"/client/try": ["GET", "POST"]} # TODO: add security level to premited actions
 RE_URI = re.compile(r"^(GET|PUT|POST|PUTCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
@@ -15,14 +16,15 @@ OK = 200
 METHOD_NOT_ALLOWED = 405
 BAD_REQUEST = 400
 NOT_FOUND = 404
+UNAUTHORIZED = 401
 
 def validate_request(request):
     """
     valid the request:
     1.correct structure (http verb, url, http version, JWT token, content-type)
     2.premited URL
-    3.valid JWT TODO: all
-    4.premited HTTp verb TODO: add sec levels from JWT
+    3.valid JWT TODO: remove from here and move to Autentication API file
+    4.premited HTTp verb TODO: rem0ove from here and move to Autentication API file
     :param request: the client request
     :return: True if the request is valid and false otherwise
     """
@@ -30,10 +32,12 @@ def validate_request(request):
         uri = get_URI(request)
         verb = get_verb(request)
         jwt = get_JWT(request)
+        if not validate(jwt):
+            return UNAUTHORIZED
         if uri in URI_PREMITED_LIST.keys():
             if verb in URI_PREMITED_LIST[uri]:
                 return OK
-                # TODO: validate JWT
+
             else:
                 return METHOD_NOT_ALLOWED
         else:

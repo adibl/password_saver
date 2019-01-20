@@ -3,7 +3,7 @@ name:
 date:
 description
 """
-import __validate
+import validate
 
 def handle_client(data):
     """
@@ -11,14 +11,14 @@ def handle_client(data):
     :return: the needed responce
     """
     data = data.replace('\r\n', '\n')
-    code = __validate.validate_request(data)
-    if code == __validate.OK:
+    code = validate.validate_request(data)
+    if code == validate.OK:
         responce = prosses_request(data)
-    elif code == __validate.BAD_REQUEST:
+    elif code == validate.BAD_REQUEST:
         responce = bad_request(data)
-    elif code == __validate.METHOD_NOT_ALLOWED:
+    elif code == validate.METHOD_NOT_ALLOWED:
         responce = method_not_allowed(data)
-    elif code == __validate.NOT_FOUND:
+    elif code == validate.NOT_FOUND:
         responce = not_found(data)
     else:
         responce = bad_request(data)
@@ -39,7 +39,7 @@ def method_not_allowed(request):
     s = ''
     s += "HTTP/1.1 405 METHOD NOT ALLOWED\r\n"
     s += "Access-Control-Request-Method: " + " ".join(
-        __validate.URI_PREMITED_LIST[__validate.get_URI(request)]) + '\r\n'
+        validate.URI_PREMITED_LIST[validate.get_URI(request)]) + '\r\n'
     s += '\r\n'
     return s
 

@@ -5,7 +5,7 @@ description
 """
 
 import pytest
-import __validate as validate
+import validate as validate
 
 @pytest.mark.parametrize("packege,is_valid", [
 ("GET /client/try?id=123 HTTP/1.1\nAuthorization: Bearer AB.CDE.FG\nContent-Type: application/json\n", True),

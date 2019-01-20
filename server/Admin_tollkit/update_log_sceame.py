@@ -6,12 +6,10 @@ update the log settings to the setting in the file of the script argoment
 import socket, struct
 import yaml
 import sys
-import json
 import logging.config
 import logging
 
 if len(sys.argv) == 2:
-    print sys.argv[1]
     with open(sys.argv[1], 'r') as f:
         data_to_send = yaml.safe_load(f.read()) #FIXME: transfor to str taht is good for recv
 
