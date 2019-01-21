@@ -1,0 +1,7 @@
+
+npython:S117("WRename this local variable "userID" to match the regular expression ^[_a-z][a-z0-9_]*$.(ù¼ÁÃ
+dpython:S1134"LTake the required action to fix the issue indicated by this "FIXME" comment.(Ø¶§
+npython:S117"RRename this parameter "userID" to match the regular expression ^[_a-z][a-z0-9_]*$.(×¤¼Ñıÿÿÿÿ
+ipython:S117"RRename this parameter "userID" to match the regular expression ^[_a-z][a-z0-9_]*$.(ûÊ½à
+Cpython:S1481,"+Remove the unused local variable "timeout".(å£€À
+6python:S125/"Remove this commented out code.(Æ õ´

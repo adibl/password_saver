@@ -1,0 +1,6 @@
+
+?python:S1481 "'Remove the unused local variable "jwt".(ÜÄ’Á
+opython:S1542A"WRename function "__validate_URI" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(°ÇÚÍ
+hpython:S1542I"PRename function "get_URI" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(Ô¨î—
+zpython:S1542R"bRename function "__validate_Authentication" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(Äšêì
+mpython:S1542["PRename function "get_JWT" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(»ã–úÿÿÿÿ

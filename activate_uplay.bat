@@ -1,0 +1,1 @@
+python D:\adi\Documents\password_saver\POC\password_injection_winapi.py "C:\\Program Files (x86)\\Ubisoft\\Ubisoft Game Launcher\\Uplay.exe"

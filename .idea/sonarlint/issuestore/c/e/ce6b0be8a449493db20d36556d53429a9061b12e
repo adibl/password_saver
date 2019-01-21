@@ -1,0 +1,6 @@
+
+rpython:S15427"URename function "test_get_URI" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(ÙÂ²›øÿÿÿÿ
+opython:S1542"WRename function "test_valid_JWT" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(ôÌ·è
+mpython:S1542 "URename function "test_get_JWT" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(¼¦ùí
+fpython:S117 "ORename this parameter "JWT" to match the regular expression ^[_a-z][a-z0-9_]*$.(¼¦ùí
+rpython:S1542/"ZRename function "test_validate_URI" to match the regular expression ^[a-z_][a-z0-9_]{2,}$.(±”¨á
