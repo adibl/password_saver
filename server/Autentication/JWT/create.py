@@ -25,7 +25,7 @@ def create(userID, timeout=25):
     body ={}
     body['iss'] = userID
     body['iat'] = int(time.time())
-    body['exp'] = body['iat'] + timeout * 60
+    body['exp'] = int(body['iat'] + timeout * 60)
 
     # generate JWT
     T = jwt.JWT(header, body)
