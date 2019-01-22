@@ -1,6 +1,0 @@
-"""
-name:
-date:
-description
-"""
-
