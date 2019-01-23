@@ -19,7 +19,7 @@ def run_around_tests():
     database.delete_time('aaaaaaaaaaaaaaaaaaaaaaaa')
 
 @pytest.mark.parametrize("userID,reset_time,result", [
-    ('aaaaaaaaaaaaaaaaaaaaaaaa', int(time.time()) + 10000, False),
+    ('aaaaaaaaaaaaaaaaaaaaaaaa', int(time.time()) + 10000, True),
     ('aaaaaaaaaaaaaaaaaaaaaaaa', int(time.time()), False),
 ])
 def test_insert_get(userID, reset_time, result):

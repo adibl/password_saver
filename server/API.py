@@ -28,7 +28,7 @@ def handle_logging():
     """
     # FIXME: move to __logs file
     __logs.setup_logging()
-    logging.info('start logging canges server')
+    logging.info('start logging changes server')
     return logging.config.listen(9999).start()
 
 

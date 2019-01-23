@@ -3,28 +3,25 @@ name:
 date:
 description
 """
-import pytest
-
+import sys
+import time
 from server.Resorce import database
 
-@pytest.fixture(scope="session", autouse=True)
-def connect():
-    global conn
-    conn = database.connect()
 
-@pytest.mark.parametrize("username,result", [
-    ('adi2', True),
+import pytest
+from server.Autentication.JWT import validate, create
 
-    ])
-def test_add_user(username, result):
-    assert database.add_customer(username)
+
+@pytest.fixture(autouse=True)
+def run_around_tests():
+    yield
+    database.delete_user('aaaaaaaaaaaaaaaaaaaaaaaa')
 
 
 
-@pytest.mark.parametrize("userID,progID, username, password", [
-    ('dddddddddddddddddddddddd', 'ddddddddddddddddddddddda', 'bleyer23', '1234'),
-
-    ])
-def test_add_pass(userID,progID, username, password):
-    database.add_customer(username)
-    assert database.get_site(userID, progID) == (username, password)
+@pytest.mark.parametrize("userID,result", [
+    ('aaaaaaaaaaaaaaaaaaaaaaaa', True),
+    ('aaaaaaaaaaaaaaaaaaaaaaa1', False),
+])
+def test_add_user(userID, result):
+    assert database.add_user(userID) is result

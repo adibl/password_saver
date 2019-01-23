@@ -6,7 +6,7 @@ have defs to extract the data from the request.
 
 """
 import re
-from Autentication.JWT import validate
+from server.Autentication.JWT import validate
 # regex
 URI_PREMITED_LIST = {"/client/try": ["GET", "POST"]} # TODO: add security level to premited actions
 RE_URI = re.compile(r"^(GET|PUT|POST|PUTCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")

@@ -5,11 +5,11 @@ description
 """
 
 import pytest
-import validate as validate
+from server.Resorce import validate as validate
 from server.Autentication.JWT import create
 
 def valid_JWT():
-    return create('aaaa')
+    return create('aaaaaaaaaaaaaaaaaaaaaaaa')
 
 @pytest.mark.parametrize("packege,is_valid", [
 ("GET /client/try?id=123 HTTP/1.1\nAuthorization: Bearer {0}\nContent-Type: application/json\n".format(valid_JWT()), True),
