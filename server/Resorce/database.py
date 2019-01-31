@@ -3,62 +3,67 @@ name:
 date:
 description
 """
-"""
-name:
-date:
-description
-"""
 import pymongo
 from bson.objectid import ObjectId
-import time
 from datetime import datetime
-MAX_TIMEOUT = 25 #FIXME move to create file
+
+MAX_TIMEOUT = 24*5 #FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 
 
 
-def create_database(expire_time):
-    """
-    :param int expire_time: after how match time to expire documents (minites)
-    :return: None
-    """
+def create_database(expire_time =MAX_TIMEOUT):
     client = pymongo.MongoClient(CONN_STR)
     db = client.Resorce
+    db.users.ensure_index('delete_time', expireAfterSeconds=60 * 60 * expire_time)
 
 
 def add_user(userID):
+    """
+    :param userID: the user ID to create the collection for
+    :return: True ifg the client was created, False if he is already exzist
+    """
     client = pymongo.MongoClient(CONN_STR)
     db = client.Resorce
     try:
-        col = db.create_collection(userID)
-        col.create_index('program_id')
-    except pymongo.errors.CollectionInvalid as err:
+        col = db['users'].insert_one({'_id': ObjectId(userID), 'records': []})
+    except pymongo.errors.DuplicateKeyError as err:
         return False
     return True
 
 
-
-
-def get_col(userID):
+def get_col():
     client = pymongo.MongoClient(CONN_STR)
     db = client.Resorce
-    return db[userID]
+    record = db['users']
+    return record
 
 
 def add_record(clientID, programID, username, password):
-    collection = get_col(clientID)
-    collection.insert_one({'program_id': programID, 'username': username, 'password': password})
+    collection = get_col()
+    res = collection.update({'_id': ObjectId(clientID) },
+    {
+     '$addToSet': {
+        'records': {'program_id': programID, 'username': username, 'password': password}
+        }
+    })
+    return res
 
 
 def get_record(clientID, programID):
-    collection = get_col(clientID)
-    reg_time = collection.find_one({'program_id': programID})
-    return reg_time
+    collection = get_col()
+    prog = collection.find_one({'_id': ObjectId(clientID)}, {'records': {'$elemMatch': {'program_id': programID}}})
+    return prog[u'records']
 
 
 def delete_user(clientID):
-    collection = get_col(clientID)
-    return collection.drop()
+    collection = get_col()
+    return collection.update({'_id': ObjectId(clientID)}, {'delete_time': datetime.utcnow()})
+
+
+def _immidiate_delete(clientID):
+    collection = get_col()
+    return collection.delete_one({'_id': ObjectId(clientID)})
 
 
 

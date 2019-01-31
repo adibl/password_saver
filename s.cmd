@@ -1,0 +1,1 @@
+locust -f D:\adi\Documents\password_saver\server\test_server\loding_test.py

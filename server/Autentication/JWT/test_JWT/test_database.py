@@ -16,7 +16,7 @@ from server.Autentication.JWT import validate, create
 def run_around_tests():
     #database.delete_time('aaaaaaaaaaaaaaaaaaaaaaaa')
     yield
-    database.delete_time('aaaaaaaaaaaaaaaaaaaaaaaa')
+    database.delete('aaaaaaaaaaaaaaaaaaaaaaaa')
 
 @pytest.mark.parametrize("userID,reset_time,result", [
     ('aaaaaaaaaaaaaaaaaaaaaaaa', int(time.time()) + 10000, True),
@@ -24,10 +24,10 @@ def run_around_tests():
 ])
 def test_insert_get(userID, reset_time, result):
     time.sleep(0.5)
-    database.add_time(userID)
+    database.add(userID)
     time.sleep(0.5)
-    print database.validate_time(userID, reset_time)
-    assert database.validate_time(userID, reset_time) is result
+    print database.validate(userID, reset_time)
+    assert database.validate(userID, reset_time) is result
 
 
 
@@ -36,4 +36,4 @@ def test_insert_get(userID, reset_time, result):
     ('aaaaaaaaaaaaaaaaaaaaaaaa', 500, True),
 ])
 def test_insert_not_found(userID, reset_time, result):
-    assert database.validate_time(userID, time) is result
+    assert database.validate(userID, time) is result

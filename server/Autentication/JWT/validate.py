@@ -9,7 +9,7 @@ from jwcrypto import jwt, jwe, jwk
 import json
 from jwcrypto.common import json_decode
 import os
-from database import validate_time
+from database import validate as validate_JWT_time
 
 with open(os.path.join(os.path.dirname(__file__), 'public_signing.pem'), 'rb') as f: #FIXME: take files from other directory
     KEY = json_decode(f.read())
@@ -49,6 +49,6 @@ def validate(Token):
     if Token is False:
         return False
     Token = ast.literal_eval(Token)
-    if not validate_time(Token['iss'], Token['iat']):
+    if not validate_JWT_time(Token['iss'], Token['iat']):
         return False
     return True

@@ -22,23 +22,23 @@ def create_database(expire_time):
     collection = db.jwt_time
     collection.ensure_index('register_time', expireAfterSeconds=60*expire_time)
 
-def get_col():
+def connect():
     client = pymongo.MongoClient(CONN_STR)
     db = client.Autentication
     return db.jwt_time
 
-def add_time(clientID):
-    collection = get_col()
+def add(clientID):
+    collection = connect()
     collection.insert_one({'_id': ObjectId(clientID), 'register_time' : datetime.utcnow()})
 
-def validate_time(clientID, time):
+def validate(clientID, time):
     """
     check if the token was issoed befor or after the last user password change
     :param clientID: the client that owns the token ID
     :param time: the time the token was iisoed
     :return: True if the token is valid, False otherwise
     """
-    collection = get_col()
+    collection = connect()
     reg_time = collection.find_one({'_id': ObjectId(clientID)})
     if reg_time is None:
         return True
@@ -46,8 +46,8 @@ def validate_time(clientID, time):
     return reg_time['register_time'] < utc_dt
 
 
-def delete_time(clientID):
-    collection = get_col()
+def delete(clientID):
+    collection = connect()
     collection.delete_one({'_id': ObjectId(clientID)})
 
 
