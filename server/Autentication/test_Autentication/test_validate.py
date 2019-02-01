@@ -12,14 +12,11 @@ def valid_JWT():
     return create('aaaaaaaaaaaaaaaaaaaaaaaa')
 
 @pytest.mark.parametrize("packege,is_valid", [
-("GET /client/try?id=123 HTTP/1.1\nAuthorization: Bearer {0}\nContent-Type: application/json\n".format(valid_JWT()), True),
-    ("Authorization: Bearer {0}".format(valid_JWT()), True),
-    ("Authorizationx: Bearer {0}".format(valid_JWT()), False),
-    ("Authorization: Bearer{0}".format(valid_JWT()), False),
+("GET /client/try HTTP/1.1\r\nAuthorization: Bearer {0}\r\nContent-Type: application/json\r\n".format(valid_JWT()), 200),
+("GET /client/try HTTP/1.1\r\nAuthorization: Bearer {0}\r\nContent-Type: application/json\r\n".format('aa.ff.vvvvdvvd'), 401),
 ])
 def test_valid_JWT(packege, is_valid):
-
-    assert validate.ValidateAuthentication(packege).__validate_Authentication() == is_valid
+    assert validate.ValidateAuthentication(packege).validate() == is_valid
 
 
 @pytest.mark.parametrize("packege,JWT", [

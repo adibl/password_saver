@@ -21,12 +21,13 @@ def decrypte(Token):
     :return: False if the token is not valid, and JWS token string otherwise
     """
     E = jwe.JWE(algs=["RSA-OAEP", "A128CBC-HS256"])
-    v= jwk.JWK()
+    v = jwk.JWK()
     v.import_key(**ENC_KEY)
     try:
         E.deserialize(Token, key=v)
     except jwe.JWException as err:
         logging.warning('sent invalid JWE:' + str(err))
+        logging.info(Token)
         return False
     raw_payload = E.payload
     S = jwt.JWT(check_claims={'exp': None, 'iat': None, 'iss': None}, algs=['HS256'])
@@ -51,3 +52,5 @@ def validate(Token):
     if not validate_JWT_time(Token['iss'], Token['iat']):
         return False
     return True
+
+

@@ -11,10 +11,12 @@ from server.Autentication.JWT import validate, create
 
 @pytest.mark.parametrize("userID,result", [
     ('aaaaaaaaaaaaaaaaaaaaaaaa', True),
-    ('aaaaaaaaaaaaaaaaaaaaaaaa', True),
+    ('aaaaaaaaaaaaaaaaaaaaaaa1', True),
 ])
 def test_create(userID, result):
-    assert validate(create(userID)) is not False
+    t = create(userID)
+    print t
+    assert validate(t) is not False
 
 
 @pytest.mark.parametrize("userID, timeout,result", [

@@ -8,7 +8,7 @@ import logging
 from server.Autentication.JWT import validate
 from server.validate import Validate
 
-RE_JWT = re.compile(r"Authorization: Bearer (.*)", re.M)
+RE_JWT = re.compile(r"^Authorization: Bearer (.*)$", re.M)
 
 OK = 200
 METHOD_NOT_ALLOWED = 405
@@ -54,4 +54,4 @@ class ValidateAuthentication(Validate):
         :rtype: str
         """
         if RE_JWT.search(self.request):
-            return RE_JWT.search(self.request).group(1)
+            return RE_JWT.search(self.request).group(1)[:-1] #QUESTION: whay [:-1]

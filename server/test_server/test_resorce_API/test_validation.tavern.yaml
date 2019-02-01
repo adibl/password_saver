@@ -1,0 +1,86 @@
+test_name: test API headers validation
+
+stages:
+  - name: .
+    request:
+      url: http://127.0.0.1:50007/client/try
+      method: GET
+      headers:
+        Content-Type: application/json
+        Authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJ0eXAiOiJKV0UifQ.SXsEbt1qmN--JWMj4vE6NKrvjwIa5h_-H33uVb26S0ORl9Uy4ZVhCjxsxnEFhXPER2WMIBlefdXZbVg23d5jtYrlaljSd8ncFjWOpD84JQrKkb94b_z4kn3UjaaT6Txk3MLp-idhHjBNAdYZciYT_MfNbxfawUyHTBJw3uCMlpaQj3pg0M4wCfklt0yVIU_Psn0bbKDid-T4eVB-w2n7SWBfE-o5_a-83zsit6Vqwi5l6XKXepYW2nG8tSbtr_vsLJqaMmo_If_c0v9mlVpQYw0C3m_7EzOidztuTHAH-EdT6ur_2a6zpbNOxF4oR7fnPu8QxSlzy39ct4MAW2Sv4A.PFg2j2ld5YcOdodA8b8MUg.xAh5uxiLb_UfrJYgcS72eFkIwxrXfiUpcJF8wfRpEA9313M_r9L-XhuU5kEPJDW5b-XKPLB6xxxIEEybzq0F5j5RFNT5mrU74FJS358r5vC_Ry14Q7iYMiYCIlQttUxiTisra-W7wLvZekNPqxRfImffsqbCGZpsPzzgtw19MxCokfh073G6hRE8gd83hlHY4xc9oWOW9Mjce8L4K19wDSRDwJxHBTjmQ-Mf4EPymDc.N5KoUJU3fJjinx2PwEtvRg
+    response:
+      status_code: 200
+
+
+
+---
+
+test_name: test API url validation
+
+stages:
+  - name: forbidden url
+    request:
+      url: http://127.0.0.1:50007/client/forbidden
+      method: GET
+      headers:
+        Content-Type: application/json
+        Authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJ0eXAiOiJKV0UifQ.SXsEbt1qmN--JWMj4vE6NKrvjwIa5h_-H33uVb26S0ORl9Uy4ZVhCjxsxnEFhXPER2WMIBlefdXZbVg23d5jtYrlaljSd8ncFjWOpD84JQrKkb94b_z4kn3UjaaT6Txk3MLp-idhHjBNAdYZciYT_MfNbxfawUyHTBJw3uCMlpaQj3pg0M4wCfklt0yVIU_Psn0bbKDid-T4eVB-w2n7SWBfE-o5_a-83zsit6Vqwi5l6XKXepYW2nG8tSbtr_vsLJqaMmo_If_c0v9mlVpQYw0C3m_7EzOidztuTHAH-EdT6ur_2a6zpbNOxF4oR7fnPu8QxSlzy39ct4MAW2Sv4A.PFg2j2ld5YcOdodA8b8MUg.xAh5uxiLb_UfrJYgcS72eFkIwxrXfiUpcJF8wfRpEA9313M_r9L-XhuU5kEPJDW5b-XKPLB6xxxIEEybzq0F5j5RFNT5mrU74FJS358r5vC_Ry14Q7iYMiYCIlQttUxiTisra-W7wLvZekNPqxRfImffsqbCGZpsPzzgtw19MxCokfh073G6hRE8gd83hlHY4xc9oWOW9Mjce8L4K19wDSRDwJxHBTjmQ-Mf4EPymDc.N5KoUJU3fJjinx2PwEtvRg
+
+
+    response:
+      status_code: 404
+  - name: alowed url
+    request:
+      url: http://127.0.0.1:50007/client/try
+      method: GET
+      headers:
+        Content-Type: application/json
+        Authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJ0eXAiOiJKV0UifQ.SXsEbt1qmN--JWMj4vE6NKrvjwIa5h_-H33uVb26S0ORl9Uy4ZVhCjxsxnEFhXPER2WMIBlefdXZbVg23d5jtYrlaljSd8ncFjWOpD84JQrKkb94b_z4kn3UjaaT6Txk3MLp-idhHjBNAdYZciYT_MfNbxfawUyHTBJw3uCMlpaQj3pg0M4wCfklt0yVIU_Psn0bbKDid-T4eVB-w2n7SWBfE-o5_a-83zsit6Vqwi5l6XKXepYW2nG8tSbtr_vsLJqaMmo_If_c0v9mlVpQYw0C3m_7EzOidztuTHAH-EdT6ur_2a6zpbNOxF4oR7fnPu8QxSlzy39ct4MAW2Sv4A.PFg2j2ld5YcOdodA8b8MUg.xAh5uxiLb_UfrJYgcS72eFkIwxrXfiUpcJF8wfRpEA9313M_r9L-XhuU5kEPJDW5b-XKPLB6xxxIEEybzq0F5j5RFNT5mrU74FJS358r5vC_Ry14Q7iYMiYCIlQttUxiTisra-W7wLvZekNPqxRfImffsqbCGZpsPzzgtw19MxCokfh073G6hRE8gd83hlHY4xc9oWOW9Mjce8L4K19wDSRDwJxHBTjmQ-Mf4EPymDc.N5KoUJU3fJjinx2PwEtvRg
+
+
+    response:
+      status_code: 200
+
+---
+
+test_name: test API HTTP verb validation
+
+stages:
+  - name: forbidden verb
+    request:
+      url: http://127.0.0.1:50007/client/try
+      method: DELETE
+      headers:
+        Content-Type: application/json
+        Authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJ0eXAiOiJKV0UifQ.SXsEbt1qmN--JWMj4vE6NKrvjwIa5h_-H33uVb26S0ORl9Uy4ZVhCjxsxnEFhXPER2WMIBlefdXZbVg23d5jtYrlaljSd8ncFjWOpD84JQrKkb94b_z4kn3UjaaT6Txk3MLp-idhHjBNAdYZciYT_MfNbxfawUyHTBJw3uCMlpaQj3pg0M4wCfklt0yVIU_Psn0bbKDid-T4eVB-w2n7SWBfE-o5_a-83zsit6Vqwi5l6XKXepYW2nG8tSbtr_vsLJqaMmo_If_c0v9mlVpQYw0C3m_7EzOidztuTHAH-EdT6ur_2a6zpbNOxF4oR7fnPu8QxSlzy39ct4MAW2Sv4A.PFg2j2ld5YcOdodA8b8MUg.xAh5uxiLb_UfrJYgcS72eFkIwxrXfiUpcJF8wfRpEA9313M_r9L-XhuU5kEPJDW5b-XKPLB6xxxIEEybzq0F5j5RFNT5mrU74FJS358r5vC_Ry14Q7iYMiYCIlQttUxiTisra-W7wLvZekNPqxRfImffsqbCGZpsPzzgtw19MxCokfh073G6hRE8gd83hlHY4xc9oWOW9Mjce8L4K19wDSRDwJxHBTjmQ-Mf4EPymDc.N5KoUJU3fJjinx2PwEtvRg
+
+
+    response:
+      status_code: 405
+      headers:
+        Access-Control-Request-Method: GET POST
+  - name: alowed verb
+    request:
+      url: http://127.0.0.1:50007/client/try
+      method: GET
+      headers:
+        Content-Type: application/json
+        Authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJ0eXAiOiJKV0UifQ.SXsEbt1qmN--JWMj4vE6NKrvjwIa5h_-H33uVb26S0ORl9Uy4ZVhCjxsxnEFhXPER2WMIBlefdXZbVg23d5jtYrlaljSd8ncFjWOpD84JQrKkb94b_z4kn3UjaaT6Txk3MLp-idhHjBNAdYZciYT_MfNbxfawUyHTBJw3uCMlpaQj3pg0M4wCfklt0yVIU_Psn0bbKDid-T4eVB-w2n7SWBfE-o5_a-83zsit6Vqwi5l6XKXepYW2nG8tSbtr_vsLJqaMmo_If_c0v9mlVpQYw0C3m_7EzOidztuTHAH-EdT6ur_2a6zpbNOxF4oR7fnPu8QxSlzy39ct4MAW2Sv4A.PFg2j2ld5YcOdodA8b8MUg.xAh5uxiLb_UfrJYgcS72eFkIwxrXfiUpcJF8wfRpEA9313M_r9L-XhuU5kEPJDW5b-XKPLB6xxxIEEybzq0F5j5RFNT5mrU74FJS358r5vC_Ry14Q7iYMiYCIlQttUxiTisra-W7wLvZekNPqxRfImffsqbCGZpsPzzgtw19MxCokfh073G6hRE8gd83hlHY4xc9oWOW9Mjce8L4K19wDSRDwJxHBTjmQ-Mf4EPymDc.N5KoUJU3fJjinx2PwEtvRg
+
+
+    response:
+      status_code: 200
+
+---
+test_name: test JWT validation
+
+stages:
+  - name: forbidden header
+    request:
+      url: http://127.0.0.1:50007/client/try
+      method: DELETE
+      headers:
+        Content-Type: application/json
+        Authorization: Bearrrrr eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkExMjhDQkMtSFMyNTYiLCJ0eXAiOiJKV0UifQ.DeDvJLjwUCnv-q7WUY8TFLvDfZ0UnE4Gsv-MZOCaJMCfloO4HdQZiEeGnzWbMIeEvpFQQNSAKuEjL0zIHELavPcFC4kpt2NH0MnKTIr75sN0GW_WJwy9uOpMcWLxhViVm-o2zycZd-xrAvDO9w7M_6R7z_y4QhrA_5m5pxN1_WZyNlOlXu_GDkSF54I6jQDZxaia3onmeesxxys-88QXMD2vl5D9To5VnZBhIjvt2mUGitpvY6Q-GmYhVBLEI_2NOOOusZB2a13ZuP0iDMmk7H6gLtFRym26R6xDoWRsT6HzS8yeL8Pfp2qJ23QeLb4i4EMlVXCktQQfsT5aD1iLVA.NCCdUI7C_85wSTJiNNCbKQ.SW4N2bWkDhVnkdvjB9iNA5PUUo3lszcZRDqmr9EUXC5Mac_seHvVKv1tPO0On6wmG8fakgdgzKTEfaSTLVworKzJK8Wgv-Tzk_3fLZoueWH8NjUTaKHbgpJ-5TUBz5mgOv71x17_1fv-2YcW9ZhCLIifzvoOys5eKXIWytaDXqJ5BjZ-Spvdez_Z2bmG7llBzDNN7CLPuN4SdsZeCl7CyOKdNKGZDPKpeZaLYDby0qE.C6YkqvSn-VPXBwvcvkyAbQ
+    response:
+      status_code: 400

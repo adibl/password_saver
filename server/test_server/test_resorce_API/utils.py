@@ -3,17 +3,18 @@ name:
 date:
 description
 """
-from server.Autentication.JWT import create
+from server.Autentication.JWT import create, validate
 import re
 
 def create_JWT():
-    return "Bearer " + create('aaaaaaaaaaaaaaaaaaaaaaaa', 10)
+    jwt =create('aaaaaaaaaaaaaaaaaaaaaaaa', 100)
+    print validate(str(jwt))
+    return "Bearer " + str(jwt)
 
 if __name__ == '__main__':
-    with open("test_API.tavern.yaml", 'r') as f:
+    with open("test_validation.tavern.yaml", 'r') as f:
         s = f.read()
         print s
     s = re.sub('Bearer (.*)$', create_JWT(), s, flags=re.M)
-    print s
-    with open("test_API.tavern.yaml", 'w+') as f:
+    with open("test_validation.tavern.yaml", 'w+') as f:
         f.write(s)

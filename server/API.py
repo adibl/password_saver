@@ -10,6 +10,7 @@ import socket
 import sys
 import threading
 from validate import Validate
+from server.Autentication.validate import ValidateAuthentication
 from server.HTTPtolls import *
 
 sys.path.insert(0, "D:/adi/Documents/password_saver/server/Resorce") #FIXME: make this unesesery
@@ -71,10 +72,15 @@ def handle_client(conn):
     validator = Validate(request)
     code = validator.validate()
     if code == OK:
-        if Resorce.ValidateResorce.IsResorceURL(validator):
-            responce = Resorce.process_request(request)
+        validator = ValidateAuthentication(request)
+        code = validator.validate()
+        if code == OK:
+            if Resorce.ValidateResorce.IsResorceURL(validator):
+                responce = Resorce.process_request(request)
+            else:
+                responce = code_to_responce(NOT_FOUND, request)
         else:
-            responce = code_to_responce(NOT_FOUND, request)
+           responce = code_to_responce(code, request)
     else:
         responce = code_to_responce(code, request)
     conn.sendall(responce)
