@@ -5,8 +5,8 @@ description
 """
 import pymongo
 from bson.objectid import ObjectId
-import time
 from datetime import datetime
+
 MAX_TIMEOUT = 25 #FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 
@@ -23,11 +23,20 @@ def create_database(expire_time):
     collection.ensure_index('register_time', expireAfterSeconds=60*expire_time)
 
 def connect():
+    """
+    connect to the database.
+    :return:
+    """
     client = pymongo.MongoClient(CONN_STR)
     db = client.Autentication
     return db.jwt_time
 
 def add(clientID):
+    """
+    add user record to database
+    :param clientID: the client identifier
+    :return:
+    """
     collection = connect()
     collection.insert_one({'_id': ObjectId(clientID), 'register_time' : datetime.utcnow()})
 

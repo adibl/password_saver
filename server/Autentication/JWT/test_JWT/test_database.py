@@ -3,13 +3,9 @@ name:
 date:
 description
 """
-import sys
 import time
 from server.Autentication.JWT import database
-
-
 import pytest
-from server.Autentication.JWT import validate, create
 
 
 @pytest.fixture(autouse=True)

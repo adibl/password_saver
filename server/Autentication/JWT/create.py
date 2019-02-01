@@ -16,15 +16,11 @@ def create(userID, timeout=25):
     """
     bild JWT token from user cradentials
     :param str userID: the user identifier
-    :param str signing_key: the signing key
-    :param str encrypte_key: the encription key
     :param int timeout: timeout of the JWT in minutes. default is 25
     :return:
     """
     header = {'alg': 'HS256', 'typ': "JWT"}
-    body ={}
-    body['iss'] = userID
-    body['iat'] = int(time.time())
+    body = {'iss': userID, 'iat': int(time.time())}
     body['exp'] = int(body['iat'] + timeout * 60)
 
     # generate JWT

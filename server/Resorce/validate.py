@@ -6,99 +6,49 @@ have defs to extract the data from the request.
 
 """
 import re
-from server.Autentication.JWT import validate
+import logging
+from server.Autentication.validate import ValidateAuthentication
+from server.HTTPtolls import *
 # regex
-URI_PREMITED_LIST = {"/client/try": ["GET", "POST"]} # TODO: add security level to premited actions
-RE_URI = re.compile(r"^(GET|PUT|POST|PUTCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
-RE_JWT = re.compile(r"^Authorization: Bearer (.*)$", re.M)
-RE_CONTENT_TYPE = re.compile("^Content-Type: (application/json|application/xml)$", re.M)
-OK = 200
-METHOD_NOT_ALLOWED = 405
-BAD_REQUEST = 400
-NOT_FOUND = 404
-UNAUTHORIZED = 401
 
-def validate_request(request):
-    """
-    valid the request:
-    1.correct structure (http verb, url, http version, JWT token, content-type)
-    2.premited URL
-    3.valid JWT TODO: remove from here and move to Autentication API file
-    4.premited HTTp verb TODO: rem0ove from here and move to Autentication API file
-    :param request: the client request
-    :return: True if the request is valid and false otherwise
-    """
-    if __validate_URI(request) and __validate_Authentication(request) and __validate_content_type(request):
-        uri = get_URI(request)
-        verb = get_verb(request)
-        jwt = get_JWT(request)
-        if not validate(jwt):
-            return UNAUTHORIZED
-        if uri in URI_PREMITED_LIST.keys():
-            if verb in URI_PREMITED_LIST[uri]:
+
+class ValidateResorce(ValidateAuthentication):
+    ResorceURI = ['/password', "/client/try"]
+    @classmethod
+    def IsResorceURL(clt, request):
+        return any([True for uri in clt.ResorceURI if uri in request.get_URI()])
+
+
+    def validate(self):
+        status = super(ValidateAuthentication, self).validate()
+        if status is OK:
+            return self.__validate_URI()
+        else:
+            return status
+
+    def __validate_URI(self):
+        verb = self.get_verb()
+        uri = [uri for uri in self.ResorceURI if uri in self.get_URI()]
+        print uri
+        if len(uri) == 1:
+            if verb in URI_PREMITED_LIST[uri[0]]:
                 return OK
 
             else:
+                logging.debug('resource validation fail, invalid verb')
                 return METHOD_NOT_ALLOWED
         else:
+            logging.debug('resource validation fail, invalid uri')
             return NOT_FOUND
 
-    else:
-        return BAD_REQUEST
 
 
-def get_verb(request):
-    """
-    return the http verb of the request
-    :param str request: the client request
-    :return: the client request HTTP verb
-    :rtype: str
-    """
-    return RE_URI.search(request).group(1)
 
 
-def __validate_content_type(request):
-    """
-    validate the request content type is existing an matching
-    :param str request: the client request
-    :return: True if request have valid content type, False otherwise
-    """
-    return bool(RE_CONTENT_TYPE.search(request))
 
 
-def __validate_URI(request):
-    """
-    validate the URI structure
-    :param str request: the client request
-    :return: True if the structure is valid, False otherwise
-    """
-    return bool(RE_URI.search(request))
-
-def get_URI(request):
-    """
-    get the request URL
-    :param str request: the client request
-    :return: the request URI
-    :rtype: str
-    """
-    return RE_URI.search(request).group(2)
-
-def __validate_Authentication(request):
-    """
-    validate Autentication header structure
-    :param str request: the client request
-    :return: True if structure is valid, false otherwise
-    """
-    return bool(RE_JWT.search(request))
 
 
-def get_JWT(request):
-    """
-    :param request: the client full request
-    :return: JWT if fount False otherwise
-    :rtype: str
-    """
-    if RE_JWT.search(request):
-        return RE_JWT.search(request).group(1)
-    return False
+
+
 

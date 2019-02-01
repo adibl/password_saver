@@ -7,6 +7,7 @@ LOGGER_NAME = 'sss'
 LOG_FILE = 'logs/API.log'
 CONF_FILE = 'log.yaml'
 
+
 def setup_logging():
     """
     Setup logging configuration

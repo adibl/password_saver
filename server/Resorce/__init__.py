@@ -4,3 +4,4 @@ sys.path.insert(0, "D:/adi/Documents/password_saver/server/Resorce")  # FIXME: m
 
 from API import handle_client as process_request
 import database
+from validate import ValidateResorce

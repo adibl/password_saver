@@ -6,7 +6,6 @@ description
 import ast
 import logging
 from jwcrypto import jwt, jwe, jwk
-import json
 from jwcrypto.common import json_decode
 import os
 from database import validate as validate_JWT_time

@@ -3,13 +3,8 @@ name:
 date:
 description
 """
-import sys
-import time
 from server.Resorce import database
-
-
 import pytest
-from server.Autentication.JWT import validate, create
 
 
 @pytest.fixture(autouse=True)
@@ -36,8 +31,7 @@ def test_add_user(userID, result):
 def test_add_pass(userID, progID, username, password, result):
     database.add_record(userID, progID, username, password)
     result2 = database.get_record(userID, progID)
-    print result2
     if result:
-        assert result2 == [{u'username': username, u'password': password, u'program_id': progID}]
+        assert result2 == [{'username': username, 'password': password, 'program_id': progID}]
     else:
         assert result2 is None

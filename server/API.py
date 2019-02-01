@@ -9,6 +9,8 @@ import logging.config
 import socket
 import sys
 import threading
+from validate import Validate
+from server.HTTPtolls import *
 
 sys.path.insert(0, "D:/adi/Documents/password_saver/server/Resorce") #FIXME: make this unesesery
 import Resorce
@@ -17,7 +19,7 @@ import __logs
 
 
 HOST = '127.0.0.1'
-PORT = 50008
+PORT = 50007
 CONN_LOG = "connect IP:{0} PORT:{1}"
 
 
@@ -65,8 +67,16 @@ def handle_client(conn):
     :param conn: the socket of the client
     :return: None
     """
-    data = receive(conn)
-    responce = Resorce.process_request(data)
+    request = receive(conn)
+    validator = Validate(request)
+    code = validator.validate()
+    if code == OK:
+        if Resorce.ValidateResorce.IsResorceURL(validator):
+            responce = Resorce.process_request(request)
+        else:
+            responce = code_to_responce(NOT_FOUND, request)
+    else:
+        responce = code_to_responce(code, request)
     conn.sendall(responce)
     logging.debug('sent:' + responce)
     conn.close()
