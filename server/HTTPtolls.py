@@ -3,6 +3,7 @@ name:
 date:
 description
 """
+from abc import abstractmethod
 URI_PREMITED_LIST = {"/client/try": ["GET", "POST"]} # TODO: add security level to premited actions
 
 OK = 200
@@ -11,39 +12,68 @@ BAD_REQUEST = 400
 NOT_FOUND = 404
 UNAUTHORIZED = 401
 
-def code_to_responce(code, data):
-    if code == OK:
-        responce = prosses_request(data)
-    elif code == BAD_REQUEST:
-        responce = bad_request(data)
-    elif code == METHOD_NOT_ALLOWED:
-        responce = method_not_allowed(data, ['get']) #FIXME: add secend parameter as neded
-    elif code == NOT_FOUND:
-        responce = not_found(data)
-    else:
-        responce = bad_request(data)
-    return responce
 
-def not_found(request):
-    s = ''
-    s += "HTTP/1.1 404 NOT FOUND\r\n"
-    return s
+class Responce(object):
+
+    @classmethod
+    def validate_erors(self, code):
+        """
+        get the request and the response code and bild the response package
+        :param int code: the responce status code
+        :param string data: the request
+        :return int : the response
+        """
+        if code == BAD_REQUEST:
+            responce = self.bad_request()
+        elif code == NOT_FOUND:
+            responce = self.not_found()
+        elif code == UNAUTHORIZED:
+            responce = self.unauthorized()
+        else:
+            responce = self.bad_request()
+        return responce
+
+    @staticmethod
+    def not_found():
+        s = ''
+        s += "HTTP/1.1 404 NOT FOUND\r\n"
+        s += "\r\n"
+        return s
+
+    @staticmethod
+    def bad_request():
+        s = ""
+        s += "HTTP/1.1 400 BAD REQUEST\r\n"
+        s += "\r\n"
+        return s
+
+    @staticmethod
+    def unauthorized():
+        s = ''
+        s += "HTTP/1.1 401 UNAUTHORIZED\r\n"
+        return s
+
+    @abstractmethod
+    def handle_request(self):
+        pass
+
+    @abstractmethod
+    def method_not_allowed(self):
+        pass
+
+    @abstractmethod
+    def prosses_request(self):
+        pass
 
 
-def method_not_allowed(request, alooed_metodes):
-    s = ''
-    s += "HTTP/1.1 405 METHOD NOT ALLOWED\r\n"
-    s += "Access-Control-Request-Method: " + " ".join(alooed_metodes) + '\r\n'
-    s += '\r\n'
-    return s
+class Uri(Responce):
+    URI = NotImplemented #re compiled
+    def __init__(self, request):
+        """
+        :param ResorceRequest request:
+        """
+        self.request = request
 
-
-def bad_request(request):
-    s = ""
-    s += "HTTP/1.1 400 BAD REQUEST\r\n"
-    s += "\r\n"
-    return s
-
-
-def prosses_request(request):
-    return "HTTP/1.1 200 OK\r\n\r\n"
+    @classmethod
+    def is_uri(cls, uri):
+        return cls.URI.match(uri)

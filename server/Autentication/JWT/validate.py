@@ -37,7 +37,7 @@ def decrypte(Token):
         logging.warning('send invalid JWS:' + str(eror))
         return False
     final_payload = S.claims
-    return final_payload
+    return ast.literal_eval(final_payload)
 
 
 def validate(Token):
@@ -48,9 +48,10 @@ def validate(Token):
     Token = decrypte(Token)
     if Token is False:
         return False
-    Token = ast.literal_eval(Token)
     if not validate_JWT_time(Token['iss'], Token['iat']):
         return False
     return True
 
+def get_data(token):
+    return decrypte(token)
 

@@ -7,29 +7,32 @@ have defs to extract the data from the request.
 """
 import re
 import logging
-from server.Autentication.validate import ValidateAuthentication
+from server.Autentication.request import AuthenticatedRequest
 from server.HTTPtolls import *
 # regex
 
 
-class ValidateResorce(ValidateAuthentication):
-    ResorceURI = ['/password', "/client/try"]
+class ResorceRequest(AuthenticatedRequest):
+    ResorceURI = ['/passwords', "/client/try"] #FIXME: take form the URI classes
+
     @classmethod
     def IsResorceURL(clt, request):
+        request = AuthenticatedRequest(request)
         return any([True for uri in clt.ResorceURI if uri in request.get_URI()])
 
-
-    def validate(self):
-        status = super(ValidateAuthentication, self).validate()
+    @classmethod
+    def validate(clt, request):
+        status = super(AuthenticatedRequest, clt).validate(request)
         if status is OK:
-            return self.__validate_URI()
+            return clt.__validate_URI(request)
         else:
             return status
 
-    def __validate_URI(self):
-        verb = self.get_verb()
-        uri = [uri for uri in self.ResorceURI if uri in self.get_URI()]
-        print uri
+    @classmethod
+    def __validate_URI(clt, request):
+        request = AuthenticatedRequest(request)
+        verb = request.get_verb()
+        uri = [uri for uri in clt.ResorceURI if uri in request.get_URI()]
         if len(uri) == 1:
             if verb in URI_PREMITED_LIST[uri[0]]:
                 return OK

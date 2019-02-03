@@ -4,7 +4,7 @@ date:
 description
 """
 import pytest
-from server.Resorce.validate import ValidateResorce
+from server.Resorce.request import ResorceRequest
 from server.Autentication.JWT import create
 from HTTPtolls import *
 
@@ -20,4 +20,4 @@ def valid_JWT():
     ("GET /client/try?id=123 HTTP/1.1\nAuthorization: Bearer A.BCD.EFG\nContent-Type: application/json\n", 200),
 ])
 def test_validate_URI(packege, is_valid):
-    assert ValidateResorce(packege)._ValidateResorce__validate_URI() == is_valid
+    assert ResorceRequest._ResorceRequest__validate_URI(packege) == is_valid

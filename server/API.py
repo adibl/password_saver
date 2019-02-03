@@ -9,11 +9,9 @@ import logging.config
 import socket
 import sys
 import threading
-from validate import Validate
-from server.Autentication.validate import ValidateAuthentication
+from request import Request
+from server.Autentication.request import AuthenticatedRequest
 from server.HTTPtolls import *
-
-sys.path.insert(0, "D:/adi/Documents/password_saver/server/Resorce") #FIXME: make this unesesery
 import Resorce
 import __logs
 
@@ -50,7 +48,7 @@ def lisening():
         threading.Thread(target=handle_client, args=(conn,)).start()
 
 
-def receive(client_socket, func=lambda data: "\r\n\r\n" not in data):
+def receive(client_socket, func=lambda data: "\r\n\r\n" not in data): #FIXME: cant get requests with body
     """
     :param func: the exit funcsion of the while loop.
     :param client_socket: the comm socket
@@ -60,7 +58,7 @@ def receive(client_socket, func=lambda data: "\r\n\r\n" not in data):
     while func(data):
         data += client_socket.recv(1024)
     logging.debug("RECV:" + data)
-    return data
+    return data.replace('\r\n', '\n')
 
 
 def handle_client(conn):
@@ -69,20 +67,18 @@ def handle_client(conn):
     :return: None
     """
     request = receive(conn)
-    validator = Validate(request)
-    code = validator.validate()
+    code = Request.validate(request)
     if code == OK:
-        validator = ValidateAuthentication(request)
-        code = validator.validate()
+        code = AuthenticatedRequest.validate(request)
         if code == OK:
-            if Resorce.ValidateResorce.IsResorceURL(validator):
-                responce = Resorce.process_request(request)
+            if Resorce.ResorceRequest.IsResorceURL(request):
+                responce = Resorce.process_request(Resorce.ResorceRequest(request))
             else:
-                responce = code_to_responce(NOT_FOUND, request)
+                responce = Responce.not_found()
         else:
-           responce = code_to_responce(code, request)
+           responce = Responce.validate_erors(code)
     else:
-        responce = code_to_responce(code, request)
+        responce = Responce.validate_erors(code)
     conn.sendall(responce)
     logging.debug('sent:' + responce)
     conn.close()

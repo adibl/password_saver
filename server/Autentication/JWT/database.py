@@ -56,6 +56,11 @@ def validate(clientID, time):
 
 
 def delete(clientID):
+    """
+    delete user credentials reset, FOR TESTS ONLY!!!
+    :param clientID: the client ID
+    :return: None
+    """
     collection = connect()
     collection.delete_one({'_id': ObjectId(clientID)})
 
