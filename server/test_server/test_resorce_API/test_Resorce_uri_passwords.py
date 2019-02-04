@@ -21,6 +21,17 @@ def run_around_tests():
 def JWT():
     return create('aaaaaaaaaaaaaaaaaaaaaaaa', 25)
 
-def test_valid_requet(JWT):
+@pytest.mark.run(order=0)
+def test_GET_valid_requet(JWT):
     responce = requests.get(URI + '/passwords', headers={'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(JWT), })
     assert responce.status_code == 200
+
+
+@pytest.mark.run(order=1)
+def test_POST_valid_requet(JWT):
+    responce = requests.post(URI + '/passwords', headers={'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(JWT)}, data={'username': 'adibl', 'password': 'pass', 'program_id': 'steam'})
+    assert responce.status_code == 200
+    responce = requests.get(URI + '/passwords/steam', headers={'Content-Type': 'application/json', 'Authorization': 'Bearer {0}'.format(JWT), })
+    print responce
+
+

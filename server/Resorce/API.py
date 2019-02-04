@@ -30,6 +30,8 @@ class PasswordsUri(Uri):
         metode = self.request.get_verb()
         if metode == 'GET':
             return self.GET()
+        elif metode == 'POST':
+            return self.POST()
         else:
             return Responce.not_found()
 
@@ -46,16 +48,22 @@ class PasswordsUri(Uri):
             s += "\r\n"
             return s
 
+
+    def POST(self):
+        clientID = self.request.get_JWT_data()['iss']
+        data = self.request.get_data_as_dictionery()
+        #FIXME: write more
+
+
+
 class programUri(Uri):
     URI = re.compile('^/passwords/(.*)$')
-
-
-
 
     def handle_request(self):
         metode = self.request.get_verb()
         if metode == 'GET':
             return self.GET()
+
         else:
             return Responce.not_found()
 
@@ -75,6 +83,7 @@ class programUri(Uri):
             s += str(data)
             s += "\r\n"
             return s
+
 
 
 

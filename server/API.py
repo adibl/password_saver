@@ -6,6 +6,7 @@ runs the server and wrap up everything.
 """
 import logging
 import logging.config
+import re
 import socket
 import sys
 import threading
@@ -48,7 +49,7 @@ def lisening():
         threading.Thread(target=handle_client, args=(conn,)).start()
 
 
-def receive(client_socket, func=lambda data: "\r\n\r\n" not in data): #FIXME: cant get requests with body
+def receive(client_socket, func=lambda data: not re.search(".*\r\n.*\r\n", data)): #FIXME: cant get requests with body
     """
     :param func: the exit funcsion of the while loop.
     :param client_socket: the comm socket

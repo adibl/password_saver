@@ -6,11 +6,15 @@ description
 import re
 import logging
 from server.HTTPtolls import *
+import ast
+from urlparse import parse_qs
+from BaseHTTPServer import BaseHTTPRequestHandler
 
-
+#BaseHTTPRequestHandler
 class Request(object):
     RE_URI = re.compile(r"^(GET|PUT|POST|PUTCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
     RE_CONTENT_TYPE = re.compile("Content-Type: (application/json|application/xml)", re.M)
+    RE_DATA = re.compile(".*\n(.*)\n$")
 
 
     def __init__(self, data):
@@ -59,3 +63,11 @@ class Request(object):
         :rtype: str
         """
         return self.RE_URI.search(self.request).group(1)
+
+    def get_data_as_dictionery(self):
+        data = self.RE_DATA.search(self.request).group(1)
+        print data
+        if data is '':
+            return None
+        else:
+            return parse_qs(data) #FIXME dont work
