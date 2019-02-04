@@ -6,7 +6,7 @@ description
 import pytest
 from server.Resorce.request import ResorceRequest
 from server.Autentication.JWT import create
-from HTTPtolls import *
+from server.HTTPtolls import *
 
 
 def valid_JWT():
