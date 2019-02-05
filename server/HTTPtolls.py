@@ -4,6 +4,7 @@ date:
 description
 """
 from abc import abstractmethod
+import json
 URI_PREMITED_LIST = {"/client/try": ["GET", "POST"]} # TODO: add security level to premited actions
 
 OK = 200
@@ -11,7 +12,9 @@ METHOD_NOT_ALLOWED = 405
 BAD_REQUEST = 400
 NOT_FOUND = 404
 UNAUTHORIZED = 401
-
+USERNAME = 'username'
+PASS = 'password'
+PROGRAM = 'program_id'
 
 class Responce(object):
 
@@ -41,6 +44,19 @@ class Responce(object):
         return s
 
     @staticmethod
+    def ok(data=None):
+        s = ''
+        s += "HTTP/1.1 200 OK\r\n"
+        if data is not None:
+            data = json.dumps(data)
+            s += 'Content-Type: application/json\r\n'
+            s += 'Content-Length: {0}\r\n'.format(len(data))
+            s += '\r\n'
+            s += data
+        s += "\r\n"
+        return s
+
+    @staticmethod
     def bad_request():
         s = ""
         s += "HTTP/1.1 400 BAD REQUEST\r\n"
@@ -51,6 +67,7 @@ class Responce(object):
     def unauthorized():
         s = ''
         s += "HTTP/1.1 401 UNAUTHORIZED\r\n"
+        s += '\r\n'
         return s
 
     @abstractmethod

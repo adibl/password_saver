@@ -15,7 +15,6 @@ from server.Autentication.JWT import validate, create
 ])
 def test_create(userID, result):
     t = create(userID)
-    print t
     assert validate(t) is not False
 
 

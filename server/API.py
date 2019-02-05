@@ -49,7 +49,7 @@ def lisening():
         threading.Thread(target=handle_client, args=(conn,)).start()
 
 
-def receive(client_socket, func=lambda data: not re.search(".*\r\n.*\r\n", data)): #FIXME: cant get requests with body
+def receive(client_socket, func=lambda data: not re.search(".*\r\n\r\n(.*\r\n)?", data)): #FIXME: cant get requests with body
     """
     :param func: the exit funcsion of the while loop.
     :param client_socket: the comm socket
