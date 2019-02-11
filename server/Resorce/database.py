@@ -84,7 +84,6 @@ def get_record(clientID, programID):
 def get_all_records(clientID):
     collection = get_col()
     prog = collection.find_one({'_id': ObjectId(clientID)}, {'records.program_id': 1, 'records.username': 1})
-    print prog
     if prog is None:
         return None
     return prog[u'records']

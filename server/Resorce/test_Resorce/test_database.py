@@ -41,7 +41,6 @@ def test_get_all_records():
     database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', 'adibleyer', '123456')
     database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam2', 'adibleyer', '123456')
     result = database.get_all_records('aaaaaaaaaaaaaaaaaaaaaaaa')
-    print result
     assert result == [
         {'username': 'adibleyer', 'program_id': 'steam'},
         {'username': 'adibleyer', 'program_id': 'steam2'}

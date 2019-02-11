@@ -22,7 +22,6 @@ def test_insert_get(userID, reset_time, result):
     time.sleep(0.5)
     database.add(userID)
     time.sleep(0.5)
-    print database.validate(userID, reset_time)
     assert database.validate(userID, reset_time) is result
 
 

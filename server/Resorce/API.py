@@ -30,6 +30,8 @@ class PasswordsUri(Uri):
         metode = self.request.get_verb()
         if metode == 'GET':
             return self.GET()
+        elif metode == 'POST':
+            return self.POST()
         else:
             return Responce.not_found()
 
@@ -40,17 +42,22 @@ class PasswordsUri(Uri):
             logging.critical('user id {0} send valid JWT but the user not exzisting'.format(clientID))
             return Responce.not_found() #FIXME: user dont exzist is not found ????
         else:
-            s = ''
-            s += "HTTP/1.1 200 OK\r\n"
-            s += str(data)
-            s += "\r\n"
-            return s
+            return Responce.ok(data)
+
+
+    def POST(self):
+        clientID = self.request.get_JWT_data()['iss']
+        data = self.request.get_data_as_dictionery()
+        if any(x in data.keys() for x in [USERNAME, PASS, PROGRAM]):
+            database.add_record(clientID, data[PROGRAM], data[USERNAME], data[PASS])
+            return Responce.ok()
+        else:
+            return Responce.bad_request()
+
+
 
 class programUri(Uri):
     URI = re.compile('^/passwords/(.*)$')
-
-
-
 
     def handle_request(self):
         metode = self.request.get_verb()
@@ -70,11 +77,8 @@ class programUri(Uri):
         if len(data) == 0:
             return Responce.not_found()
         else:
-            s = ''
-            s += "HTTP/1.1 200 OK\r\n"
-            s += str(data)
-            s += "\r\n"
-            return s
+            return Responce.ok(data)
+
 
 
 
