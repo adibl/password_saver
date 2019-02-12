@@ -14,10 +14,10 @@ def valid_JWT():
 
 
 @pytest.mark.parametrize("packege,is_valid", [
-    ("GET /client/try?id=123 HTTP/1.1", 200),
-    ("DELETE /client/try HTTP/1.1", 405),
-    ("POST /client/try?id=123&sdfg=hyjydghj HTTP/1.1", 200),
-    ("GET /client/try?id=123 HTTP/1.1\nAuthorization: Bearer A.BCD.EFG\nContent-Type: application/json\n", 200),
+    ("GET /passwords?id=123 HTTP/1.1", True),
+    ("DELETE /false HTTP/1.1", False),
+    ("POST /passwords/steam?id=123&sdfg=hyjydghj HTTP/1.1", True),
+    ("GET /passwords/blabla?id=123 HTTP/1.1\nAuthorization: Bearer A.BCD.EFG\nContent-Type: application/json\n", True),
 ])
 def test_validate_URI(packege, is_valid):
-    assert ResorceRequest._ResorceRequest__validate_URI(packege) == is_valid
+    assert ResorceRequest.IsResorceURL(packege) == is_valid

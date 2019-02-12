@@ -35,7 +35,7 @@ def test_GET_valid_requet(JWT):
 @pytest.mark.run(order=0)
 def test_GET_unvalid_user(JWT):
     responce = requests.get(URI + '/passwords/steam', headers={'Authorization': 'Bearer {0}'.format(create('aaaaaaaaaaaaaaaaaa111111', 25)), })
-    assert responce.status_code == 400  # QUESTION: is 400??
+    assert responce.status_code == 401
 
 
 @pytest.mark.run(order=0)

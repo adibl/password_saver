@@ -6,10 +6,10 @@ description
 import pymongo
 from bson.objectid import ObjectId
 from datetime import datetime
+from functools import wraps
 
 MAX_TIMEOUT = 24*5 #FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
-
 
 
 def create_database(expire_time =MAX_TIMEOUT):
@@ -54,16 +54,34 @@ def add_record(clientID, programID, username, password):
     :param programID: the program identifier
     :param username: the client username to the program
     :param password: the client password to the program
-    :return: #QUESTION: ??
+    :return bool: True if update seceded False otherwise
     """
     collection = get_col()
-    res = collection.update({'_id': ObjectId(clientID) },
+    res = collection.update({'_id': ObjectId(clientID)},
     {
      '$addToSet': {
         'records': {'program_id': programID, 'username': username, 'password': password}
         }
     })
-    return res
+    return res['nModified'] == 1
+
+def cange_record(clientID, programID,username=None, password=None):
+    d = {}
+    if username is not None:
+        d['records.$.username'] = username
+    if password is not None:
+        d['records.$.password'] = password
+    print d
+    collection = get_col()
+    res = collection.update_one(
+        {
+            '_id': ObjectId(clientID),
+            'records': {'$elemMatch': {'program_id': programID}}
+        },
+        {'$set': d}
+    )
+    return res.modified_count == 1
+
 
 
 def get_record(clientID, programID):
@@ -71,32 +89,64 @@ def get_record(clientID, programID):
     get record from database
     :param clientID: the client to get the record from
     :param programID: the program identifier to get the cradentials to
-    :return: username and password for the program
+    :return: username and password for the program or None if user dont exzist. True if record will be deleted, False otherwise
     """
     collection = get_col()
     prog = collection.find_one({'_id': ObjectId(clientID)}, {'records': {'$elemMatch': {'program_id': programID}}})
-    print prog
     if prog is None:
         return None
-    return prog[u'records']
+
+    elif u'records' in prog:
+        return prog[u'records'][0]
+    else:
+        return {}
+
+
+
+def delete_record(clientID, programID):
+    """
+    delete record from database. delete just after x time.
+    :param clientID: the client to get the record from
+    :param programID: the program identifier to get the cradentials to
+    :return: True if succeed, false otherwise
+    """
+    collection = get_col()
+    res =  collection.update_one(
+        {
+            '_id': ObjectId(clientID),
+            'records': {'$elemMatch': {'program_id': programID}}
+    },
+    {'$set': {"records.$.delete_time": datetime.utcnow()}}
+    )
+    return res.modified_count == 1
+
 
 
 def get_all_records(clientID):
+    """
+    get all username program id pairs (with delete time if exist)
+    :param str clientID: the client id
+    :return list: list of dictionaries of the records
+    """
     collection = get_col()
-    prog = collection.find_one({'_id': ObjectId(clientID)}, {'records.program_id': 1, 'records.username': 1})
+    prog = collection.find_one({'_id': ObjectId(clientID)}, {'records.program_id': 1, 'records.username': 1, 'records.delete_time': 1})
     if prog is None:
         return None
-    return prog[u'records']
+    elif u'records' in prog:
+        return prog[u'records']
+    else:
+        return {}
 
 
 def delete_user(clientID):
     """
     delete user after few days from action
     :param clientID: the client id to delete
-    :return: #QUESTION: ??
+    :return bool: True if update seceded, False otherwise
     """
     collection = get_col()
-    return collection.update({'_id': ObjectId(clientID)}, {'delete_time': datetime.utcnow()})
+    ret = collection.update({'_id': ObjectId(clientID)}, {'delete_time': datetime.utcnow()})
+    return ret.modified_count == 1
 
 
 def _immidiate_delete(clientID):
@@ -105,6 +155,9 @@ def _immidiate_delete(clientID):
     """
     collection = get_col()
     return collection.delete_one({'_id': ObjectId(clientID)})
+
+
+
 
 
 

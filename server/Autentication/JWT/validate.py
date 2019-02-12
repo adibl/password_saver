@@ -8,7 +8,7 @@ import logging
 from jwcrypto import jwt, jwe, jwk
 from jwcrypto.common import json_decode
 import os
-from database import validate as validate_JWT_time
+from database import validate_JWT_time
 
 with open(os.path.join(os.path.dirname(__file__), 'public_signing.pem'), 'rb') as f: #FIXME: take files from other directory
     KEY = json_decode(f.read())

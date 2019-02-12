@@ -40,7 +40,7 @@ def add(clientID):
     collection = connect()
     collection.insert_one({'_id': ObjectId(clientID), 'register_time' : datetime.utcnow()})
 
-def validate(clientID, time):
+def validate_JWT_time(clientID, time):
     """
     check if the token was issoed befor or after the last user password change
     :param clientID: the client that owns the token ID

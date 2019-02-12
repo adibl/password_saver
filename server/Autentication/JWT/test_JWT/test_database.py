@@ -22,7 +22,7 @@ def test_insert_get(userID, reset_time, result):
     time.sleep(0.5)
     database.add(userID)
     time.sleep(0.5)
-    assert database.validate(userID, reset_time) is result
+    assert database.validate_JWT_time(userID, reset_time) is result
 
 
 
@@ -31,4 +31,4 @@ def test_insert_get(userID, reset_time, result):
     ('aaaaaaaaaaaaaaaaaaaaaaaa', 500, True),
 ])
 def test_insert_not_found(userID, reset_time, result):
-    assert database.validate(userID, time) is result
+    assert database.validate_JWT_time(userID, time) is result

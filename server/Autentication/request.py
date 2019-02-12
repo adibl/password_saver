@@ -57,6 +57,14 @@ class AuthenticatedRequest(Request):
     def get_JWT_data(self):
         """
         return the JWT payload data
-        :return: #QUESTION ??
+        :return dict: dictionery of JWT payload
         """
         return JWT.get_data(self.get_JWT())
+
+    def is_user_exzist(self):
+        """
+        check if the user in the JWT is exzist
+        :return: True if the user exzist, False otherwise
+        """
+        pass #FIXME: add check if user exzist in username password database
+

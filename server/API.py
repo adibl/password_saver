@@ -14,25 +14,13 @@ from request import Request
 from server.Autentication.request import AuthenticatedRequest
 from server.HTTPtolls import *
 import Resorce
-import __logs
+from __logs import handle_logging
 
 
 
 HOST = '127.0.0.1'
 PORT = 50007
 CONN_LOG = "connect IP:{0} PORT:{1}"
-
-
-def handle_logging():
-    """
-    create tread that listen and auto-cange log config on run
-    :return: tread object
-    """
-    # FIXME: move to __logs file
-    __logs.setup_logging()
-    logging.info('start logging changes server')
-    return logging.config.listen(9999).start()
-
 
 
 def lisening():
@@ -49,7 +37,7 @@ def lisening():
         threading.Thread(target=handle_client, args=(conn,)).start()
 
 
-def receive(client_socket, func=lambda data: not re.search(".*\r\n\r\n(.*\r\n)?", data)): #FIXME: cant get requests with body
+def receive(client_socket, func=lambda data: not re.search(".*\r\n\r\n(.*\r\n)?", data)):
     """
     :param func: the exit funcsion of the while loop.
     :param client_socket: the comm socket
@@ -73,7 +61,8 @@ def handle_client(conn):
         code = AuthenticatedRequest.validate(request)
         if code == OK:
             if Resorce.ResorceRequest.IsResorceURL(request):
-                responce = Resorce.process_request(Resorce.ResorceRequest(request))
+                resorce_request = Resorce.ResorceRequest(request)
+                responce = resorce_request.process_request()
             else:
                 responce = Responce.not_found()
         else:

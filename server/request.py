@@ -11,7 +11,7 @@ from urlparse import parse_qs
 
 #BaseHTTPRequestHandler
 class Request(object):
-    RE_URI = re.compile(r"^(GET|PUT|POST|PUTCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
+    RE_URI = re.compile(r"^(GET|PUT|POST|PATCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
     RE_CONTENT_TYPE = re.compile("Content-Type: (application/x-www-form-urlencoded)", re.M)
     RE_DATA = re.compile("\n(.*)$")
 
@@ -64,8 +64,12 @@ class Request(object):
         return self.RE_URI.search(self.request).group(1)
 
     def get_data_as_dictionery(self):
+        """
+        return the request data as dictionary
+        :return dict: the request data
+        """
         data = self.RE_DATA.search(self.request).group(1)
         if data is '':
             return None
         else:
-            return parse_qs(data) #FIXME dont work
+            return parse_qs(data)

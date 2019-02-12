@@ -5,7 +5,7 @@ description
 """
 from abc import abstractmethod
 import json
-URI_PREMITED_LIST = {"/client/try": ["GET", "POST"]} # TODO: add security level to premited actions
+from bson import json_util
 
 OK = 200
 METHOD_NOT_ALLOWED = 405
@@ -22,9 +22,10 @@ class Responce(object):
     def validate_erors(self, code):
         """
         get the request and the response code and bild the response package
+
         :param int code: the responce status code
-        :param string data: the request
-        :return int : the response
+        :return: the response
+        :rtype str:
         """
         if code == BAD_REQUEST:
             responce = self.bad_request()
@@ -48,7 +49,7 @@ class Responce(object):
         s = ''
         s += "HTTP/1.1 200 OK\r\n"
         if data is not None:
-            data = json.dumps(data)
+            data = json.dumps(data, default=json_util.default)
             s += 'Content-Type: application/json\r\n'
             s += 'Content-Length: {0}\r\n'.format(len(data))
             s += '\r\n'
@@ -85,12 +86,50 @@ class Responce(object):
 
 class Uri(Responce):
     URI = NotImplemented #re compiled
+    METODES = NotImplemented
     def __init__(self, request):
         """
-        :param ResorceRequest request:
+        :param Request request: the request to handle
         """
         self.request = request
 
     @classmethod
     def is_uri(cls, uri):
         return cls.URI.match(uri)
+
+    def handle_request(self):
+        metode = self.request.get_verb()
+        try:
+            if metode == 'GET':
+                return self.GET()
+            elif metode == 'PATCH':
+                return self.PATCH()
+            elif metode == 'POST':
+                return self.POST()
+            elif metode == 'DELETE':
+                return self.DELETE()
+            else:
+                return self.not_found()
+        except NotImplementedError as err:
+            return self.method_not_allowed()
+
+
+    def method_not_allowed(self):
+        s = ''
+        s += "HTTP/1.1 405 NOT FOUND\r\n"
+        s+= 'Allow:' + ' '.join(self.METODES) + '\r\n'
+        s += "\r\n"
+        return s
+
+
+    def GET(self):
+        raise NotImplementedError
+
+    def PATCH(self):
+        raise NotImplementedError
+
+    def POST(self):
+        raise NotImplementedError
+
+    def DELETE(self):
+        raise NotImplementedError
