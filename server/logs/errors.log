@@ -101,3 +101,5 @@
 2019-02-18 10:57:11,181 - 7464 - CRITICAL - user id aaaaaaaaaaaaaaaaaa111111 send valid JWT but the user not exzisting
 2019-02-18 11:40:54,338 - 612 - CRITICAL - user id 111111111111111111111111 send valid JWT but the user not exzisting
 2019-02-18 11:41:25,499 - 3656 - CRITICAL - user id aaaaaaaaaaaaaaaaaa111111 send valid JWT but the user not exzisting
+2019-02-18 11:48:24,089 - 7132 - CRITICAL - user id 111111111111111111111111 send valid JWT but the user not exzisting
+2019-02-18 11:49:03,124 - 9144 - CRITICAL - user id aaaaaaaaaaaaaaaaaa111111 send valid JWT but the user not exzisting
