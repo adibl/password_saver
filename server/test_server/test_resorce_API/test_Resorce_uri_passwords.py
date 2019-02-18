@@ -46,8 +46,9 @@ def test_GET_unvalid_user(JWT):
 
 @pytest.mark.run(order=1)
 def test_POST_valid_requet(JWT):
-    responce = requests.post(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT)}, data={'username': 'adibl', 'password': 'pass', 'program_id': 'steam2'})
+    responce = requests.post(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT)}, json={'username': 'adibl', 'password': 'pass', 'program_id': 'steam2'})
     assert responce.status_code == 200
+    time.sleep(1)
     responce = requests.get(URI + '/passwords/steam2', headers={'Authorization': 'Bearer {0}'.format(JWT), })
     assert responce.status_code == 200
     data = json.loads(responce.text, object_hook=json_util.object_hook)

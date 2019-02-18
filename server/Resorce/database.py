@@ -57,13 +57,13 @@ def add_record(clientID, programID, username, password):
     :return bool: True if update seceded False otherwise
     """
     collection = get_col()
-    res = collection.update({'_id': ObjectId(clientID)},
+    res = collection.update_one({'_id': ObjectId(clientID)},
     {
      '$addToSet': {
         'records': {'program_id': programID, 'username': username, 'password': password}
         }
     })
-    return res['nModified'] == 1
+    return res.modified_count == 1
 
 def cange_record(clientID, programID,username=None, password=None):
     d = {}

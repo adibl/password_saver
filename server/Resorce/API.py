@@ -39,7 +39,7 @@ class PasswordsUri(Uri):
         clientID = self.request.get_JWT_data()['iss']
         data = self.request.get_data_as_dictionery()
         if any(x in data.keys() for x in [USERNAME, PASS, PROGRAM]):
-            if database.add_record(clientID, data[PROGRAM][0], data[USERNAME][0], data[PASS][0]):
+            if database.add_record(clientID, data[PROGRAM], data[USERNAME], data[PASS]):
                 return Responce.ok()
         return Responce.bad_request()
 
@@ -85,20 +85,6 @@ class ProgramUri(Uri):
         programID = self.URI.match(uri).group(1)
         data = self.request.get_data_as_dictionery()
         username, password = data.get(USERNAME), data.get(PASS)
-
-        if username is None:
-            pass
-        elif type(username) is list and len(username) == 1:
-            username = username[0]
-        else:
-            return Responce.bad_request()
-        if password is None:
-            pass
-        elif type(password) is list and len(password) == 1:
-            password = password[0]
-        else:
-            return Responce.bad_request()
-
         if database.cange_record(clientID, programID, username, password):
             return Responce.ok()
         else:

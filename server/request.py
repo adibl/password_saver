@@ -72,4 +72,4 @@ class Request(object):
         if data is '':
             return None
         else:
-            return parse_qs(data)
+            return json.loads(data)
