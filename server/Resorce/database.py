@@ -71,7 +71,6 @@ def cange_record(clientID, programID,username=None, password=None):
         d['records.$.username'] = username
     if password is not None:
         d['records.$.password'] = password
-    print d
     collection = get_col()
     res = collection.update_one(
         {

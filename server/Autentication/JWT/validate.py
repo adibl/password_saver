@@ -9,6 +9,7 @@ from jwcrypto import jwt, jwe, jwk
 from jwcrypto.common import json_decode
 import os
 from database import validate_JWT_time
+import time
 
 with open(os.path.join(os.path.dirname(__file__), 'public_signing.pem'), 'rb') as f: #FIXME: take files from other directory
     KEY = json_decode(f.read())
@@ -36,8 +37,15 @@ def decrypte(Token):
     except jwt.JWTClaimsRegistry as eror:
         logging.warning('send invalid JWS:' + str(eror))
         return False
-    final_payload = S.claims
-    return ast.literal_eval(final_payload)
+    except jwt.JWTExpired as eror:
+        logging.info('send expired token')
+        return False
+
+    final_payload = ast.literal_eval(S.claims)
+    if int(final_payload['exp']) < int(time.time()):
+        logging.info('send expired token, JCrypto is wrong')
+        return False
+    return final_payload
 
 
 def validate(Token):

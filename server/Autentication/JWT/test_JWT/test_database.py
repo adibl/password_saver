@@ -10,7 +10,6 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
-    #database.delete_time('aaaaaaaaaaaaaaaaaaaaaaaa')
     yield
     database.delete('aaaaaaaaaaaaaaaaaaaaaaaa')
 

@@ -4,8 +4,6 @@ date:
 description
 """
 import time
-
-
 import pytest
 from server.Autentication.JWT import validate, create
 
@@ -15,17 +13,17 @@ from server.Autentication.JWT import validate, create
 ])
 def test_create(userID, result):
     t = create(userID)
-    assert validate(t) is not False
+    assert validate(t) is result
 
 
 @pytest.mark.parametrize("userID, timeout,result", [
-    ('aaaaaaaaaaaaaaaaaaaaaaaa', 5, True),
-    ('aaaaaaaaaaaaaaaaaaaaaaaa', 3, True),
-    ('aaaaaaaaaaaaaaaaaaaaaaaa', 11, False),
+    ('aaaaaaaaaaaaaaaaaaaaaaaa', 5, False),
+    ('aaaaaaaaaaaaaaaaaaaaaaaa', 3, False),
+    ('aaaaaaaaaaaaaaaaaaaaaaaa', 20, True),
 ])
 def test_validate_timeout(userID, timeout,result):
 
-    token = create('aaaaaaaaaaaaaaaaaaaaaaaa', timeout=timeout/60)
+    token = create('aaaaaaaaaaaaaaaaaaaaaaaa', timeout=timeout/60.0)
     time.sleep(10)
-    assert validate(token) is not False
+    assert validate(token) is result
 
