@@ -6,7 +6,6 @@ description
 import pymongo
 from bson.objectid import ObjectId
 from datetime import datetime
-from functools import wraps
 
 MAX_TIMEOUT = 24*5 #FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
@@ -144,7 +143,7 @@ def delete_user(clientID):
     :return bool: True if update seceded, False otherwise
     """
     collection = get_col()
-    ret = collection.update({'_id': ObjectId(clientID)}, {'delete_time': datetime.utcnow()})
+    ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
     return ret.modified_count == 1
 
 

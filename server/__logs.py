@@ -5,7 +5,7 @@ import os
 
 LOGGER_NAME = 'sss'
 LOG_FILE = 'logs/API.log'
-CONF_FILE = 'log.yaml'
+CONF_FILE = 'log.ini'
 
 
 def setup_logging():
@@ -14,9 +14,7 @@ def setup_logging():
     """
     path = CONF_FILE
     if os.path.exists(path):
-        with open(path, 'rt') as f:
-            config = yaml.safe_load(f.read())
-        logging.config.dictConfig(config)
+        logging.config.fileConfig(path)
 
 
 def handle_logging():
