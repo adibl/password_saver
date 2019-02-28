@@ -6,7 +6,7 @@ description
 from server.Resorce import database
 import pytest
 import time
-
+#TODO: handle ServerSelectionTimeoutError
 
 @pytest.fixture(autouse=True)
 def run_around_tests():

@@ -100,7 +100,7 @@ def get_record(clientID, programID):
         return {}
 
 
-
+#unchecked
 def delete_record(clientID, programID):
     """
     delete record from database. delete just after x time.
@@ -109,7 +109,7 @@ def delete_record(clientID, programID):
     :return: True if succeed, false otherwise
     """
     collection = get_col()
-    res =  collection.update_one(
+    res = collection.update_one(
         {
             '_id': ObjectId(clientID),
             'records': {'$elemMatch': {'program_id': programID}}
@@ -119,7 +119,7 @@ def delete_record(clientID, programID):
     return res.modified_count == 1
 
 
-
+#unchecked
 def get_all_records(clientID):
     """
     get all username program id pairs (with delete time if exist)
@@ -145,6 +145,17 @@ def delete_user(clientID):
     collection = get_col()
     ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
     return ret.modified_count == 1
+
+def cancel_delete(clientID):
+    """
+    cancel user deletion time
+    :param clientID: the client id to undelete
+    :return bool: True if update seceded, False otherwise
+    """
+    collection = get_col()
+    ret = collection.update_one({'_id': ObjectId(clientID)}, {'$unset': {'delete_time': ""}})
+    return ret.modified_count == 1
+
 
 
 def _immidiate_delete(clientID):

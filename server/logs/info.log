@@ -164,3 +164,7 @@ Content-Length: 0
 Allow:GET PATCH DELETE
 
 
+2019-02-26 14:41:23,227 - 728 - INFO - start logging changes server
+2019-02-26 14:44:32,247 - 728 - INFO - connect IP:127.0.0.1 PORT:54015
+2019-02-26 14:44:43,239 - 728 - INFO - connect IP:127.0.0.1 PORT:54047
+2019-02-26 14:44:48,513 - 3296 - CRITICAL - user id 111111111111111111111111 send valid JWT but the user not exzisting
