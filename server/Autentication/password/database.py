@@ -8,6 +8,7 @@ from bson.objectid import ObjectId
 from datetime import datetime
 import logging
 from passlib.hash import bcrypt
+import server.Resorce.database as resorce_database
 
 EXPIRE_TIME_HOUERS = 48 #FIXME: should be the same as resorce database
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
@@ -45,17 +46,16 @@ def add(username, password):
     """
     collection = connect()
     try:
-        id = collection.insert_one({'username': username, 'password':  bcrypt.using(rounds=13).hash(password)}) #QUESTION: how match rounds to do??
+        d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password)}
+        ret = collection.insert_one(d) #QUESTION: how match rounds to do??
     except pymongo.errors.DuplicateKeyError as err:
         return USERNAME_ALREADY_EXZIST
-    except pymongo.errors as err: #FIXME: return special output if user not exzist
+    except pymongo.errors as err:
         logging.critical('add user didint sucsess' + str(err))
         return None
-
-    if id.acknowledged == True:
-        return id.inserted_id
+    if resorce_database.add_user(ret.inserted_id):
+        return ret.inserted_id
     else:
-        logging.critical('add user didint sucsess' + str(id))
         return None
 
 
@@ -64,17 +64,20 @@ def validate(username, password):
     validate user cradentials
     :param username:
     :param password:
-    :return:
+    :return: the id if the password is correct and None otherwise
     """
 
     collection = connect()
     try:
         prog = collection.find_one({'username': username})
+        print prog
     except pymongo.errors as err:
         logging.info('add user didint sucsess' + str(err))
         return None
-    if bcrypt.verify("wrong", prog.password):
-        return prog.id
+    if prog is None:
+        return None
+    elif bcrypt.verify(password, prog['password']):
+        return prog['_id']
     else:
         return None
 
@@ -87,16 +90,21 @@ def delete_user(clientID):
     :return bool: True if update seceded, False otherwise
     """
     collection = connect()
-    ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
-    return ret.modified_count == 1
+    # TODO: add delete user data in resorce database
+    if resorce_database.delete_user(clientID) is True:
+        ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
+        return ret.modified_count == 1
+    else:
+        return False
 
-#unchecked
+
 def _immidiate_delete(clientID):
     """
     immediately delete user FOR TEST ONLY!!
     """
     collection = connect()
-    return collection.delete_one({'_id': clientID})
+    resorce_database._immidiate_delete(clientID)
+    return collection.delete_one({'_id': ObjectId(clientID)})
 
 create_database()
 

@@ -12,6 +12,7 @@ METHOD_NOT_ALLOWED = 405
 BAD_REQUEST = 400
 NOT_FOUND = 404
 UNAUTHORIZED = 401
+UNEXPECTED_ENTITY = 442
 USERNAME = 'username'
 PASS = 'password'
 PROGRAM = 'program_id'
@@ -69,6 +70,19 @@ class Responce(object):
         s = ''
         s += "HTTP/1.1 401 UNAUTHORIZED\r\n"
         s += '\r\n'
+        return s
+
+    @staticmethod
+    def unexpected_entity(data):
+        s = ''
+        s += "HTTP/1.1 442 OK\r\n"
+        if data is not None:
+            data = json.dumps(data, default=json_util.default)
+            s += 'Content-Type: application/json\r\n'
+            s += 'Content-Length: {0}\r\n'.format(len(data))
+            s += '\r\n'
+            s += data
+        s += "\r\n"
         return s
 
     @abstractmethod

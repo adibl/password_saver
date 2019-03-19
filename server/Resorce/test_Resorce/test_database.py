@@ -42,10 +42,11 @@ def test_add_pass(userID, progID, username, password, result):
 
 
 @pytest.mark.run(order=1)
-def test_add_exzisting_progID(): #FIXME: add assert and fix it
+def test_add_exzisting_progID():
     database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', 'adibleyer', '123456')
     time.sleep(1)
-    database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', 'adibleyer', '123456')
+    ret = database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', 'adibleyer', '123456')
+    assert ret is False
 
 
 @pytest.mark.run(order=1)
@@ -86,7 +87,6 @@ def test_delete_user():
     database.delete_user('aaaaaaaaaaaaaaaaaaaaaaaa')
     time.sleep(1)
     result = database.get_all_records('aaaaaaaaaaaaaaaaaaaaaaaa') #QUESTION: how I know if user will be deleted??
-    print result
     assert 'delete_time' in result
 
 

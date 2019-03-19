@@ -44,7 +44,7 @@ class PasswordsUri(Uri):
         return Responce.bad_request()
 
     @staticmethod
-    def delte_user(clientID):
+    def delte_user(clientID): #FIXME: is needed???
         """
         delete the user from the databse
         :return bool: true if delete seceded, false otherwise

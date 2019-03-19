@@ -15,7 +15,7 @@ from server.Autentication.request import AuthenticatedRequest
 from server.HTTPtolls import *
 import Resorce
 from __logs import handle_logging
-
+from Autentication import password
 
 
 HOST = '127.0.0.1'

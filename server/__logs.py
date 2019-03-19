@@ -22,7 +22,6 @@ def handle_logging():
     create tread that listen and auto-cange log config on run
     :return: tread object
     """
-    # FIXME: move to __logs file
     setup_logging()
     logging.info('start logging changes server')
     return logging.config.listen(9999).start()

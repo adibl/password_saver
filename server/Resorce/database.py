@@ -127,13 +127,10 @@ def get_all_records(clientID):
     :return list: list of dictionaries of the records
     """
     collection = get_col()
-    prog = collection.find_one({'_id': ObjectId(clientID)}, {'records.program_id': 1, 'records.username': 1, 'records.delete_time': 1})
+    prog = collection.find_one({'_id': ObjectId(clientID)}, {'records.program_id': 1, 'records.username': 1, 'records.delete_time': 1, 'delete_time': 1})
     if prog is None:
         return None
-    elif u'records' in prog:
-        return prog[u'records']
-    else:
-        return {}
+    return prog
 
 
 def delete_user(clientID):
