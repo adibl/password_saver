@@ -3,15 +3,17 @@ name:
 date:
 description
 """
-import pymongo
-from bson.objectid import ObjectId
+import logging
 from datetime import datetime
 
-MAX_TIMEOUT = 24*5 #FIXME move to create file
+import pymongo
+from bson.objectid import ObjectId
+
+MAX_TIMEOUT = 24 * 5  # FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 
 
-def create_database(expire_time =MAX_TIMEOUT):
+def create_database(expire_time=MAX_TIMEOUT):
     """
     create the database with all needed
     :param expire_time: the time (in houers) after a delete user command will be executed
@@ -32,6 +34,7 @@ def add_user(userID):
     try:
         col = db['users'].insert_one({'_id': ObjectId(userID), 'records': []})
     except pymongo.errors.DuplicateKeyError as err:
+        logging.debug('ID already exzist')
         return False
     return True
 
@@ -47,7 +50,7 @@ def get_col():
     return record
 
 
-def add_record(clientID, programID, username, password):
+def add_record(clientID, programID, username, password, sec_level=0):
     """
     :param clientID: the client ID
     :param programID: the program identifier
@@ -57,14 +60,16 @@ def add_record(clientID, programID, username, password):
     """
     collection = get_col()
     res = collection.update_one({'_id': ObjectId(clientID)},
-    {
-     '$addToSet': {
-        'records': {'program_id': programID, 'username': username, 'password': password}
-        }
-    })
+                                {
+                                    '$addToSet': {
+                                        'records': {'program_id': programID, 'username': username, 'password': password,
+                                                    'sec_level': sec_level}
+                                    }
+                                })
     return res.modified_count == 1
 
-def cange_record(clientID, programID,username=None, password=None):
+
+def cange_record(clientID, programID, username=None, password=None):
     d = {}
     if username is not None:
         d['records.$.username'] = username
@@ -79,7 +84,6 @@ def cange_record(clientID, programID,username=None, password=None):
         {'$set': d}
     )
     return res.modified_count == 1
-
 
 
 def get_record(clientID, programID):
@@ -100,7 +104,6 @@ def get_record(clientID, programID):
         return {}
 
 
-#unchecked
 def delete_record(clientID, programID):
     """
     delete record from database. delete just after x time.
@@ -113,13 +116,12 @@ def delete_record(clientID, programID):
         {
             '_id': ObjectId(clientID),
             'records': {'$elemMatch': {'program_id': programID}}
-    },
-    {'$set': {"records.$.delete_time": datetime.utcnow()}}
+        },
+        {'$set': {"records.$.delete_time": datetime.utcnow()}}
     )
     return res.modified_count == 1
 
 
-#unchecked
 def get_all_records(clientID):
     """
     get all username program id pairs (with delete time if exist)
@@ -127,7 +129,9 @@ def get_all_records(clientID):
     :return list: list of dictionaries of the records
     """
     collection = get_col()
-    prog = collection.find_one({'_id': ObjectId(clientID)}, {'records.program_id': 1, 'records.username': 1, 'records.delete_time': 1, 'delete_time': 1})
+    prog = collection.find_one({'_id': ObjectId(clientID)},
+                               {'records.program_id': 1, 'records.username': 1, 'records.delete_time': 1,
+                                'records.sec_level': 1, 'delete_time': 1})
     if prog is None:
         return None
     return prog
@@ -143,6 +147,7 @@ def delete_user(clientID):
     ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
     return ret.modified_count == 1
 
+
 def cancel_delete(clientID):
     """
     cancel user deletion time
@@ -154,17 +159,9 @@ def cancel_delete(clientID):
     return ret.modified_count == 1
 
 
-
 def _immidiate_delete(clientID):
     """
     immediately delete user FOR TEST ONLY!!
     """
     collection = get_col()
     return collection.delete_one({'_id': ObjectId(clientID)})
-
-
-
-
-
-
-

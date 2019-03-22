@@ -6,7 +6,6 @@ description
 from server.Resorce import database
 import pytest
 import time
-#TODO: handle ServerSelectionTimeoutError
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
@@ -36,7 +35,7 @@ def test_add_pass(userID, progID, username, password, result):
     time.sleep(1)
     result2 = database.get_record(userID, progID)
     if result:
-        assert result2 == {'username': username, 'password': password, 'program_id': progID}
+        assert result2 == {'username': username, 'password': password, 'program_id': progID, 'sec_level': 0}
     else:
         assert result2 is None
 
@@ -56,7 +55,7 @@ def test_change_record():
     database.cange_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', password='changed')
     time.sleep(1)
     rec = database.get_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam')
-    assert rec == {'username': 'adibleyer', 'password': 'changed', 'program_id': 'steam'}
+    assert rec == {'username': 'adibleyer', 'password': 'changed', 'program_id': 'steam', 'sec_level': 0}
 
 
 

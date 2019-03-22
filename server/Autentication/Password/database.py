@@ -78,10 +78,12 @@ def validate(username, password):
         logging.info('add user didint sucsess' + str(err))
         return None
     if prog is None:
+        logging.debug('username incorrect')
         return None
     elif bcrypt.verify(password, prog['password']):
         return str(prog['_id'])
     else:
+        logging.debug('password incorrect')
         return None
 
 
@@ -119,6 +121,7 @@ def __add_id(ID, username, password):
         d = {'_id': ObjectId(ID), 'username': username, 'password': bcrypt.using(rounds=13).hash(password)}
         ret = collection.insert_one(d) #QUESTION: how match rounds to do??
     except pymongo.errors.DuplicateKeyError as err:
+        logging.debug('username already exzist')
         return USERNAME_ALREADY_EXZIST
     except pymongo.errors as err:
         logging.critical('add user didint sucsess' + str(err))

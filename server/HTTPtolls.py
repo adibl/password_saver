@@ -66,9 +66,11 @@ class Responce(object):
         return s
 
     @staticmethod
-    def unauthorized():
+    def unauthorized(header=''):
         s = ''
         s += "HTTP/1.1 401 UNAUTHORIZED\r\n"
+        s+= header
+        s+= '\r\n'
         s += '\r\n'
         return s
 

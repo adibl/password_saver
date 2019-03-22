@@ -38,18 +38,11 @@ class PasswordsUri(Uri):
         """
         clientID = self.request.get_user_id()
         data = self.request.get_data_as_dictionery()
+        sec_level = self.request.get_sec_level()
         if any(x in data.keys() for x in [USERNAME, PASS, PROGRAM]):
-            if database.add_record(clientID, data[PROGRAM], data[USERNAME], data[PASS]):
+            if database.add_record(clientID, data[PROGRAM], data[USERNAME], data[PASS], sec_level):
                 return Responce.ok()
         return Responce.bad_request()
-
-    @staticmethod
-    def delte_user(clientID): #FIXME: is needed???
-        """
-        delete the user from the databse
-        :return bool: true if delete seceded, false otherwise
-        """
-        return database.delete_user(clientID)
 
 
 
@@ -66,12 +59,16 @@ class ProgramUri(Uri):
         uri = self.request.get_URI()
         clientID = self.request.get_user_id()
         programID = self.URI.match(uri).group(1)
+        sec_level = self.request.get_sec_level()
         data = database.get_record(clientID, programID)
         if data is None:
             logging.critical('user id {0} send valid JWT but the user not exzisting'.format(clientID))
             return Responce.unauthorized()
-        if len(data) == 0:
+        elif len(data) == 0:
             return Responce.not_found()
+        elif data['sec_level'] > sec_level:
+            logging.debug('valid request with {0} sec level when {1} in neded'.format(sec_level, data['sec_level']))
+            return Responce.unauthorized('SecLevel: ' + str(data['sec_level']))
         else:
             return Responce.ok(data)
 

@@ -9,6 +9,8 @@ from server.Autentication.Password.request import AuthenticatedRequestPassword
 
 
 class AuthenticatedRequest(AuthenticatedRequestScema):
+    SEC_LEVEL = {AuthenticatedRequestJWT: 0, AuthenticatedRequestPassword: 1}
+
     @classmethod
     def validate(clt, request):
         if AuthenticatedRequestPassword.is_fit(request):
@@ -18,6 +20,11 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
         return backend.validate(request)
 
     def __init__(self, request):
+        """
+        create Autenticated request that provide all nececery interface.
+
+        :param request: the request string
+        """
         super(AuthenticatedRequest, self).__init__(request)
         if AuthenticatedRequestPassword.is_fit(request):
             self.backend = AuthenticatedRequestPassword(request)
@@ -32,6 +39,15 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
         :return:
         """
         return self.backend.get_user_id()
+
+    def get_sec_level(self):
+        """
+        get the autentication methode sec level
+
+        :return: the user sec level
+        :rtype: int
+        """
+        return self.SEC_LEVEL[type(self.backend)]
 
 
 

@@ -25,30 +25,28 @@ class AuthenticatedRequestPassword(AuthenticatedRequestScema):
         status = super(AuthenticatedRequestPassword, cls).validate(request)
         if status is OK:
             if cls.validate_Authentication(request):
-                request = AuthenticatedRequestPassword(request)
                 username_password = cls.__get_username_password(request)
                 if username_password is None:
-                    return BAD_REQUEST #QUESTION: eror type if Autentication filed is wrong??
-                username, password = username_password.split(':')
+                    return BAD_REQUEST
+                username, password = username_password
                 ret = passwordAutentication.validate(username, password)
                 if ret is None:
-                    return NOT_FOUND #QUESTION: eror type if pass or username filed is wrong??
+                    return UNAUTHORIZED
                 else:
                     return OK
             else:
                 logging.debug('Authentication header missing or wrong')
-                return BAD_REQUEST #QUESTION: eror type if Autentication filed is wrong??
+                return BAD_REQUEST
         else:
             return status
 
     def get_user_id(self):
         """
-        get the user id from JWT
-        :return:
+        get the user id from database
+        :return: the user ID
+        :rtype: str
         """
         username_password = self.__get_username_password(self.request)
-        print username_password
-        print type(username_password)
         if username_password is None:
             return None
         username, password = username_password
@@ -57,12 +55,15 @@ class AuthenticatedRequestPassword(AuthenticatedRequestScema):
 
     @classmethod
     def __get_username_password(cls, request):
+        """
+        get user username and password from request
+        :param str request: the request string
+        :return: username, password tuple
+        """
         auto = cls.RE_VALIDATE.search(request).group(1)
-        auto += '='*(len(auto)%4)
+        auto += '='*(len(auto) % 4)
         username_password = base64.b64decode(auto)
-        print username_password
-        print type(username_password)
         if ':' in username_password:
-            return ':'.split(username_password)
+            return username_password.split(':')
         else:
             return None

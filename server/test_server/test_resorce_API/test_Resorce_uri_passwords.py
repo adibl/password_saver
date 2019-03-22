@@ -35,7 +35,7 @@ def test_GET_valid_requet(JWT):
     responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT), })
     assert responce.status_code == 200
     data = json.loads(responce.text, object_hook=json_util.object_hook)
-    assert data['records'] == [{"username": "adibl", "program_id": "steam"}, {"username": "adibl", "program_id": "gmail"}]
+    assert data['records'] == [{"username": "adibl", "program_id": "steam", 'sec_level': 0}, {"username": "adibl", "program_id": "gmail", 'sec_level': 1}]
 
 
 @pytest.mark.run(order=0)
@@ -54,6 +54,6 @@ def test_POST_valid_requet(JWT):
     assert responce.status_code == 200
     data = json.loads(responce.text, object_hook=json_util.object_hook)
     assert type(data) is dict
-    assert data == {'username': 'adibl', 'password': 'pass', 'program_id': 'steam2'}
+    assert data == {'username': 'adibl', 'password': 'pass', 'program_id': 'steam2', 'sec_level': 0}
 
 
