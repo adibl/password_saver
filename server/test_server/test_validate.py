@@ -7,7 +7,6 @@ import pytest
 from server import request
 from server.Autentication.JWT import create
 from server.HTTPtolls import *
-from server.Autentication.request import AuthenticatedRequest
 
 
 def valid_JWT():

@@ -3,7 +3,7 @@ import win32com.client
 import os
 
 program = 'C:\\Program Files (x86)\\Ubisoft\\Ubisoft Game Launcher\\Uplay.exe'
-print program
+
 desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
 paths = glob.glob(desktop + "\\*.lnk")
 print paths

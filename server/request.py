@@ -5,11 +5,13 @@ description
 """
 import re
 import logging
+from abc import ABCMeta, abstractmethod
+
 from server.HTTPtolls import *
 import json
 from urlparse import parse_qs
 
-#BaseHTTPRequestHandler
+
 class Request(object):
     RE_URI = re.compile(r"^(GET|PUT|POST|PATCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
     RE_CONTENT_TYPE = re.compile("Content-Type: (application/x-www-form-urlencoded)", re.M)
@@ -73,3 +75,29 @@ class Request(object):
             return None
         else:
             return json.loads(data)
+
+
+class AuthenticatedRequestScema(Request):
+    __metaclass__ = ABCMeta
+    RE_VALIDATE = None
+
+    @classmethod
+    def is_fit(cls, request):
+        return cls.validate_Authentication(request)
+
+    @classmethod
+    def validate_Authentication(clt, request):
+        """
+        validate Autentication header structure
+        :param str request: the client request
+        :return: True if structure is valid, false otherwise
+        """
+        return bool(clt.RE_VALIDATE.search(request))
+
+    @abstractmethod
+    def get_user_id(self):
+        """
+        get the user id
+        :return: user id
+        :rtype: str
+        """

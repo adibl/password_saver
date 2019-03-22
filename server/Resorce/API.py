@@ -22,7 +22,7 @@ class PasswordsUri(Uri):
         :return str: the responce
         """
 
-        clientID = self.request.get_JWT_data()['iss']
+        clientID = self.request.get_user_id()
         data = database.get_all_records(clientID)
         if data is None:
             logging.critical('user id {0} send valid JWT but the user not exzisting'.format(clientID))
@@ -36,7 +36,7 @@ class PasswordsUri(Uri):
         post new password, username, program id record to database
         :return str: the response 200 ok or 400 bad request
         """
-        clientID = self.request.get_JWT_data()['iss']
+        clientID = self.request.get_user_id()
         data = self.request.get_data_as_dictionery()
         if any(x in data.keys() for x in [USERNAME, PASS, PROGRAM]):
             if database.add_record(clientID, data[PROGRAM], data[USERNAME], data[PASS]):
@@ -64,7 +64,7 @@ class ProgramUri(Uri):
         :return str: http responce 200 or 404 or 401
         """
         uri = self.request.get_URI()
-        clientID = self.request.get_JWT_data()['iss']
+        clientID = self.request.get_user_id()
         programID = self.URI.match(uri).group(1)
         data = database.get_record(clientID, programID)
         if data is None:
@@ -81,7 +81,7 @@ class ProgramUri(Uri):
         :return str: http response 200 or 404
         """
         uri = self.request.get_URI()
-        clientID = self.request.get_JWT_data()['iss']
+        clientID = self.request.get_user_id()
         programID = self.URI.match(uri).group(1)
         data = self.request.get_data_as_dictionery()
         username, password = data.get(USERNAME), data.get(PASS)
@@ -97,7 +97,7 @@ class ProgramUri(Uri):
         :return str: http response 200 or 404
         """
         uri = self.request.get_URI()
-        clientID = self.request.get_JWT_data()['iss']
+        clientID = self.request.get_user_id()
         programID = self.URI.match(uri).group(1)
         if database.delete_record(clientID, programID):
             return Responce.ok()

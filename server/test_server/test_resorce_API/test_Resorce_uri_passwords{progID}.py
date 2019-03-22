@@ -63,7 +63,8 @@ def test_DELETE_valid_request(JWT):
     responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT)})
     assert responce.status_code == 200
     data = json.loads(responce.text, object_hook=json_util.object_hook)
-    for program in data:
+    print data
+    for program in data['records']:
         if program['program_id'] == 'steam':
             assert 'delete_time' in program
 

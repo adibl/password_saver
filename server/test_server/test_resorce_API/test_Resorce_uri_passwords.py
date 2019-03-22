@@ -6,6 +6,7 @@ description
 import requests
 import pytest
 from server.Resorce import database
+from server.Autentication.Password import database as pass_database
 from server.Autentication.JWT import create
 import json
 from bson import json_util
@@ -16,6 +17,7 @@ URI = 'http://127.0.0.1:50007'
 @pytest.fixture(autouse=True)
 def run_around_tests():
     database.add_user('aaaaaaaaaaaaaaaaaaaaaaaa')
+    pass_database.__add_id('aaaaaaaaaaaaaaaaaaaaaaaa', 'adi', 'secpass')
     time.sleep(1)
     database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', 'adibl', '1234')
     database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'gmail', 'adibl', 'abcdef')
@@ -33,8 +35,7 @@ def test_GET_valid_requet(JWT):
     responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT), })
     assert responce.status_code == 200
     data = json.loads(responce.text, object_hook=json_util.object_hook)
-    assert type(data) is list
-    assert data == [{"username": "adibl", "program_id": "steam"}, {"username": "adibl", "program_id": "gmail"}]
+    assert data['records'] == [{"username": "adibl", "program_id": "steam"}, {"username": "adibl", "program_id": "gmail"}]
 
 
 @pytest.mark.run(order=0)

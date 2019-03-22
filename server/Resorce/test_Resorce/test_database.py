@@ -66,7 +66,7 @@ def test_get_all_records():
     database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam2', 'adibleyer', '123456')
     time.sleep(1)
     result = database.get_all_records('aaaaaaaaaaaaaaaaaaaaaaaa')
-    assert result == [
+    assert result['records'] == [
         {'username': 'adibleyer', 'program_id': 'steam'},
         {'username': 'adibleyer', 'program_id': 'steam2'}
     ]

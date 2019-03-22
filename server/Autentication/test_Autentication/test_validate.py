@@ -4,9 +4,11 @@ date:
 description
 """
 import pytest
-from server.Resorce import request as validate
+from Autentication.JWT.request import AuthenticatedRequestJWT
 from server.Autentication.JWT import create
+
 import time
+from HTTPtolls import *
 
 
 def valid_JWT():
@@ -17,7 +19,7 @@ def valid_JWT():
 ("GET /client/try HTTP/1.1\nAuthorization: Bearer {0}\nContent-Type: application/json\n".format('aa.ff.vvvvdvvd'), 401),
 ])
 def test_valid_JWT(packege, is_valid):
-    assert validate.AuthenticatedRequest.validate(packege) == is_valid
+    assert AuthenticatedRequestJWT.validate(packege) == is_valid
 
 
 @pytest.mark.parametrize("userID, timeout,result", [
@@ -26,13 +28,13 @@ def test_valid_JWT(packege, is_valid):
 ])
 def test_validate_JWT_timeout(userID, timeout, result):
     token = create('aaaaaaaaaaaaaaaaaaaaaaaa', timeout=timeout/60.0)
-    packege = "GET /client/try HTTP/1.1\nAuthorization: Bearer {0}\nContent-Type: application/json\n".format(token)
     time.sleep(10)
-    assert validate.AuthenticatedRequest.validate(packege)== result
+    packege = "GET /client/try HTTP/1.1\nAuthorization: Bearer {0}\nContent-Type: application/json\n".format(token)
+    assert AuthenticatedRequestJWT.validate(packege) == result
 
-@pytest.mark.parametrize("packege,JWT", [
-    ("Authorization: Bearer A.BCD.EFG\n", "A.BCD.EFG"),
-    ("Authorization: Bearer ABCDEFGfdhghf6756756.sdfgs.dfgd\n", "ABCDEFGfdhghf6756756.sdfgs.dfgd"),
-])
-def test_get_JWT(packege, JWT):
-    assert validate.AuthenticatedRequest(packege).get_JWT() == JWT
+def test_get_user_id():
+    token = create('aaaaaaaaaaaaaaaaaaaaaaaa', timeout=20 / 60.0)
+    packege = "GET /client/try HTTP/1.1\nAuthorization: Bearer {0}\nContent-Type: application/json\n".format(token)
+    assert AuthenticatedRequestJWT.validate(packege) == OK
+    req = AuthenticatedRequestJWT(packege)
+    assert req.get_user_id() == 'aaaaaaaaaaaaaaaaaaaaaaaa'

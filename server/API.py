@@ -8,15 +8,13 @@ import logging
 import logging.config
 import re
 import socket
-import sys
 import threading
+
+from Resorce.request import ResorceRequest
+from __logs import handle_logging
 from request import Request
 from server.Autentication.request import AuthenticatedRequest
 from server.HTTPtolls import *
-import Resorce
-from __logs import handle_logging
-from Autentication import password
-
 
 HOST = '127.0.0.1'
 PORT = 50007
@@ -60,8 +58,8 @@ def handle_client(conn):
     if code == OK:
         code = AuthenticatedRequest.validate(request)
         if code == OK:
-            if Resorce.ResorceRequest.IsResorceURL(request):
-                resorce_request = Resorce.ResorceRequest(request)
+            if ResorceRequest.IsResorceURL(request):
+                resorce_request = ResorceRequest(request)
                 responce = resorce_request.process_request()
             else:
                 responce = Responce.not_found()

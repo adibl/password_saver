@@ -3,13 +3,11 @@ name:
 date:
 description
 """
-import logging
-import re
 
 import database
-from server.HTTPtolls import *
 
-class password():
+
+class passwordAutentication():
 
     @staticmethod
     def create(username, password):

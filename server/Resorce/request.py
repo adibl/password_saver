@@ -5,11 +5,12 @@ validate the request with re.
 have defs to extract the data from the request.
 
 """
-import re
-import logging
-from server.Autentication.request import AuthenticatedRequest
-from server.HTTPtolls import *
 from API import PasswordsUri, ProgramUri
+from server.Autentication.request import AuthenticatedRequest
+from server.request import Request
+from server.HTTPtolls import *
+
+
 # regex
 
 
@@ -18,12 +19,12 @@ class ResorceRequest(AuthenticatedRequest):
 
     @classmethod
     def IsResorceURL(clt, request):
-        request = AuthenticatedRequest(request)
+        request = Request(request)
         return any([True for uri in clt.ResorceURI if uri.match(request.get_URI())])
 
     @classmethod
     def validate(clt, request):
-        status = super(AuthenticatedRequest, clt).validate(request)
+        status = super(ResorceRequest, clt).validate(request)
         if status is OK:
             return clt.IsResorceURL(request)
         else:

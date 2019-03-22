@@ -3,11 +3,13 @@ name:
 date:
 description
 """
+import logging
+from datetime import datetime
+
 import pymongo
 from bson.objectid import ObjectId
-from datetime import datetime
-import logging
 from passlib.hash import bcrypt
+
 import server.Resorce.database as resorce_database
 
 EXPIRE_TIME_HOUERS = 48 #FIXME: should be the same as resorce database
@@ -43,6 +45,7 @@ def add(username, password):
     :param username: the client username
     :param password: the client password
     :return: the client id if created None otherwise.
+    :rtype: ObjectId
     """
     collection = connect()
     try:
@@ -65,19 +68,19 @@ def validate(username, password):
     :param username:
     :param password:
     :return: the id if the password is correct and None otherwise
+    :rtype: str
     """
 
     collection = connect()
     try:
         prog = collection.find_one({'username': username})
-        print prog
     except pymongo.errors as err:
         logging.info('add user didint sucsess' + str(err))
         return None
     if prog is None:
         return None
     elif bcrypt.verify(password, prog['password']):
-        return prog['_id']
+        return str(prog['_id'])
     else:
         return None
 
@@ -90,7 +93,6 @@ def delete_user(clientID):
     :return bool: True if update seceded, False otherwise
     """
     collection = connect()
-    # TODO: add delete user data in resorce database
     if resorce_database.delete_user(clientID) is True:
         ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
         return ret.modified_count == 1
@@ -106,6 +108,22 @@ def _immidiate_delete(clientID):
     resorce_database._immidiate_delete(clientID)
     return collection.delete_one({'_id': ObjectId(clientID)})
 
+
+def __add_id(ID, username, password):
+    """
+    add user with predefined ID , FOR TESTS ONLY!!!!
+    :return:
+    """
+    collection = connect()
+    try:
+        d = {'_id': ObjectId(ID), 'username': username, 'password': bcrypt.using(rounds=13).hash(password)}
+        ret = collection.insert_one(d) #QUESTION: how match rounds to do??
+    except pymongo.errors.DuplicateKeyError as err:
+        return USERNAME_ALREADY_EXZIST
+    except pymongo.errors as err:
+        logging.critical('add user didint sucsess' + str(err))
+        return None
+    return ret.inserted_id
 create_database()
 
 
