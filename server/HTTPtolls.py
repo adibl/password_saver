@@ -20,7 +20,7 @@ PROGRAM = 'program_id'
 class Responce(object):
 
     @classmethod
-    def validate_erors(self, code):
+    def validate_erors(cls, code):
         """
         get the request and the response code and bild the response package
 
@@ -29,13 +29,13 @@ class Responce(object):
         :rtype str:
         """
         if code == BAD_REQUEST:
-            responce = self.bad_request()
+            responce = cls.bad_request()
         elif code == NOT_FOUND:
-            responce = self.not_found()
+            responce = cls.not_found()
         elif code == UNAUTHORIZED:
-            responce = self.unauthorized()
+            responce = cls.unauthorized()
         else:
-            responce = self.bad_request()
+            responce = cls.bad_request()
         return responce
 
     @staticmethod

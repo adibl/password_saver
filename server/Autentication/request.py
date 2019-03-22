@@ -12,11 +12,13 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
     SEC_LEVEL = {AuthenticatedRequestJWT: 0, AuthenticatedRequestPassword: 1}
 
     @classmethod
-    def validate(clt, request):
+    def validate(cls, request):
         if AuthenticatedRequestPassword.is_fit(request):
             backend = AuthenticatedRequestPassword(request)
         elif AuthenticatedRequestJWT.is_fit(request):
             backend = AuthenticatedRequestJWT(request)
+        else:
+            return None
         return backend.validate(request)
 
     def __init__(self, request):

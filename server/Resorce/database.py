@@ -56,6 +56,7 @@ def add_record(clientID, programID, username, password, sec_level=0):
     :param programID: the program identifier
     :param username: the client username to the program
     :param password: the client password to the program
+    :param sec_level: the security level of this record
     :return bool: True if update seceded False otherwise
     """
     collection = get_col()
@@ -131,7 +132,7 @@ def get_all_records(clientID):
     collection = get_col()
     prog = collection.find_one({'_id': ObjectId(clientID)},
                                {'records.program_id': 1, 'records.username': 1, 'records.delete_time': 1,
-                                'records.sec_level': 1, 'delete_time': 1})
+                                'records.sec_level': 1, 'delete_time': 1, "_id": 0})
     if prog is None:
         return None
     return prog

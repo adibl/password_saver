@@ -7,7 +7,7 @@ description
 import database
 
 
-class passwordAutentication():
+class passwordAutentication:
 
     @staticmethod
     def create(username, password):

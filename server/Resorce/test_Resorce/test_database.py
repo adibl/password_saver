@@ -66,8 +66,8 @@ def test_get_all_records():
     time.sleep(1)
     result = database.get_all_records('aaaaaaaaaaaaaaaaaaaaaaaa')
     assert result['records'] == [
-        {'username': 'adibleyer', 'program_id': 'steam'},
-        {'username': 'adibleyer', 'program_id': 'steam2'}
+        {'username': 'adibleyer', 'program_id': 'steam', 'sec_level': 0},
+        {'username': 'adibleyer', 'program_id': 'steam2', 'sec_level': 0}
     ]
 
 
@@ -85,7 +85,7 @@ def test_delete_user():
     time.sleep(1)
     database.delete_user('aaaaaaaaaaaaaaaaaaaaaaaa')
     time.sleep(1)
-    result = database.get_all_records('aaaaaaaaaaaaaaaaaaaaaaaa') #QUESTION: how I know if user will be deleted??
+    result = database.get_all_records('aaaaaaaaaaaaaaaaaaaaaaaa')
     assert 'delete_time' in result
 
 

@@ -20,14 +20,14 @@ USERNAME_ALREADY_EXZIST = 1
 
 def create_database():
     """
-    :param int expire_time: after how match time to expire documents (minites)
-    :return: None
+    create the database with his indexes
     """
     client = pymongo.MongoClient(CONN_STR)
     db = client.Autentication
     collection = db.passwords
     collection.create_index('delete_time', expireAfterSeconds=60*60*EXPIRE_TIME_HOUERS)
     collection.create_index('username', unique=True)
+
 
 def connect():
     """

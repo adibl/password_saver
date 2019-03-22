@@ -3,13 +3,12 @@ name:
 date:
 description
 """
-import re
+import json
 import logging
-from abc import ABCMeta, abstractmethod
+import re
+from abc import ABCMeta
 
 from server.HTTPtolls import *
-import json
-from urlparse import parse_qs
 
 
 class Request(object):
@@ -22,8 +21,8 @@ class Request(object):
         self.request = data
 
     @classmethod
-    def validate(clt, request): #FIXME: add content type validation
-        if clt.__validate_request_line(request):
+    def validate(cls, request): #FIXME: add content type validation
+        if cls.__validate_request_line(request):
             return OK
         else:
             logging.debug('general validation failed')
@@ -31,13 +30,13 @@ class Request(object):
 
 
     @classmethod
-    def __validate_request_line(clt, request):
+    def __validate_request_line(cls, request):
         """
         validate the URI structure
         :param str request: the client request
         :return: True if the structure is valid, False otherwise
         """
-        return bool(clt.RE_URI.search(request))
+        return bool(cls.RE_URI.search(request))
 
     def __validate_content_type(self):
         """
@@ -50,7 +49,6 @@ class Request(object):
     def get_URI(self):
         """
         get the request URL
-        :param str request: the client request
         :return: the request URI
         :rtype: str
         """
@@ -59,7 +57,6 @@ class Request(object):
     def get_verb(self):
         """
         return the http verb of the request
-        :param str request: the client request
         :return: the client request HTTP verb
         :rtype: str
         """
@@ -86,13 +83,13 @@ class AuthenticatedRequestScema(Request):
         return cls.validate_Authentication(request)
 
     @classmethod
-    def validate_Authentication(clt, request):
+    def validate_Authentication(cls, request):
         """
         validate Autentication header structure
         :param str request: the client request
         :return: True if structure is valid, false otherwise
         """
-        return bool(clt.RE_VALIDATE.search(request))
+        return bool(cls.RE_VALIDATE.search(request))
 
     @abstractmethod
     def get_user_id(self):

@@ -18,15 +18,15 @@ class ResorceRequest(AuthenticatedRequest):
     ResorceURI = [PasswordsUri.URI, ProgramUri.URI]
 
     @classmethod
-    def IsResorceURL(clt, request):
+    def IsResorceURL(cls, request):
         request = Request(request)
-        return any([True for uri in clt.ResorceURI if uri.match(request.get_URI())])
+        return any([True for uri in cls.ResorceURI if uri.match(request.get_URI())])
 
     @classmethod
-    def validate(clt, request):
-        status = super(ResorceRequest, clt).validate(request)
+    def validate(cls, request):
+        status = super(ResorceRequest, cls).validate(request)
         if status is OK:
-            return clt.IsResorceURL(request)
+            return cls.IsResorceURL(request)
         else:
             return status
 

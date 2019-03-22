@@ -20,10 +20,10 @@ class AuthenticatedRequestJWT(AuthenticatedRequestScema):
         return cls.validate_Authentication(request)
 
     @classmethod
-    def validate(clt, request):
-        status = super(AuthenticatedRequestJWT, clt).validate(request)
+    def validate(cls, request):
+        status = super(AuthenticatedRequestJWT, cls).validate(request)
         if status is OK:
-            if clt.validate_Authentication(request):
+            if cls.validate_Authentication(request):
                 request = AuthenticatedRequestJWT(request)
                 jwt = request.__get_JWT()
                 if JWT.validate(jwt):

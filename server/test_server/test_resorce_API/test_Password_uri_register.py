@@ -1,6 +1,3 @@
-import requests
-import pytest
-
 URI = 'http://127.0.0.1:50007'
 
 #def test_POST_valid_request():
