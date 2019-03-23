@@ -6,6 +6,7 @@ description
 
 import database
 import base64
+from server.HTTPtolls import *
 
 
 class passwordAutentication:
@@ -16,6 +17,16 @@ class passwordAutentication:
 
     @staticmethod
     def validate(username, password):
+        ret = database.validate(username, password)
+        if ret == database.USERNAME_OR_PASSWORD_INCORRECT:
+            return UNEXPECTED_ENTITY
+        elif ret == None:
+            return INTERNAL_ERROR
+        else:
+            return OK
+
+    @staticmethod
+    def get_id(username, password):
         return database.validate(username, password)
 
     @staticmethod

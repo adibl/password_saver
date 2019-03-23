@@ -5,7 +5,6 @@ description
 """
 from abc import abstractmethod
 import json
-from bson import json_util
 import logging
 
 OK = 200
@@ -14,6 +13,7 @@ BAD_REQUEST = 400
 NOT_FOUND = 404
 UNAUTHORIZED = 401
 UNEXPECTED_ENTITY = 442
+INTERNAL_ERROR = 500
 USERNAME = 'username'
 PASS = 'password'
 PROGRAM = 'program_id'
@@ -57,7 +57,8 @@ class Responce(object):
         s = ''
         s += "HTTP/1.1 200 OK\r\n"
         if data is not None:
-            data = json.dumps(data, default=json_util.default)
+            print type(data)
+            data = json.dumps(data)
             s += 'Content-Type: application/json\r\n'
             s += 'Content-Length: {0}\r\n'.format(len(data))
             s += '\r\n'
@@ -89,11 +90,11 @@ class Responce(object):
         return s
 
     @staticmethod
-    def unexpected_entity(data):
+    def unexpected_entity(data=None):
         s = ''
         s += "HTTP/1.1 442 OK\r\n"
         if data is not None:
-            data = json.dumps(data, default=json_util.default)
+            data = json.dumps(data)
             s += 'Content-Type: application/json\r\n'
             s += 'Content-Length: {0}\r\n'.format(len(data))
             s += '\r\n'

@@ -6,16 +6,22 @@ from server.Autentication.JWT import create
 from Autentication.Password import database
 import time
 import json
-from bson import json_util
+import pymongo
 
 
 @pytest.fixture()
 def delete_user():
     yield
-    id = database.validate('username', 'Secretpass123')
-    database._immidiate_delete(id)
-    id = database.validate('username', 'Secretpass')
-    database._immidiate_delete(id)
+    try:
+        id = database.validate('username', 'Secretpass123')
+        if len(str(id)) > 10:
+            database._immidiate_delete(id)
+
+        id = database.validate('username', 'Secretpass')
+        if len(str(id)) > 10:
+            database._immidiate_delete(id)
+    except pymongo.errors as err:
+        pass
 
 
 @pytest.fixture

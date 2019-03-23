@@ -34,7 +34,7 @@ def JWT():
 def test_GET_valid_requet(JWT):
     responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT), })
     assert responce.status_code == 200
-    data = json.loads(responce.text, object_hook=json_util.object_hook)
+    data = json.loads(responce.text)
     assert data['records'] == [{"username": "adibl", "program_id": "steam", 'sec_level': 0}, {"username": "adibl", "program_id": "gmail", 'sec_level': 0}]
 
 
@@ -52,7 +52,7 @@ def test_POST_valid_requet(JWT):
     time.sleep(1)
     responce = requests.get(URI + '/passwords/steam2', headers={'Authorization': 'Bearer {0}'.format(JWT), })
     assert responce.status_code == 200
-    data = json.loads(responce.text, object_hook=json_util.object_hook)
+    data = json.loads(responce.text)
     assert type(data) is dict
     assert data == {'username': 'adibl', 'password': 'pass', 'program_id': 'steam2', 'sec_level': 0}
 

@@ -31,11 +31,7 @@ class AuthenticatedRequestPassword(AuthenticatedRequestScema):
                     logging.debug('username and password are wrong formated')
                     return BAD_REQUEST
                 username, password = username_password
-                ret = passwordAutentication.validate(username, password)
-                if ret is None:
-                    return UNAUTHORIZED
-                else:
-                    return OK
+                return passwordAutentication.validate(username, password)
             else:
                 logging.debug('Authentication header missing or wrong')
                 return BAD_REQUEST
@@ -52,7 +48,7 @@ class AuthenticatedRequestPassword(AuthenticatedRequestScema):
         if username_password is None:
             return None
         username, password = username_password
-        return passwordAutentication.validate(username, password)
+        return passwordAutentication.get_id(username, password)
 
     def get_username_password(self):
         auto = self.RE_VALIDATE.search(self.request).group(1)

@@ -16,6 +16,7 @@ EXPIRE_TIME_HOUERS = 48 #FIXME: should be the same as resorce database
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 
 USERNAME_ALREADY_EXZIST = 1
+USERNAME_OR_PASSWORD_INCORRECT = 2
 
 
 def create_database():
@@ -79,12 +80,12 @@ def validate(username, password):
         return None
     if prog is None:
         logging.debug('username incorrect')
-        return None
+        return USERNAME_OR_PASSWORD_INCORRECT
     elif bcrypt.verify(password, prog['password']):
         return str(prog['_id'])
     else:
         logging.debug('password incorrect')
-        return None
+        return USERNAME_OR_PASSWORD_INCORRECT
 
 
 #unchecked

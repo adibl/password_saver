@@ -3,11 +3,14 @@ name:
 date:
 description
 """
+import json
 import logging
 from datetime import datetime
 
+from bson import json_util
 import pymongo
 from bson.objectid import ObjectId
+
 
 MAX_TIMEOUT = 24 * 5  # FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
@@ -100,7 +103,8 @@ def get_record(clientID, programID):
         return None
 
     elif u'records' in prog:
-        return prog[u'records'][0]
+        print json.loads(json_util.dumps(prog[u'records'][0]))
+        return json.loads(json_util.dumps(prog[u'records'][0]))
     else:
         return {}
 
@@ -135,7 +139,7 @@ def get_all_records(clientID):
                                 'records.sec_level': 1, 'delete_time': 1, "_id": 0})
     if prog is None:
         return None
-    return prog
+    return json.loads(json_util.dumps(prog))
 
 
 def delete_user(clientID):

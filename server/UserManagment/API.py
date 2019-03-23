@@ -9,7 +9,7 @@ import base64
 
 from server.Autentication.Password import database
 from server.HTTPtolls import *
-from server.Autentication.Password.API import passwordAutentication
+from server.Autentication.JWT import create
 
 
 class Register(Uri):
@@ -43,3 +43,19 @@ class Register(Uri):
 
     def __get_username_password(self):
         return self.request.get_username_password()
+
+
+class Login(Uri):
+    URI = re.compile('^/login')
+    METODES = ['GET']
+
+    def GET(self):
+        """
+        login to the service and get JWT
+        :return str: the responce
+        """
+        identifier = self.request.get_user_id()
+        if identifier is None:
+            return Responce.unexpected_entity({AUTENTICATION: 'invalid username password structure'}) #FIXME: eror if autentication cradentials are wrong
+        jwt = create(identifier)
+        return Responce.ok({AUTENTICATION: jwt})
