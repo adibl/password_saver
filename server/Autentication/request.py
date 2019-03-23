@@ -6,20 +6,27 @@ description
 from server.request import AuthenticatedRequestScema
 from server.Autentication.JWT.request import AuthenticatedRequestJWT
 from server.Autentication.Password.request import AuthenticatedRequestPassword
+from server.HTTPtolls import *
 
 
 class AuthenticatedRequest(AuthenticatedRequestScema):
     SEC_LEVEL = {AuthenticatedRequestJWT: 0, AuthenticatedRequestPassword: 1}
 
     @classmethod
-    def validate(cls, request):
+    def is_fit(cls, request):
         if AuthenticatedRequestPassword.is_fit(request):
             backend = AuthenticatedRequestPassword(request)
         elif AuthenticatedRequestJWT.is_fit(request):
             backend = AuthenticatedRequestJWT(request)
         else:
-            return None
-        return backend.validate(request)
+            logging.debug('dont fit to any of the Autentication metodes')
+            return UNAUTHORIZED
+        return backend
+
+    @classmethod
+    def validate(cls, request):
+        return cls.is_fit(request).validate(request)
+
 
     def __init__(self, request):
         """
@@ -33,6 +40,7 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
         elif AuthenticatedRequestJWT.is_fit(request):
             self.backend = AuthenticatedRequestJWT(request)
         else:
+            raise ValueError
             pass #FIXME: waht to do here????
 
     def get_user_id(self):
@@ -50,6 +58,9 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
         :rtype: int
         """
         return self.SEC_LEVEL[type(self.backend)]
+
+
+
 
 
 

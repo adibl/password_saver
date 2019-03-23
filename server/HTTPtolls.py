@@ -6,6 +6,7 @@ description
 from abc import abstractmethod
 import json
 from bson import json_util
+import logging
 
 OK = 200
 METHOD_NOT_ALLOWED = 405
@@ -16,6 +17,7 @@ UNEXPECTED_ENTITY = 442
 USERNAME = 'username'
 PASS = 'password'
 PROGRAM = 'program_id'
+AUTENTICATION = 'Autentication'
 
 class Responce(object):
 
@@ -34,7 +36,12 @@ class Responce(object):
             responce = cls.not_found()
         elif code == UNAUTHORIZED:
             responce = cls.unauthorized()
+        elif code == UNEXPECTED_ENTITY:
+            responce = cls.unexpected_entity('unknoen')
+        elif code == METHOD_NOT_ALLOWED:
+            responce = cls.method_not_allowed('unknoen')
         else:
+            logging.critical('code {0} is not valid'.format(code))
             responce = cls.bad_request()
         return responce
 
@@ -62,6 +69,13 @@ class Responce(object):
     def bad_request():
         s = ""
         s += "HTTP/1.1 400 BAD REQUEST\r\n"
+        s += "\r\n"
+        return s
+
+    @staticmethod
+    def internal_eror():
+        s = ""
+        s += "HTTP/1.1 500 INTERNAL SERVER EROR\r\n"
         s += "\r\n"
         return s
 

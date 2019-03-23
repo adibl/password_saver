@@ -42,6 +42,10 @@ class PasswordsUri(Uri):
         if any(x in data.keys() for x in [USERNAME, PASS, PROGRAM]):
             if database.add_record(clientID, data[PROGRAM], data[USERNAME], data[PASS], sec_level):
                 return Responce.ok()
+            else:
+                logging.debug('add record didint sucseed')
+                return Responce.internal_eror()
+        logging.debug('data is missing')
         return Responce.bad_request()
 
 

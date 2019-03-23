@@ -22,14 +22,6 @@ class ResorceRequest(AuthenticatedRequest):
         request = Request(request)
         return any([True for uri in cls.ResorceURI if uri.match(request.get_URI())])
 
-    @classmethod
-    def validate(cls, request):
-        status = super(ResorceRequest, cls).validate(request)
-        if status is OK:
-            return cls.IsResorceURL(request)
-        else:
-            return status
-
     def process_request(self):
         """
         proses resource request

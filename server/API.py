@@ -11,6 +11,7 @@ import socket
 import threading
 
 from Resorce.request import ResorceRequest
+from UserManagment.request import RegisterRequest
 from __logs import handle_logging
 from request import Request
 from server.Autentication.request import AuthenticatedRequest
@@ -47,6 +48,16 @@ def receive(client_socket, func=lambda data: not re.search(".*\r\n\r\n(.*\r\n)?"
     logging.debug("RECV:" + data)
     return data.replace('\r\n', '\n')
 
+def handle_request(cl, request):
+    code = cl.validate(request)
+    if code == OK:
+        resorce_request = cl(request)
+        responce = resorce_request.process_request()
+    else:
+        responce = Responce.validate_erors(code)
+    return responce
+
+
 
 def handle_client(conn):
     """
@@ -56,15 +67,17 @@ def handle_client(conn):
     request = receive(conn)
     code = Request.validate(request)
     if code == OK:
-        code = AuthenticatedRequest.validate(request)
-        if code == OK:
-            if ResorceRequest.IsResorceURL(request):
-                resorce_request = ResorceRequest(request)
-                responce = resorce_request.process_request()
-            else:
-                responce = Responce.not_found()
+        if RegisterRequest.IsResorceURL(request):
+            responce = handle_request(RegisterRequest, request)
         else:
-           responce = Responce.validate_erors(code)
+            code = AuthenticatedRequest.validate(request)
+            if code == OK:
+                if ResorceRequest.IsResorceURL(request):
+                    responce = handle_request(ResorceRequest, request)
+                else:
+                    responce = Responce.not_found()
+            else:
+               responce = Responce.validate_erors(code)
     else:
         responce = Responce.validate_erors(code)
     conn.sendall(responce)

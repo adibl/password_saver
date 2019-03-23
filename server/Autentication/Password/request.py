@@ -25,8 +25,10 @@ class AuthenticatedRequestPassword(AuthenticatedRequestScema):
         status = super(AuthenticatedRequestPassword, cls).validate(request)
         if status is OK:
             if cls.validate_Authentication(request):
-                username_password = cls.__get_username_password(request)
+                auto = cls.RE_VALIDATE.search(request).group(1)
+                username_password = passwordAutentication.get_username_password(auto)
                 if username_password is None:
+                    logging.debug('username and password are wrong formated')
                     return BAD_REQUEST
                 username, password = username_password
                 ret = passwordAutentication.validate(username, password)
@@ -46,24 +48,15 @@ class AuthenticatedRequestPassword(AuthenticatedRequestScema):
         :return: the user ID
         :rtype: str
         """
-        username_password = self.__get_username_password(self.request)
+        username_password = self.get_username_password()
         if username_password is None:
             return None
         username, password = username_password
         return passwordAutentication.validate(username, password)
 
+    def get_username_password(self):
+        auto = self.RE_VALIDATE.search(self.request).group(1)
+        return passwordAutentication.get_username_password(auto)
 
-    @classmethod
-    def __get_username_password(cls, request):
-        """
-        get user username and password from request
-        :param str request: the request string
-        :return: username, password tuple
-        """
-        auto = cls.RE_VALIDATE.search(request).group(1)
-        auto += '='*(len(auto) % 4)
-        username_password = base64.b64decode(auto)
-        if ':' in username_password:
-            return username_password.split(':')
-        else:
-            return None
+
+
