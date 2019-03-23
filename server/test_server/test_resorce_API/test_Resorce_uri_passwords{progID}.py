@@ -11,7 +11,6 @@ from server.Resorce import database
 from server.Autentication.JWT import create
 from server.Autentication.Password import database as pass_database
 import json
-from bson import json_util
 import time
 
 
@@ -62,12 +61,12 @@ def test_DELETE_valid_request(JWT):
     #test that GET return the delete time
     responce = requests.get(URI + '/passwords/steam', headers={'Authorization': 'Bearer {0}'.format(JWT)})
     assert responce.status_code == 200
-    data = json.loads(responce.text, object_hook=json_util.object_hook)
+    data = json.loads(responce.text)
     assert 'delete_time' in data
 
     responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT)})
     assert responce.status_code == 200
-    data = json.loads(responce.text, object_hook=json_util.object_hook)
+    data = json.loads(responce.text)
     for program in data['records']:
         if program['program_id'] == 'steam':
             assert 'delete_time' in program
@@ -95,7 +94,7 @@ def test_passward_autentication():
 
 def test_passward_autentication_invalid_username():
     responce = requests.get(URI + '/passwords/steam', headers={'Authorization': 'Basic {0}'.format(base64.b64encode('unvalid:password'))})
-    assert responce.status_code == 401
+    assert responce.status_code == 442
 
 def test_GET__high_sec_level(JWT):
     responce = requests.get(URI + '/passwords/gmail',
