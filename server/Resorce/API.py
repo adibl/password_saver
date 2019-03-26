@@ -39,14 +39,18 @@ class PasswordsUri(Uri):
         clientID = self.request.get_user_id()
         data = self.request.get_data_as_dictionery()
         sec_level = self.request.get_sec_level()
-        if any(x in data.keys() for x in [USERNAME, PASS, PROGRAM]):
+        if all(x in data.keys() for x in [USERNAME, PASS, PROGRAM]):
             if database.add_record(clientID, data[PROGRAM], data[USERNAME], data[PASS], sec_level):
                 return Responce.ok()
             else:
                 logging.debug('add record didint sucseed')
                 return Responce.internal_eror()
         logging.debug('data is missing')
-        return Responce.bad_request()
+        not_found = filter(lambda x: x not in data.keys(), [USERNAME, PASS, PROGRAM])
+        d = {}
+        for val in not_found:
+            d[val] = 'data parameter must be added'
+        return Responce.unexpected_entity(d) #FIXME : this is not bad request + add test to it
 
 
 

@@ -25,7 +25,7 @@ def test_immidiate_delete():
     time.sleep(1)
     database._immidiate_delete(identifier)
     time.sleep(1)
-    assert database.validate('user', 'password') is None
+    assert database.validate('user', 'password') == database.USERNAME_OR_PASSWORD_INCORRECT
     assert resorce_database.get_record(identifier, 'try') is None
 
 

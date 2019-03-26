@@ -71,6 +71,11 @@ def test_DELETE_valid_request(JWT):
         if program['program_id'] == 'steam':
             assert 'delete_time' in program
 
+@pytest.mark.run(order=1)
+def test_DELETE_invalid_program_id(JWT):
+    responce = requests.delete(URI + '/passwords/invalid', headers={'Authorization': 'Bearer {0}'.format(JWT), })
+    assert responce.status_code == 404
+
 
 def test_metode_dont_allow(JWT):
     responce = requests.post(URI + '/passwords/steam', headers={'Authorization': 'Bearer {0}'.format(JWT), })
@@ -85,6 +90,11 @@ def test_PATCH_valid_request(JWT):
     data = json.loads(responce.text)
     assert type(data) is dict
     assert data['username'] == 'new_username'
+
+@pytest.mark.run(order=1)
+def test_PATCH_invalid_program_id(JWT):
+    responce = requests.patch(URI + '/passwords/invalid', headers={'Authorization': 'Bearer {0}'.format(JWT), }, json={'username': 'new_username'})
+    assert responce.status_code == 404
 
 
 def test_passward_autentication():

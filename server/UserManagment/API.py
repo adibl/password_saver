@@ -14,13 +14,13 @@ from server.Autentication.JWT import create
 
 class Register(Uri):
     URI = re.compile('^/register$')
-    METODES = ['GET']
+    METODES = ['POST']
 
     MIN_LEN = 8
     RE_CHRACTERS = re.compile('^(?=\S{6,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])')
     PASS_POLICY ='must contain 6-20 characters\r\n1 capital letter\r\n1 letter\r\n1 difit'
 
-    def GET(self):
+    def POST(self):
         """
         register to the service
         :return str: the responce

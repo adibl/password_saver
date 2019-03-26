@@ -41,7 +41,7 @@ def test_GET_valid_requet(JWT):
 @pytest.mark.run(order=0)
 def test_GET_unvalid_user(JWT):
     responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(create('111111111111111111111111', 25)), })
-    assert responce.status_code == 401
+    assert responce.status_code == 401 #QUESTION: NOT FOUND may be better
 
 
 
@@ -55,5 +55,14 @@ def test_POST_valid_requet(JWT):
     data = json.loads(responce.text)
     assert type(data) is dict
     assert data == {'username': 'adibl', 'password': 'pass', 'program_id': 'steam2', 'sec_level': 0}
+
+
+@pytest.mark.run(order=1)
+def test_POST_data_is_missing(JWT):
+    responce = requests.post(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT)}, json={'username': 'adibl'})
+    assert responce.status_code == 442
+    data = json.loads(responce.text)
+    assert type(data) is dict
+    assert ['password', 'program_id'] == data.keys()
 
 
