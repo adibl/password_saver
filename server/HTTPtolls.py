@@ -92,7 +92,7 @@ class Responce(object):
     @staticmethod
     def unexpected_entity(data=None):
         s = ''
-        s += "HTTP/1.1 442 OK\r\n"
+        s += "HTTP/1.1 442 UNEXPECTED ENTITY\r\n"
         if data is not None:
             data = json.dumps(data)
             s += 'Content-Type: application/json\r\n'

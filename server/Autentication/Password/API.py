@@ -12,7 +12,7 @@ from server.HTTPtolls import *
 class passwordAutentication:
 
     @staticmethod
-    def create(username, password):
+    def add(username, password):
         if database.add(username, password):
             return True
         else:
