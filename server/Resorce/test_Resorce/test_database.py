@@ -15,16 +15,6 @@ def run_around_tests():
     database._immidiate_delete('aaaaaaaaaaaaaaaaaaaaaaa1')
 
 
-
-@pytest.mark.parametrize("userID,result", [
-    ('aaaaaaaaaaaaaaaaaaaaaaa1', True),
-    ('aaaaaaaaaaaaaaaaaaaaaaaa', False),
-])
-@pytest.mark.run(order=0)
-def test_add_user(userID, result):
-    assert database.add_user(userID) is result
-
-
 @pytest.mark.parametrize("userID, progID, username, password, result", [
     ('aaaaaaaaaaaaaaaaaaaaaaaa', 'wertgdfsgf', 'dstsdf', 'sadfsxcvx', True),
     ('aaaaaaaaaaaaaaaaaaaaaaaa', 'sdas', 'asdsad', 'asdsadsd', True),

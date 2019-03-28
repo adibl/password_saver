@@ -9,13 +9,12 @@ from datetime import datetime
 import pymongo
 from bson.objectid import ObjectId
 from passlib.hash import bcrypt
+from server.database_errors import *
 
 import server.Resorce.database as resorce_database
 
 EXPIRE_TIME_HOUERS = 48 #FIXME: should be the same as resorce database
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
-
-USERNAME_ALREADY_EXZIST = 1
 USERNAME_OR_PASSWORD_INCORRECT = 2
 
 
@@ -40,6 +39,7 @@ def connect():
     return db.passwords
 
 
+@handle_general_eror
 def add(username, password):
     """
     add user to database
@@ -49,20 +49,15 @@ def add(username, password):
     :rtype: ObjectId
     """
     collection = connect()
-    try:
-        d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password)}
-        ret = collection.insert_one(d) #QUESTION: how match rounds to do??
-    except pymongo.errors.DuplicateKeyError as err:
-        return USERNAME_ALREADY_EXZIST
-    except pymongo.errors as err:
-        logging.critical('add user didint sucsess' + str(err))
-        return None
+    d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password)}
+    ret = collection.insert_one(d) #QUESTION: how match rounds to do??
     if resorce_database.add_user(ret.inserted_id):
         return ret.inserted_id
     else:
         return None
 
 
+@handle_general_eror
 def validate(username, password):
     """
     validate user cradentials
@@ -73,11 +68,7 @@ def validate(username, password):
     """
 
     collection = connect()
-    try:
-        prog = collection.find_one({'username': username})
-    except pymongo.errors as err:
-        logging.info('add user didint sucsess' + str(err))
-        return None
+    prog = collection.find_one({'username': username})
     if prog is None:
         logging.debug('username incorrect')
         return USERNAME_OR_PASSWORD_INCORRECT
@@ -88,7 +79,7 @@ def validate(username, password):
         return USERNAME_OR_PASSWORD_INCORRECT
 
 
-#unchecked
+@handle_general_eror
 def delete_user(clientID):
     """
     delete user after few days from action
@@ -103,6 +94,7 @@ def delete_user(clientID):
         return False
 
 
+@handle_general_eror
 def _immidiate_delete(clientID):
     """
     immediately delete user FOR TEST ONLY!!
@@ -112,22 +104,15 @@ def _immidiate_delete(clientID):
     return collection.delete_one({'_id': ObjectId(clientID)})
 
 
+@handle_general_eror
 def __add_id(ID, username, password):
     """
     add user with predefined ID , FOR TESTS ONLY!!!!
     :return:
     """
     collection = connect()
-    try:
-        d = {'_id': ObjectId(ID), 'username': username, 'password': bcrypt.using(rounds=13).hash(password)}
-        ret = collection.insert_one(d) #QUESTION: how match rounds to do??
-    except pymongo.errors.DuplicateKeyError as err:
-        logging.debug('username already exzist')
-        return USERNAME_ALREADY_EXZIST
-    except pymongo.errors as err:
-        logging.critical('add user didint sucsess' + str(err))
-        return None
+    d = {'_id': ObjectId(ID), 'username': username, 'password': bcrypt.using(rounds=13).hash(password)}
+    ret = collection.insert_one(d) #QUESTION: how match rounds to do??
     return ret.inserted_id
-create_database()
 
 

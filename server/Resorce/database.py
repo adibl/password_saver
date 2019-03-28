@@ -6,6 +6,7 @@ description
 import json
 import logging
 from datetime import datetime
+from server.database_errors import *
 
 from bson import json_util
 import pymongo
@@ -16,6 +17,8 @@ MAX_TIMEOUT = 24 * 5  # FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 
 
+
+@handle_general_eror
 def create_database(expire_time=MAX_TIMEOUT):
     """
     create the database with all needed
@@ -27,6 +30,7 @@ def create_database(expire_time=MAX_TIMEOUT):
     db.users.ensure_index('delete_time', expireAfterSeconds=60 * 60 * expire_time)
 
 
+@handle_general_eror
 def add_user(userID):
     """
     :param userID: the user ID to create the collection for
@@ -34,14 +38,11 @@ def add_user(userID):
     """
     client = pymongo.MongoClient(CONN_STR)
     db = client.Resorce
-    try:
-        col = db['users'].insert_one({'_id': ObjectId(userID), 'records': []})
-    except pymongo.errors.DuplicateKeyError as err:
-        logging.debug('ID already exzist')
-        return False
+    col = db['users'].insert_one({'_id': ObjectId(userID), 'records': []})
     return True
 
 
+@handle_general_eror
 def get_col():
     """
     get the collection of the users
@@ -53,6 +54,7 @@ def get_col():
     return record
 
 
+@handle_general_eror
 def add_record(clientID, programID, username, password, sec_level=0):
     """
     :param clientID: the client ID
@@ -73,6 +75,7 @@ def add_record(clientID, programID, username, password, sec_level=0):
     return res.modified_count == 1
 
 
+@handle_general_eror
 def cange_record(clientID, programID, username=None, password=None):
     d = {}
     if username is not None:
@@ -90,6 +93,7 @@ def cange_record(clientID, programID, username=None, password=None):
     return res.modified_count == 1
 
 
+@handle_general_eror
 def get_record(clientID, programID):
     """
     get record from database
@@ -109,6 +113,7 @@ def get_record(clientID, programID):
         return {}
 
 
+@handle_general_eror
 def delete_record(clientID, programID):
     """
     delete record from database. delete just after x time.
@@ -127,6 +132,7 @@ def delete_record(clientID, programID):
     return res.modified_count == 1
 
 
+@handle_general_eror
 def get_all_records(clientID):
     """
     get all username program id pairs (with delete time if exist)
@@ -142,6 +148,7 @@ def get_all_records(clientID):
     return json.loads(json_util.dumps(prog))
 
 
+@handle_general_eror
 def delete_user(clientID):
     """
     delete user after few days from action
@@ -153,6 +160,7 @@ def delete_user(clientID):
     return ret.modified_count == 1
 
 
+@handle_general_eror
 def cancel_delete(clientID):
     """
     cancel user deletion time

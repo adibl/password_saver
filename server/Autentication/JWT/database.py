@@ -6,6 +6,7 @@ description
 import pymongo
 from bson.objectid import ObjectId
 from datetime import datetime
+from server.database_errors import *
 
 MAX_TIMEOUT = 25 #FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
@@ -31,6 +32,8 @@ def connect():
     db = client.Autentication
     return db.jwt_time
 
+
+@handle_general_eror
 def add(clientID):
     """
     add user record to database
@@ -40,6 +43,8 @@ def add(clientID):
     collection = connect()
     collection.insert_one({'_id': ObjectId(clientID), 'register_time' : datetime.utcnow()})
 
+
+@handle_general_eror
 def validate_JWT_time(clientID, time):
     """
     check if the token was issoed befor or after the last user password change
@@ -55,6 +60,8 @@ def validate_JWT_time(clientID, time):
     return reg_time['register_time'] < utc_dt
 
 
+
+@handle_general_eror
 def delete(clientID):
     """
     delete user credentials reset, FOR TESTS ONLY!!!

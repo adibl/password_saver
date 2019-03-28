@@ -7,8 +7,9 @@ import logging
 import re
 import base64
 
-from server.Autentication.Password import database
+from server.Autentication.Password.API import passwordAutentication as database
 from server.HTTPtolls import *
+from server import database_errors
 from server.Autentication.JWT import create
 
 
@@ -32,7 +33,7 @@ class Register(Uri):
         username, password = ret
         if re.match(self.RE_CHRACTERS, password):
             ret = database.add(username, password)
-            if ret == database.USERNAME_ALREADY_EXZIST:
+            if ret == database_errors.DUPLIKATE_KEY_ERROR:
                 return Responce.unexpected_entity({USERNAME: 'username already exzist'})
             elif ret is None:
                 return Responce.internal_eror()

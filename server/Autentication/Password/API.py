@@ -13,7 +13,10 @@ class passwordAutentication:
 
     @staticmethod
     def create(username, password):
-        return database.add(username, password)
+        if database.add(username, password):
+            return True
+        else:
+            return False
 
     @staticmethod
     def validate(username, password):
