@@ -107,7 +107,6 @@ def get_record(clientID, programID):
         return None
 
     elif u'records' in prog:
-        print json.loads(json_util.dumps(prog[u'records'][0]))
         return json.loads(json_util.dumps(prog[u'records'][0]))
     else:
         return {}

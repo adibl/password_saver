@@ -40,6 +40,8 @@ class Responce(object):
             responce = cls.unexpected_entity('unknoen')
         elif code == METHOD_NOT_ALLOWED:
             responce = cls.method_not_allowed('unknoen')
+        elif code == INTERNAL_ERROR:
+            responce = cls.internal_eror()
         else:
             logging.critical('code {0} is not valid'.format(code))
             responce = cls.bad_request()
@@ -57,7 +59,6 @@ class Responce(object):
         s = ''
         s += "HTTP/1.1 200 OK\r\n"
         if data is not None:
-            print type(data)
             data = json.dumps(data)
             s += 'Content-Type: application/json\r\n'
             s += 'Content-Length: {0}\r\n'.format(len(data))
@@ -118,6 +119,7 @@ class Responce(object):
 class Uri(Responce):
     URI = NotImplemented #re compiled
     METODES = NotImplemented
+
     def __init__(self, request):
         """
         :param Request request: the request to handle
@@ -151,7 +153,6 @@ class Uri(Responce):
         s+= 'Allow:' + ' '.join(self.METODES) + '\r\n'
         s += "\r\n"
         return s
-
 
     def GET(self):
         raise NotImplementedError

@@ -7,16 +7,14 @@ description
 import database
 import base64
 from server.HTTPtolls import *
+from server.database_errors import *
 
 
 class passwordAutentication:
 
     @staticmethod
     def add(username, password):
-        if database.add(username, password):
-            return True
-        else:
-            return False
+        return database.add(username, password)
 
     @staticmethod
     def validate(username, password):
@@ -25,6 +23,8 @@ class passwordAutentication:
             return UNEXPECTED_ENTITY
         elif ret == None:
             return INTERNAL_ERROR
+        elif ret in ERRORS:
+            return ret
         else:
             return OK
 

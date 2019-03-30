@@ -19,7 +19,6 @@ def run_around_tests():
 
 
 
-
 def test_immidiate_delete():
     identifier = 'aaaaaaaaaaaaaaaaaaaaaaaa'
     assert resorce_database.add_record(identifier, 'try', 'try', 'try')

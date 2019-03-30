@@ -1,5 +1,6 @@
 GENERAL_ERROR = 500
 DUPLIKATE_KEY_ERROR = 442
+ERRORS = [GENERAL_ERROR, DUPLIKATE_KEY_ERROR]
 import logging
 import pymongo.errors
 
