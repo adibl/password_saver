@@ -10,6 +10,7 @@ import pymongo
 from bson.objectid import ObjectId
 from passlib.hash import bcrypt
 from server.database_errors import *
+from HTTPtolls import *
 
 import server.Resorce.database as resorce_database
 
@@ -40,7 +41,7 @@ def connect():
 
 
 @handle_general_eror
-def add(username, password):
+def add(username, password, question, anser):
     """
     add user to database
     :param username: the client username
@@ -49,12 +50,25 @@ def add(username, password):
     :rtype: ObjectId
     """
     collection = connect()
-    d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password)}
+    d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password), 'question': question, 'ans': anser }
     ret = collection.insert_one(d) #QUESTION: how match rounds to do??
     if resorce_database.add_user(ret.inserted_id):
         return ret.inserted_id
     else:
         return None
+
+@handle_general_eror
+def get_question(username):
+    collection = connect()
+    prog = collection.find_one({'username': username})
+    if prog is None:
+        logging.debug('username incorrect')
+        return USERNAME_OR_PASSWORD_INCORRECT
+    elif 'ans' in prog:
+        return str(prog['ans'])
+    else:
+        logging.debug('no question in database')
+        return INTERNAL_ERROR
 
 
 @handle_general_eror
@@ -73,6 +87,19 @@ def validate(username, password):
         logging.debug('username incorrect')
         return USERNAME_OR_PASSWORD_INCORRECT
     elif bcrypt.verify(password, prog['password']):
+        return str(prog['_id'])
+    else:
+        logging.debug('password incorrect')
+        return USERNAME_OR_PASSWORD_INCORRECT
+
+@handle_general_eror
+def validate_question(username, anser):
+    collection = connect()
+    prog = collection.find_one({'username': username})
+    if prog is None:
+        logging.debug('username incorrect')
+        return USERNAME_OR_PASSWORD_INCORRECT
+    elif prog['ans'] == anser:
         return str(prog['_id'])
     else:
         logging.debug('password incorrect')

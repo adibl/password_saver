@@ -18,6 +18,7 @@ USERNAME = 'username'
 PASS = 'password'
 PROGRAM = 'program_id'
 AUTENTICATION = 'Autentication'
+QUESTION = 'auto_question'
 
 class Responce(object):
 

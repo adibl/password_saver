@@ -16,7 +16,7 @@ from server.HTTPtolls import *
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
-    database.__add_id('aaaaaaaaaaaaaaaaaaaaaaaa','username', 'Secretpass123')
+    database.__add_id('aaaaaaaaaaaaaaaaaaaaaaaa', 'username', 'Secretpass123')
     yield
     id = database.validate('username', 'Secretpass123')
     database._immidiate_delete(id)

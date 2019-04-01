@@ -7,7 +7,7 @@ from server.request import AuthenticatedRequestScema
 from server.Autentication.JWT.request import AuthenticatedRequestJWT
 from server.Autentication.Password.request import AuthenticatedRequestPassword
 from server.HTTPtolls import *
-
+import FA
 
 class AuthenticatedRequest(AuthenticatedRequestScema):
     SEC_LEVEL = {AuthenticatedRequestJWT: 0, AuthenticatedRequestPassword: 1}
@@ -58,6 +58,10 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
         :rtype: int
         """
         return self.SEC_LEVEL[type(self.backend)]
+
+    def verify_2FA(self):
+        return FA.verify()
+
 
 
 

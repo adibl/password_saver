@@ -11,7 +11,7 @@ import socket
 import threading
 
 from Resorce.request import ResorceRequest
-from UserManagment.request import RegisterRequest, LoginRequests
+from UserManagment.request import RegisterRequest, LoginRequests,ResetRequest
 from __logs import handle_logging
 from request import Request
 from server.Autentication.request import AuthenticatedRequest
@@ -69,6 +69,8 @@ def handle_client(conn):
     if code == OK:
         if RegisterRequest.IsResorceURL(request):
             responce = handle_request(RegisterRequest, request)
+        elif ResetRequest.IsResorceURL(request):
+            responce = handle_request(ResetRequest, request)
         else:
             code = AuthenticatedRequest.validate(request)
             if code == OK:

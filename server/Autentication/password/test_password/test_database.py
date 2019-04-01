@@ -36,7 +36,7 @@ def test_add_user():
 
 
 def test_add_user_username_already_exzist():
-    assert database.add('user', 'password') == database_errors.DUPLIKATE_KEY_ERROR
+    assert database.add('user', 'password', 'a', 'b') == database_errors.DUPLIKATE_KEY_ERROR
 
 def test_delete_user():
     identifier = 'aaaaaaaaaaaaaaaaaaaaaaaa'

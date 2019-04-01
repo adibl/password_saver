@@ -8,9 +8,11 @@ import re
 import base64
 
 from server.Autentication.Password.API import passwordAutentication as database
+from server.Autentication.Password.API import database as errors
 from server.HTTPtolls import *
 from server import database_errors
 from server.Autentication.JWT import create
+from server.database_errors import *
 
 
 class Register(Uri):
@@ -31,8 +33,9 @@ class Register(Uri):
             logging.debug('username password is formated wrong')
             return Responce.bad_request() #FIXME: what this is realy
         username, password = ret
+        question, ansear = self.request.get_question_ans()
         if re.match(self.RE_CHRACTERS, password):
-            ret = database.add(username, password)
+            ret = database.add(username, password, question, ansear)
             if ret == database_errors.DUPLIKATE_KEY_ERROR:
                 return Responce.unexpected_entity({USERNAME: 'username already exzist'})
             elif ret is None:
@@ -60,3 +63,20 @@ class Login(Uri):
             return Responce.unexpected_entity({AUTENTICATION: 'invalid username password structure'}) #FIXME: eror if autentication cradentials are wrong
         jwt = create(identifier)
         return Responce.ok({AUTENTICATION: jwt})
+
+
+class Reset(Uri):
+    URI = re.compile('^/reset$')
+    METODES = ['GET', 'POST']
+
+    def GET(self):
+        data = self.request.get_data_as_dictionery()
+        if data is None:
+            return Responce.bad_request() #FIXME: USER data is wrong
+        q = database.get_question(data['username'])
+        if q == errors.USERNAME_OR_PASSWORD_INCORRECT:
+            return Responce.unexpected_entity({USERNAME: 'username is wrong'})
+        if q in ERRORS:
+            return Responce.validate_erors(q)
+        return Responce.ok({'question': q})
+

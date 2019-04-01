@@ -4,7 +4,7 @@ ERRORS = [GENERAL_ERROR, DUPLIKATE_KEY_ERROR]
 import logging
 import pymongo.errors
 
-
+# FIXME: ServerSelectionTimeoutError isnt includedd
 from functools import wraps
 def handle_general_eror(f):
     @wraps(f)
@@ -14,6 +14,8 @@ def handle_general_eror(f):
         except pymongo.errors.DuplicateKeyError as err:
             logging.debug('ID already exzist')
             return DUPLIKATE_KEY_ERROR
+        except pymongo.errors.ConnectionFailure, e:
+            logging.info("Could not connect to server: %s" % e)
         except pymongo.errors as err:
             logging.info('server eror: ' + str(err))
             return GENERAL_ERROR
