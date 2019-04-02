@@ -55,7 +55,7 @@ def add(collection, username, password, question, anser):
     d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password), 'question': question, 'ans': anser }
     ret = collection.insert_one(d) #QUESTION: how match rounds to do??
     if resorce_database.add_user(ret.inserted_id):
-        return ret.inserted_id
+        return str(ret.inserted_id)
     else:
         return None
 

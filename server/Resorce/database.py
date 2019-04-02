@@ -155,6 +155,7 @@ def delete_user(collection, clientID):
     :return bool: True if update seceded, False otherwise
     """
     ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
+
     return ret.modified_count == 1
 
 

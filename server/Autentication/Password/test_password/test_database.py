@@ -7,6 +7,7 @@ import time
 from server.Autentication.Password import database
 import pytest
 import server.Resorce.database as resorce_database
+from server.database_errors import *
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
@@ -25,7 +26,7 @@ def test_immidiate_delete():
     time.sleep(1)
     database._immidiate_delete(identifier)
     time.sleep(1)
-    assert database.validate('user', 'password') is None
+    assert database.validate('user', 'password') is database.USERNAME_OR_PASSWORD_INCORRECT
     assert resorce_database.get_record(identifier, 'try') is None
 
 
@@ -36,7 +37,7 @@ def test_add_user():
 
 
 def test_add_user_username_already_exzist():
-    assert database.add('user', 'password') == database.USERNAME_ALREADY_EXZIST
+    assert database.add('user', 'password', 'a', 'b') == DUPLIKATE_KEY_ERROR
 
 def test_delete_user():
     identifier = 'aaaaaaaaaaaaaaaaaaaaaaaa'

@@ -27,26 +27,33 @@ class Responce(object):
         """
         get the request and the response code and bild the response package
 
-        :param int code: the responce status code
+        :param int/str code: the responce status code or responce packet
         :return: the response
         :rtype str:
         """
-        if code == BAD_REQUEST:
-            responce = cls.bad_request()
-        elif code == NOT_FOUND:
-            responce = cls.not_found()
-        elif code == UNAUTHORIZED:
-            responce = cls.unauthorized()
-        elif code == UNEXPECTED_ENTITY:
-            responce = cls.unexpected_entity('unknoen')
-        elif code == METHOD_NOT_ALLOWED:
-            responce = cls.method_not_allowed('unknoen')
-        elif code == INTERNAL_ERROR:
-            responce = cls.internal_eror()
+        if type(code) is int:
+            if code == BAD_REQUEST:
+                responce = cls.bad_request()
+            elif code == NOT_FOUND:
+                responce = cls.not_found()
+            elif code == UNAUTHORIZED:
+                responce = cls.unauthorized()
+            elif code == UNEXPECTED_ENTITY:
+                responce = cls.unexpected_entity('unknoen')
+            elif code == METHOD_NOT_ALLOWED:
+                responce = cls.method_not_allowed('unknoen')
+            elif code == INTERNAL_ERROR:
+                responce = cls.internal_eror()
+            else:
+                logging.critical('code {0} is not valid'.format(code))
+                responce = cls.bad_request()
+            return responce
+        elif type(code) is str:
+            return code
         else:
-            logging.critical('code {0} is not valid'.format(code))
+            logging.critical('code {0} is not valid type+ {1}'.format(code, type(code)))
             responce = cls.bad_request()
-        return responce
+
 
     @staticmethod
     def not_found():

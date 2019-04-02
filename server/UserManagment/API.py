@@ -72,7 +72,9 @@ class Reset(Uri):
     def GET(self):
         data = self.request.get_data_as_dictionery()
         if data is None:
-            return Responce.bad_request() #FIXME: USER data is wrong
+            return Responce.unexpected_entity({'username': 'username must be in data'})  # FIXME: USER data is wrong
+        elif 'username' not in data:
+            return Responce.unexpected_entity({'username': 'username must be in data'}) #FIXME: USER data is wrong
         q = database.get_question(data['username'])
         if q == errors.USERNAME_OR_PASSWORD_INCORRECT:
             return Responce.unexpected_entity({USERNAME: 'username is wrong'})

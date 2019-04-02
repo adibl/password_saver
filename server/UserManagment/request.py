@@ -27,7 +27,12 @@ class RegisterRequest(AuthenticatedRequestPassword):
             if type(data) is dict:
                 if 'question' in data and 'answer' in data:
                     return OK
-            return UNEXPECTED_ENTITY
+                else:
+                    not_found = filter(lambda x: x not in data, ['question', 'answer'])
+                    d = {key: 'must have this lable in data' for key in not_found}
+            else:
+                d = {key: 'must have this lable in data' for key in ['question', 'answer']}
+            return Responce.unexpected_entity(d)
         return UNAUTHORIZED #FIXME: if auterization is in the wrong level what to do
 
 

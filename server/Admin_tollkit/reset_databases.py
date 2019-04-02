@@ -13,16 +13,16 @@ CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.
 client = pymongo.MongoClient(CONN_STR)
 db = client.Autentication
 db.passwords.drop()
-time.sleep(1)
+#time.sleep(1)
 create_password()
-time.sleep(1)
+#time.sleep(1)
 db = client.Autentication
 db.jwt_time.drop()
-time.sleep(1)
+#time.sleep(1)
 create_jwt()
-time.sleep(1)
+#time.sleep(1)
 db = client.Resorce
 db.users.drop()
-time.sleep(1)
+#time.sleep(1)
 create_resorce()
 client.close()
