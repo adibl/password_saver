@@ -19,6 +19,18 @@ CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.
 USERNAME_OR_PASSWORD_INCORRECT = 2
 
 
+def connect(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        client = pymongo.MongoClient(CONN_STR)
+        db = client.Autentication
+        ret = f(db.passwords, *args, **kwds)
+        client.close()
+        return ret
+
+    return wrapper
+
+
 def create_database():
     """
     create the database with his indexes
@@ -30,18 +42,9 @@ def create_database():
     collection.create_index('username', unique=True)
 
 
-def connect():
-    """
-    connect to the database.
-    :return:
-    """
-    client = pymongo.MongoClient(CONN_STR)
-    db = client.Autentication
-    return db.passwords
-
-
 @handle_general_eror
-def add(username, password, question, anser):
+@connect
+def add(collection, username, password, question, anser):
     """
     add user to database
     :param username: the client username
@@ -49,7 +52,6 @@ def add(username, password, question, anser):
     :return: the client id if created None otherwise.
     :rtype: ObjectId
     """
-    collection = connect()
     d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password), 'question': question, 'ans': anser }
     ret = collection.insert_one(d) #QUESTION: how match rounds to do??
     if resorce_database.add_user(ret.inserted_id):
@@ -58,8 +60,8 @@ def add(username, password, question, anser):
         return None
 
 @handle_general_eror
-def get_question(username):
-    collection = connect()
+@connect
+def get_question(collection, username):
     prog = collection.find_one({'username': username})
     if prog is None:
         logging.debug('username incorrect')
@@ -72,7 +74,8 @@ def get_question(username):
 
 
 @handle_general_eror
-def validate(username, password):
+@connect
+def validate(collection, username, password):
     """
     validate user cradentials
     :param username:
@@ -81,7 +84,6 @@ def validate(username, password):
     :rtype: str
     """
 
-    collection = connect()
     prog = collection.find_one({'username': username})
     if prog is None:
         logging.debug('username incorrect')
@@ -93,8 +95,8 @@ def validate(username, password):
         return USERNAME_OR_PASSWORD_INCORRECT
 
 @handle_general_eror
-def validate_question(username, anser):
-    collection = connect()
+@connect
+def validate_question(collection, username, anser):
     prog = collection.find_one({'username': username})
     if prog is None:
         logging.debug('username incorrect')
@@ -107,13 +109,14 @@ def validate_question(username, anser):
 
 
 @handle_general_eror
-def delete_user(clientID):
+@connect
+def delete_user(collection, clientID):
     """
     delete user after few days from action
     :param clientID: the client id to delete
     :return bool: True if update seceded, False otherwise
     """
-    collection = connect()
+
     if resorce_database.delete_user(clientID) is True:
         ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
         return ret.modified_count == 1
@@ -121,25 +124,24 @@ def delete_user(clientID):
         return False
 
 
-@handle_general_eror
-def _immidiate_delete(clientID):
+@connect
+def _immidiate_delete(collection, clientID):
     """
     immediately delete user FOR TEST ONLY!!
     """
-    collection = connect()
     resorce_database._immidiate_delete(clientID)
     return collection.delete_one({'_id': ObjectId(clientID)})
 
 
-@handle_general_eror
-def __add_id(ID, username, password):
+@connect
+def __add_id(collection, ID, username, password):
     """
     add user with predefined ID , FOR TESTS ONLY!!!!
     :return:
     """
-    collection = connect()
     d = {'_id': ObjectId(ID), 'username': username, 'password': bcrypt.using(rounds=13).hash(password)}
     ret = collection.insert_one(d) #QUESTION: how match rounds to do??
+    resorce_database.add_user(ID)
     return ret.inserted_id
 
 

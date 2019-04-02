@@ -16,14 +16,13 @@ URI = 'http://127.0.0.1:50007'
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
-    database.add_user('aaaaaaaaaaaaaaaaaaaaaaaa')
-    pass_database.__add_id('aaaaaaaaaaaaaaaaaaaaaaaa', 'adi', 'secpass')
+    print pass_database.__add_id('aaaaaaaaaaaaaaaaaaaaaaaa', 'adi', 'secpass')
     time.sleep(1)
-    database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', 'adibl', '1234')
-    database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'gmail', 'adibl', 'abcdef')
+    print database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', 'adibl', '1234')
+    print database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'gmail', 'adibl', 'abcdef')
     time.sleep(1)
     yield
-    database._immidiate_delete('aaaaaaaaaaaaaaaaaaaaaaaa')
+    pass_database._immidiate_delete('aaaaaaaaaaaaaaaaaaaaaaaa')
     time.sleep(1)
 
 @pytest.fixture

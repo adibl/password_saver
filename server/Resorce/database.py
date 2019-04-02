@@ -17,6 +17,18 @@ MAX_TIMEOUT = 24 * 5  # FIXME move to create file
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 
 
+def connect(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        client = pymongo.MongoClient(CONN_STR)
+        db = client.Resorce
+        record = db['users']
+        ret = f(record, *args, **kwds)
+        client.close()
+        return ret
+
+    return wrapper
+
 
 @handle_general_eror
 def create_database(expire_time=MAX_TIMEOUT):
@@ -31,31 +43,19 @@ def create_database(expire_time=MAX_TIMEOUT):
 
 
 @handle_general_eror
-def add_user(userID):
+@connect
+def add_user(collection, userID):
     """
     :param userID: the user ID to create the collection for
     :return: True ifg the client was created, False if he is already exzist
     """
-    client = pymongo.MongoClient(CONN_STR)
-    db = client.Resorce
-    col = db['users'].insert_one({'_id': ObjectId(userID), 'records': []})
+    col = collection.insert_one({'_id': ObjectId(userID), 'records': []})
     return True
 
 
 @handle_general_eror
-def get_col():
-    """
-    get the collection of the users
-    :return: pymongo collection object
-    """
-    client = pymongo.MongoClient(CONN_STR)
-    db = client.Resorce
-    record = db['users']
-    return record
-
-
-@handle_general_eror
-def add_record(clientID, programID, username, password, sec_level=0):
+@connect
+def add_record(collection, clientID, programID, username, password, sec_level=0):
     """
     :param clientID: the client ID
     :param programID: the program identifier
@@ -64,7 +64,6 @@ def add_record(clientID, programID, username, password, sec_level=0):
     :param sec_level: the security level of this record
     :return bool: True if update seceded False otherwise
     """
-    collection = get_col()
     res = collection.update_one({'_id': ObjectId(clientID)},
                                 {
                                     '$addToSet': {
@@ -76,13 +75,13 @@ def add_record(clientID, programID, username, password, sec_level=0):
 
 
 @handle_general_eror
-def cange_record(clientID, programID, username=None, password=None):
+@connect
+def cange_record(collection, clientID, programID, username=None, password=None):
     d = {}
     if username is not None:
         d['records.$.username'] = username
     if password is not None:
         d['records.$.password'] = password
-    collection = get_col()
     res = collection.update_one(
         {
             '_id': ObjectId(clientID),
@@ -94,14 +93,14 @@ def cange_record(clientID, programID, username=None, password=None):
 
 
 @handle_general_eror
-def get_record(clientID, programID):
+@connect
+def get_record(collection, clientID, programID):
     """
     get record from database
     :param clientID: the client to get the record from
     :param programID: the program identifier to get the cradentials to
     :return: username and password for the program or None if user dont exzist. True if record will be deleted, False otherwise
     """
-    collection = get_col()
     prog = collection.find_one({'_id': ObjectId(clientID)}, {'records': {'$elemMatch': {'program_id': programID}}})
     if prog is None:
         return None
@@ -113,14 +112,14 @@ def get_record(clientID, programID):
 
 
 @handle_general_eror
-def delete_record(clientID, programID):
+@connect
+def delete_record(collection, clientID, programID):
     """
     delete record from database. delete just after x time.
     :param clientID: the client to get the record from
     :param programID: the program identifier to get the cradentials to
     :return: True if succeed, false otherwise
     """
-    collection = get_col()
     res = collection.update_one(
         {
             '_id': ObjectId(clientID),
@@ -132,13 +131,13 @@ def delete_record(clientID, programID):
 
 
 @handle_general_eror
-def get_all_records(clientID):
+@connect
+def get_all_records(collection, clientID):
     """
     get all username program id pairs (with delete time if exist)
     :param str clientID: the client id
     :return list: list of dictionaries of the records
     """
-    collection = get_col()
     prog = collection.find_one({'_id': ObjectId(clientID)},
                                {'records.program_id': 1, 'records.username': 1, 'records.delete_time': 1,
                                 'records.sec_level': 1, 'delete_time': 1, "_id": 0})
@@ -148,32 +147,32 @@ def get_all_records(clientID):
 
 
 @handle_general_eror
-def delete_user(clientID):
+@connect
+def delete_user(collection, clientID):
     """
     delete user after few days from action
     :param clientID: the client id to delete
     :return bool: True if update seceded, False otherwise
     """
-    collection = get_col()
     ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
     return ret.modified_count == 1
 
 
 @handle_general_eror
-def cancel_delete(clientID):
+@connect
+def cancel_delete(collection, clientID):
     """
     cancel user deletion time
     :param clientID: the client id to undelete
     :return bool: True if update seceded, False otherwise
     """
-    collection = get_col()
     ret = collection.update_one({'_id': ObjectId(clientID)}, {'$unset': {'delete_time': ""}})
     return ret.modified_count == 1
 
 
-def _immidiate_delete(clientID):
+@connect
+def _immidiate_delete(collection, clientID):
     """
     immediately delete user FOR TEST ONLY!!
     """
-    collection = get_col()
     return collection.delete_one({'_id': ObjectId(clientID)})
