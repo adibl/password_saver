@@ -17,7 +17,7 @@ import server.Resorce.database as resorce_database
 EXPIRE_TIME_HOUERS = 48 #FIXME: should be the same as resorce database
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 USERNAME_OR_PASSWORD_INCORRECT = 2
-
+#FIXME: hash the answer to the question
 
 def connect(f):
     @wraps(f)
@@ -52,7 +52,7 @@ def add(collection, username, password, question, anser):
     :return: the client id if created None otherwise.
     :rtype: ObjectId
     """
-    d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password), 'question': question, 'ans': anser }
+    d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password), 'question': question, 'ans': anser}
     ret = collection.insert_one(d) #QUESTION: how match rounds to do??
     if resorce_database.add_user(ret.inserted_id):
         return str(ret.inserted_id)
