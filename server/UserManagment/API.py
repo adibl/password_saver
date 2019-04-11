@@ -34,7 +34,8 @@ class Register(Uri):
             return Responce.bad_request() #FIXME: what this is realy
         username, password = ret
         question, ansear = self.request.get_question_ans()
-        if re.match(self.RE_CHRACTERS, password):
+        ret = self.__test_password(password)
+        if ret is True:
             ret = database.add(username, password, question, ansear)
             if ret == database_errors.DUPLIKATE_KEY_ERROR:
                 return Responce.unexpected_entity({USERNAME: 'username already exzist'})
@@ -43,10 +44,34 @@ class Register(Uri):
             else:
                 return Responce.ok()
         else:
-            return Responce.unexpected_entity({PASS: self.PASS_POLICY})
+            return Responce.unexpected_entity({PASS: ret})
 
     def __get_username_password(self):
         return self.request.get_username_password()
+
+    def __test_password(self, password):
+        """
+        test password aginst the policy
+        
+        :param password: the password 
+        :ret+=: True if the password is correct and string that represent the error otherwise
+        """
+        ret = []
+        if not 6 <= len(password) <= 20:
+            ret.append('must contain 6-20 characters')
+        if not re.search("[a-z]", password):
+            ret.append('must contain one small letter')
+        if not re.search("[A-Z]", password):
+            ret.append('must contain one big letter')
+        if not re.search("[0-9]", password):
+            ret.append('must contain one number')
+        if not re.search("[!@#$%^&*]", password):
+            ret.append('must contain one special character (!@#$%^&*)')
+        if ret == []:
+            return True
+        else:
+            print ret
+            return '\r\n'.join(ret)
 
 
 class Login(Uri):

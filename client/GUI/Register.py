@@ -30,6 +30,7 @@ def destroy_Toplevel1():
 
 class RegisterGui(Toplevel1):
     def run(self, *args):
+        self.clean_errors()
         print 'runnn'
         ret = Register.handle(self.entry_username.get(), self.entry_password.get(), self.Spinbox_question.get(), self.entry_aswer.get())
         print ret
@@ -40,14 +41,19 @@ class RegisterGui(Toplevel1):
                 if error == 'username':
                     self.username_error(ret[error])
                 elif error == 'password':
-                    print ret[error]
                     self.password_error(ret[error])
+                elif error == 'question':
+                    print ret[error]
+                    self.question_error(ret[error])
 
     def username_error(self, error):
         self.lable_username_error.config(text=error)
 
     def password_error(self, error):
         self.lable_password_error.config(text=error)
+
+    def question_error(self, error):
+        self.lable_question_error.config(text=error)
 
     def clean_errors(self):
         self.lable_username_error.config(text=' ')
