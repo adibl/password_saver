@@ -22,7 +22,6 @@ class Register(object):
         responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
                                  json={'question': question, 'answer': answer})
         if responce.status_code == 200:
-            fsm.registered()
             return True
         elif responce.status_code == 442:
             return json.loads(responce.text)
