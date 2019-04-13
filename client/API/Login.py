@@ -1,5 +1,7 @@
 """
-
+name:
+date:
+description
 """
 import base64
 
@@ -9,20 +11,19 @@ from client.window_order import fsm
 
 URI = 'http://127.0.0.1:50007'
 
-class Register(object):
+class Login(object):
 
     @classmethod
-    def handle(cls, username, password, question, answer):
-        return cls.POST(username, password, question, answer)
+    def handle(cls, username, password):
+        return cls.GET(username, password)
 
 
     @classmethod
-    def POST(cls, username, password, question, answer):
+    def GET(cls, username, password):
         auto = base64.b64encode(username + ':' + password)
-        responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
-                                 json={'question': question, 'answer': answer})
+        responce = requests.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)},)
         if responce.status_code == 200:
-            fsm.registered()
+            fsm.logedin()
             return True
         elif responce.status_code == 442:
             return json.loads(responce.text)
