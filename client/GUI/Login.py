@@ -56,15 +56,22 @@ class LoginGui(tk.Frame):
         self.lable_password_error.configure(foreground="#ff1f1f")
 
         self.Button1 = tk.Button(self)
-        self.Button1.place(relx=0.5, rely=0.845, height=24, width=87)
+        self.Button1.place(relx=0.4, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
         self.Button1.configure(command=self.run)
         self.Button1.configure(text='''Log in''')
 
         self.Button1 = tk.Button(self)
-        self.Button1.place(relx=0.7, rely=0.845, height=24, width=87)
+        self.Button1.place(relx=0.7, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
         self.Button1.configure(command=self.to_register)
         self.Button1.configure(text='''Register''')
 
-        self.bind('<Key-Return>', self.run)
+        self.Button1 = tk.Button(self)
+        self.Button1.place(relx=0.1, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
+        self.Button1.configure(command=None) #FIXME
+        self.Button1.configure(text='''forget password''')
+
+
+        self.bind('<Return>', self.run)
+        self.focus_set()
 
 

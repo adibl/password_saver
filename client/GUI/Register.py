@@ -79,7 +79,7 @@ class RegisterGui(tk.Frame):
         self.Label4.configure(text='''Answer''')
 
         self.Button1 = tk.Button(self)
-        self.Button1.place(relx=0.5, rely=0.845, height=24, width=87)
+        self.Button1.place(relx=0.4, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
         self.Button1.configure(command=self.run)
         self.Button1.configure(text='''Register''')
 
@@ -87,7 +87,9 @@ class RegisterGui(tk.Frame):
         self.lable_answer_error.place(relx=self._RELX_ENTITY, rely=0.761, relheight=self._HIGH_ALL
                                       , width=295)
         self.lable_answer_error.configure(font="-family {Segoe UI} -size 12")
+
         self.bind('<Key-Return>', self.run)
+        self.focus_set()
 
 
 

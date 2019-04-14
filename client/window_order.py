@@ -9,11 +9,12 @@ from fysom import FysomGlobalMixin, FysomGlobal, Fysom
 #from client.GUI.main_page import SeaofBTCapp
 
 
-fsm = Fysom({ 'initial': 'login','final': 'end',
+fsm = Fysom({ 'initial': 'login', 'final': 'end',
               'events': [
-                  {'name': 'registered', 'src': 'register', 'dst': 'login'},
-                    {'name': 'logedin', 'src': 'login', 'dst': 'end'},
+                    {'name': 'registered', 'src': 'register', 'dst': 'login'},
+
                     {'name': 'to_register', 'src': 'login', 'dst': 'register'},
+                    {'name': 'logedin', 'src': 'login', 'dst': 'end'},
               ] })
 
 

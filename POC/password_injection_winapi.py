@@ -10,10 +10,10 @@ if __name__ == "__main__":
     sub = subprocess.Popen(program)
     shell = win32com.client.Dispatch("WScript.Shell")
     time.sleep(9)
-    shell.SendKeys("username@gmail.com")
+    shell.SendKeys("bleyer23@gmail.com")
     shell.SendKeys("{TAB}")
     win32api.Sleep(50)
-    shell.SendKeys("password")
+    shell.SendKeys("qazwsx12")
     shell.SendKeys("{ENTER}")
     sub.wait()
 

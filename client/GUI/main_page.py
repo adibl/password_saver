@@ -16,12 +16,11 @@ except ImportError:
 from client.States.Register import RegisterState
 from client.States.Login import LoginState
 FSM_TO_CLASS = {'register' : RegisterState, 'login': LoginState}
-from abc import abstractmethod
 
 
 
 
-class SeaofBTCapp(tk.Tk):
+class TopLevel(tk.Tk):
     PAGES = (RegisterState, LoginState)
 
     def __init__(self, *args, **kwargs):
@@ -56,7 +55,7 @@ class SeaofBTCapp(tk.Tk):
         return ret
 
 if __name__ == '__main__':
-    root = SeaofBTCapp()
+    root = TopLevel()
     root.mainloop()
     while not fsm.is_finished():
         data = root.get_data()

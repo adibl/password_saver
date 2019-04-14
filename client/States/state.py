@@ -16,6 +16,15 @@ class State(object):
         """
         pass
 
+    @abstractmethod
+    def run(self):
+        """
+        run the satae
+
+        :return:
+        """
+        pass
+
     def run_after(self):
         """
         run after the window finish, return the data for future windows
