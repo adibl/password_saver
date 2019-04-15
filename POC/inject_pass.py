@@ -7,11 +7,13 @@ description
 from pynput import keyboard
 from pynput.keyboard import Key, Controller
 import time
+import win32gui, win32api
 
 def on_press(key):
     if key == Key.insert:
-        import win32api
-        win32api.LoadKeyboardLayout('00000409', 1)  # to switch to english
+
+        window_handle = win32gui.GetForegroundWindow()
+        result = win32api.SendMessage(window_handle, 0x0050, 0, 67699721)
         keyboard = Controller()
         keyboard.type('bleyer23@gmail.com')
         time.sleep(0.1)

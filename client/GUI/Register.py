@@ -88,8 +88,4 @@ class RegisterGui(tk.Frame):
                                       , width=295)
         self.lable_answer_error.configure(font="-family {Segoe UI} -size 12")
 
-        self.bind('<Key-Return>', self.run)
-        self.focus_set()
-
-
 

@@ -25,10 +25,9 @@ class Login(object):
         responce = requests.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)},)
         if responce.status_code == 200:
             cls.save_jwt_in_file(responce.text)
-            fsm.logedin()
             return True
         elif responce.status_code == 442:
-            return json.loads(responce.text)
+            return {'general': 'wrong username or password'}
         else:
             return {'general': 'general error'}
 
@@ -42,6 +41,7 @@ class Login(object):
             pass
         with open(cls.FILE_NAME, 'wb')as handle:
             handle.write(JWT)
+
 
 
 

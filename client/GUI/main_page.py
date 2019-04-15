@@ -15,13 +15,14 @@ except ImportError:
 
 from client.States.Register import RegisterState
 from client.States.Login import LoginState
-FSM_TO_CLASS = {'register' : RegisterState, 'login': LoginState}
+from client.States.SeeAll import SeeAllState
+FSM_TO_CLASS = {'register' : RegisterState, 'login': LoginState, 'see_all': SeeAllState}
 
 
 
 
 class TopLevel(tk.Tk):
-    PAGES = (RegisterState, LoginState)
+    PAGES = (RegisterState, LoginState, SeeAllState)
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -31,7 +32,7 @@ class TopLevel(tk.Tk):
         self.title("New Toplevel")
 
         self.frames = {}
-        self.current_frame = None
+        self.last_frame = None
 
         for F in self.PAGES:
             frame = F(self)
@@ -42,16 +43,17 @@ class TopLevel(tk.Tk):
 
     def show_frame(self, data=''):
         frame = self.frames[FSM_TO_CLASS[fsm.current]]
-        if self.current_frame is not None:
-            data = self.current_frame.run_after()
+        if self.last_frame is not None:
+            data = self.last_frame.run_after()
             if data is not None:
                 frame.get_data(data)
         frame.tkraise()
-        self.current_frame = frame
+        frame.run_before()
+        self.last_frame = frame
 
     def get_data(self):
-        ret = self.current_frame.run_after()
-        self.current_frame.clean()
+        ret = self.last_frame.run_after()
+        self.last_frame.clean()
         return ret
 
 if __name__ == '__main__':

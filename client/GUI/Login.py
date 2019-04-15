@@ -40,20 +40,15 @@ class LoginGui(tk.Frame):
         self.Label2.configure(font="-family {Segoe UI} -size 12")
         self.Label2.configure(text='''Password''')
 
-        self.lable_username_error = tk.Label(self)
-        self.lable_username_error.place(relx=self._RELX_ENTITY, rely=0.141, relheight=self._HIGH_ALL
-                                        , relwidth=self._WITH_ENTITY)
-        self.lable_username_error.configure(foreground="#ff1f1f")
-
         self.entry_password = tk.Entry(self)
         self.entry_password.place(relx=self._RELX_ENTITY, rely=0.225, relheight=self._HIGH_ALL,
                                   relwidth=self._WITH_ENTITY)
         self.entry_password.configure(font="-family {Courier New} -size 12")
 
-        self.lable_password_error = tk.Label(self)
-        self.lable_password_error.place(relx=self._RELX_ENTITY, rely=0.31, relheight=self._HIGH_ALL * 2
+        self.label_general_error = tk.Label(self)
+        self.label_general_error.place(relx=self._RELX_ENTITY, rely=0.31, relheight=self._HIGH_ALL * 2
                                         , relwidth=self._WITH_ENTITY)
-        self.lable_password_error.configure(foreground="#ff1f1f")
+        self.label_general_error.configure(foreground="#ff1f1f")
 
         self.Button1 = tk.Button(self)
         self.Button1.place(relx=0.4, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
@@ -69,9 +64,5 @@ class LoginGui(tk.Frame):
         self.Button1.place(relx=0.1, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
         self.Button1.configure(command=None) #FIXME
         self.Button1.configure(text='''forget password''')
-
-
-        self.bind('<Return>', self.run)
-        self.focus_set()
 
 

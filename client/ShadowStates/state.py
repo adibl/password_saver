@@ -17,7 +17,7 @@ class State(object):
         pass
 
     @abstractmethod
-    def run(self):
+    def on_press(self):
         """
         run the satae
 
@@ -25,19 +25,15 @@ class State(object):
         """
         pass
 
-    def run_after(self):
+    @classmethod
+    def pass_data(cls):
         """
         run after the window finish, return the data for future windows
         """
         return None
 
-    def run_before(self):
-        """
-        run after the window finish, return the data for future windows
-        """
-        return None
-
-    def get_data(self, data):
+    @classmethod
+    def get_data(cls, data):
         """
         get the data from last window
         """
