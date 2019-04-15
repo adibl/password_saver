@@ -14,7 +14,7 @@ class KeyLoggerState(State):
     @classmethod
     def on_press(cls):
         keyboard.add_hotkey('insert', shadow_fsm.insert)
-        keyboard.add_hotkey('home', shadow_fsm.home)
+        keyboard.add_hotkey('ctrl+alt+insert', shadow_fsm.home)
         keyboard.read_hotkey(suppress=False)
         keyboard.unhook_all_hotkeys()
 

@@ -7,9 +7,11 @@ from client.window_order import shadow_fsm
 from client.ShadowStates.ShadowInsertUsername import ShadowInserUsername
 from client.ShadowStates.ShadowInsertPassword import ShadowInserPasswordState
 from client.ShadowStates.KeyLogger import KeyLoggerState
+from client.ShadowStates.AddRecord import AddRecord
 from pynput.keyboard import Key, Controller
 
-SHADOW_FSM_TO_CLASS = {'insert_username': ShadowInserUsername, 'insert_password': ShadowInserPasswordState, 'key_logger': KeyLoggerState}
+SHADOW_FSM_TO_CLASS = {'insert_username': ShadowInserUsername, 'insert_password': ShadowInserPasswordState,
+                       'key_logger': KeyLoggerState, 'add_record': AddRecord}
 def main():
     last_state = None
     while not shadow_fsm.is_finished():

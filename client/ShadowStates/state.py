@@ -7,14 +7,6 @@ description
 from abc import abstractmethod
 
 class State(object):
-    @abstractmethod
-    def clean(self):
-        """
-        clean all the data in the lables
-
-        :return:
-        """
-        pass
 
     @abstractmethod
     def on_press(self):
