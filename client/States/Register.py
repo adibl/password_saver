@@ -43,12 +43,12 @@ class RegisterState(RegisterGui, State):
                     elif error == 'general':
                         print ret[error]
                         self.general_error(ret[error])
-            self.mainloop()
-            self.quit()
+            self.wait_until_end()
+            self.end()
         else:
             self.clean_errors()
             fsm.registered()
-            self.quit()
+            self.end()
 
 
 

@@ -7,11 +7,10 @@ try:
     import Tkinter as tk
 except ImportError:
     import tkinter as tk
-from client.window_order import fsm
-from client.API.Login import Login
+from .Gui import Gui
 
 
-class LoginGui(tk.Frame):
+class LoginGui(Gui):
     _RELX_ENTITY = 0.25
     _WITH_ENTITY = 0.7
     _HIGH_ALL = 0.07
@@ -19,7 +18,7 @@ class LoginGui(tk.Frame):
     _RELX_LABLE = 0.05
 
     def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
+        super(LoginGui, self).__init__(parent)
         self.place(relx=0.0, rely=0.0, relheight=1, relwidth=1)
         self.configure(width=455)
 
@@ -64,5 +63,7 @@ class LoginGui(tk.Frame):
         self.Button1.place(relx=0.1, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
         self.Button1.configure(command=None) #FIXME
         self.Button1.configure(text='''forget password''')
+
+        self.bind("<Escape>", self.run)
 
 

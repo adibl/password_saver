@@ -3,13 +3,17 @@ name:
 date:
 description
 """
-import Tkinter as tk
+try:
+    import Tkinter as tk
+except ImportError:
+    import tkinter as tk
 from client.API.AddRecord import Passwords
 import base64
 import re
 import numpy
+from .Gui import Gui
 
-class SeeAllGui(tk.Frame):
+class SeeAllGui(Gui):
     URL_RE = re.compile('^https?://(?:\w+\.)?(\w+)\.(\w+).*')
     _RELX_ENTITY = 0.25
     _WITH_BUTTON = 0.2
@@ -23,7 +27,7 @@ class SeeAllGui(tk.Frame):
 
 
     def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
+        super(SeeAllGui, self).__init__(parent)
         self.place(relx=0.0, rely=0.0, relheight=1, relwidth=1)
         self.configure(width=455)
         self.lables = []

@@ -21,16 +21,16 @@ class LoginState(LoginGui, State):
                 for error in ret.keys():
                     if error == 'general':
                         self.general_error(ret[error])
-            self.mainloop()
-            self.quit()
+            self.wait_until_end()
+            self.end()
         else:
             fsm.logedin()
             self.clean_errors()
-            self.quit()
+            self.end()
 
     def to_register(self):
         fsm.to_register()
-        self.quit()
+        self.end()
 
     def general_error(self, error):
         error = error.replace('\r\n', '\n')

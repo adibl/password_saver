@@ -3,9 +3,9 @@ try:
 except ImportError:
     import tkinter as tk
 from client.API.Register import Register
+from .Gui import Gui
 
-
-class RegisterGui(tk.Frame):
+class RegisterGui(Gui):
     _RELX_ENTITY = 0.25
     _WITH_ENTITY = 0.7
     _HIGH_ALL = 0.07
@@ -13,7 +13,7 @@ class RegisterGui(tk.Frame):
     _RELX_LABLE = 0.05
 
     def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
+        super(RegisterGui, self).__init__(parent)
         self.place(relx=0.0, rely=0.0, relheight=1, relwidth=1)
         self.configure(width=455)
 

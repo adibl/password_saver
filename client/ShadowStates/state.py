@@ -5,7 +5,6 @@ description
 """
 
 from abc import abstractmethod
-import langid
 
 class State(object):
 

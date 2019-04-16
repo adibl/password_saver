@@ -38,7 +38,6 @@ class TopLevel(tk.Tk):
 
             self.frames[F] = frame
             frame.place(relx=0.0, rely=0.0, relheight=1, relwidth=1)
-        self.show_frame()
 
     def show_frame(self, data=''):
         frame = self.frames[FSM_TO_CLASS[fsm.current]]
@@ -50,19 +49,25 @@ class TopLevel(tk.Tk):
 
         frame.tkraise()
         frame.run_before()
+        frame.focus_set()
         self.last_frame = frame
+        frame.wait_until_end()
 
     def get_data(self):
         ret = self.last_frame.run_after()
         self.last_frame.clean()
         return ret
 
-if __name__ == '__main__':
-    root = TopLevel()
-    root.mainloop()
+
+def run_fsm(root):
+    root.show_frame()
     while not fsm.is_finished():
         data = root.get_data()
         root.show_frame(data)
-        root.mainloop()
+
+if __name__ == '__main__':
+    root = TopLevel()
+    root.after(1, run_fsm, root)
+    root.mainloop()
 
 
