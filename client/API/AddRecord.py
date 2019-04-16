@@ -23,8 +23,10 @@ class Passwords(object):
     @classmethod
     def POST(cls, url, username, password):
         auto = cls.read_jwt()
+        print base64.urlsafe_b64encode(url)
+        encode_url =base64.urlsafe_b64encode(url)
         responce = requests.post(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)}
-                                , json={'username': username, 'password': password, 'program_id': url}) #FIXME: encode
+                                , json={'username': username, 'password': password, 'program_id': encode_url}) #FIXME: encode
         if responce.status_code == 200:
             return True
         elif responce.status_code == 442:

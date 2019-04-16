@@ -22,6 +22,7 @@ class LoginState(LoginGui, State):
                     if error == 'general':
                         self.general_error(ret[error])
             self.mainloop()
+            self.quit()
         else:
             fsm.logedin()
             self.clean_errors()

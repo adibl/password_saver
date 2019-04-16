@@ -39,6 +39,7 @@ class RegisterState(RegisterGui, State):
                         print ret[error]
                         self.question_error(ret[error])
             self.mainloop()
+            self.quit()
         else:
             self.clean_errors()
             fsm.registered()

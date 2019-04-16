@@ -17,7 +17,8 @@ class SeeAllState(SeeAllGui, State):
         print 'runnn'
 
     def run_before(self):
-        self.proses = multiprocessing.Process(target=runShadow.main())
+        self.proses = multiprocessing.Process(target=runShadow.main)
+        self.proses.start()
 
     def run_after(self):
         shadow_fsm.close()

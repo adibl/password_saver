@@ -36,17 +36,17 @@ def lisening():
         threading.Thread(target=handle_client, args=(conn,)).start()
 
 
-def receive(client_socket, func=lambda data: not re.search(".*\r\n\r\n(.*\r\n)?", data)):
+def receive(client_socket, func=lambda data: not re.search(".*\r\n\r\n(.*\r\n\r\n)?", data)):
     """
     :param func: the exit funcsion of the while loop.
     :param client_socket: the comm socket
     :return: the data thet was recived from the socket
     """
     data = ""
-    while func(data):
-        data += client_socket.recv(1024)
+    while not re.search(".*\r\n\r\n", data):
+        data += client_socket.recv(2048)
     logging.debug("RECV:" + data)
-    return data.replace('\r\n', '\n')
+    return data.replace('\r\n', '\n') #FIXME: ergent!!!!!
 
 def handle_request(cl, request):
     code = cl.validate(request)

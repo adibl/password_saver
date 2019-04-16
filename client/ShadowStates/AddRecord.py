@@ -31,7 +31,7 @@ class AddRecord(State):
         return_value = None
         while return_value is not True:
             gui.mainloop()
-            return_value = Passwords.handle(base64.b64encode(cls.URL), *gui.get_data())
+            return_value = Passwords.handle(cls.URL, *gui.get_data())
             gui.handle_errors(return_value)
         gui.destroy()
         shadow_fsm.to_key_logger()
