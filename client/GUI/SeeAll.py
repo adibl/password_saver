@@ -3,7 +3,7 @@ name:
 date:
 description
 """
-import tkinter as tk
+import Tkinter as tk
 
 class SeeAllGui(tk.Frame):
     _RELX_ENTITY = 0.25

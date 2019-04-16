@@ -87,5 +87,6 @@ class RegisterGui(tk.Frame):
         self.lable_answer_error.place(relx=self._RELX_ENTITY, rely=0.761, relheight=self._HIGH_ALL
                                       , width=295)
         self.lable_answer_error.configure(font="-family {Segoe UI} -size 12")
+        self.lable_answer_error.configure(foreground="#ff1f1f")
 
 

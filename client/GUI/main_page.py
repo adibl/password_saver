@@ -3,7 +3,6 @@ name:
 date:
 description
 """
-import tkinter as tk
 #from client.API.Register import Register
 from client.window_order import fsm
 

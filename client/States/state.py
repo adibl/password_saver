@@ -5,6 +5,7 @@ description
 """
 
 from abc import abstractmethod
+import langid
 
 class State(object):
     @abstractmethod
@@ -42,3 +43,8 @@ class State(object):
         get the data from last window
         """
         pass
+
+
+    @staticmethod
+    def test_lenguge_data(data):
+        return langid.classify(data)[0] == 'en'

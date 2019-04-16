@@ -1,8 +1,5 @@
-"""
-name:
-date:
-description
-"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from client.GUI.SeeAll import SeeAllGui
 from .state import State
@@ -10,6 +7,7 @@ import uiautomation as automation
 import win32api, win32gui
 import keyboard
 from client.window_order import shadow_fsm
+from client.API.ManageRecord import Record
 
 
 class ShadowInserUsername(State):
@@ -23,6 +21,7 @@ class ShadowInserUsername(State):
         try:
             url = cls.get_url()
         except:
+            print 'no url'
             shadow_fsm.no_url()
             return
         window_handle = win32gui.GetForegroundWindow()
@@ -30,7 +29,12 @@ class ShadowInserUsername(State):
         if not result == 0:
             shadow_fsm.no_url()
             return
-        keyboard.write(cls.USERNAME)
+        ret = Record.GET(url)
+        if 'username' in ret.keys() and 'password' in ret.keys():
+            keyboard.write(ret['username'])
+            cls.PASSWORD = ret['password']
+        else:
+            raise ValueError #FIXME:
         shadow_fsm.username_inserted()
 
     @staticmethod
@@ -44,10 +48,16 @@ class ShadowInserUsername(State):
             control = controlList[0]
         else:
             control = controlList[1]
-        address_control = automation.FindControl(control, lambda c, d: isinstance(c,
-                                                                                  automation.EditControl) and "Address and search bar" in c.Name)
+        address_control = automation.FindControl(control, find_search_bar)
         return address_control.CurrentValue()
 
     @classmethod
     def pass_data(cls):
         return {'username': cls.USERNAME, 'password': cls.PASSWORD}
+
+
+def find_search_bar(c, d):
+    if isinstance(c, automation.EditControl):
+        if u"שורת חיפוש וכתובות אתרים" in unicode(c.Name) or u"Address and search bar" in unicode(c.Name):
+            return True
+    return False

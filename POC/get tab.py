@@ -1,14 +1,19 @@
-"""
-name:
-date:
-description
-"""
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from time import sleep
 import uiautomation as automation
+
+def print_name(c,d):
+    if isinstance(c, automation.EditControl):
+        if u"שורת חיפוש וכתובות אתרים" in unicode(c.Name) or u"Address and search bar" in unicode(c.Name):
+            return True
+    return False
+
 
 if __name__ == '__main__':
     sleep(3)
     control = automation.GetFocusedControl()
+    print control
     controlList = []
     while control:
         controlList.insert(0, control)
@@ -17,6 +22,9 @@ if __name__ == '__main__':
         control = controlList[0]
     else:
         control = controlList[1]
-    address_control = automation.FindControl(control, lambda c, d: isinstance(c, automation.EditControl) and "Address and search bar" in c.Name)
+    print control
+    address_control = automation.FindControl(control, print_name)
     print address_control.CurrentValue()
+
+
 

@@ -10,8 +10,6 @@ from .state import State
 import multiprocessing
 
 
-import time
-
 class SeeAllState(SeeAllGui, State):
     def run(self, *args):
         print 'runnn'

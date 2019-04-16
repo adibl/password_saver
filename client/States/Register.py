@@ -25,8 +25,13 @@ class RegisterState(RegisterGui, State):
 
     def run(self, *args):
         print 'runnn'
-        ret = Register.handle(self.entry_username.get(), self.entry_password.get(), self.Spinbox_question.get(),
-                              self.entry_aswer.get())
+        data = [self.entry_username.get(), self.entry_password.get(), self.Spinbox_question.get(),
+                              self.entry_aswer.get()]
+        if all(self.test_lenguge_data(lable) for lable in data):
+            ret = Register.handle(self.entry_username.get(), self.entry_password.get(), self.Spinbox_question.get(),
+                                  self.entry_aswer.get())
+        else:
+            ret = {'general': 'only english supported'}
         if ret is not True:
             self.clean_errors()
             if type(ret) is dict:
@@ -38,6 +43,9 @@ class RegisterState(RegisterGui, State):
                     elif error == 'question':
                         print ret[error]
                         self.question_error(ret[error])
+                    elif error == 'general':
+                        print ret[error]
+                        self.general_error(ret[error])
             self.mainloop()
             self.quit()
         else:
@@ -57,6 +65,9 @@ class RegisterState(RegisterGui, State):
 
     def question_error(self, error):
         self.lable_question_error.config(text=error)
+
+    def general_error(self, error):
+        self.lable_answer_error.config(text=error)
 
     def clean_errors(self):
         self.lable_username_error.config(text=' ')
