@@ -44,8 +44,10 @@ class TopLevel(tk.Tk):
         frame = self.frames[FSM_TO_CLASS[fsm.current]]
         if self.last_frame is not None:
             data = self.last_frame.run_after()
+            self.last_frame.clean()
             if data is not None:
                 frame.get_data(data)
+
         frame.tkraise()
         frame.run_before()
         self.last_frame = frame

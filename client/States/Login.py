@@ -3,10 +3,12 @@ name:
 date:
 description
 """
+
 from client.window_order import fsm
 from client.GUI.Login import LoginGui
 from client.API.Login import Login
 from .state import State
+import Tkinter as tk
 
 
 class LoginState(LoginGui, State):
@@ -15,8 +17,6 @@ class LoginState(LoginGui, State):
         ret = Login.handle(self.entry_username.get(), self.entry_password.get())
         print ret
         if ret is not True:
-            self.clean_errors()
-
             if type(ret) is dict:
                 for error in ret.keys():
                     if error == 'general':
@@ -39,12 +39,11 @@ class LoginState(LoginGui, State):
     def clean_errors(self):
         self.label_general_error.config(text=' ')
 
-    def clean(self):
-        pass
-
     def get_data(self, data):
+        self.entry_username.delete(0, tk.END)
         self.entry_username.insert(0, data[0])
+        self.entry_password.delete(0, tk.END)
         self.entry_password.insert(0, data[1])
 
-    def run_after(self):
-        return None
+    def clean(self):
+        self.clean_errors()

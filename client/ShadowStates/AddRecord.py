@@ -4,11 +4,9 @@ date:
 description
 """
 from .state import State
-import uiautomation as automation
-from .GenerateGui import GenerateGui
+from GUI.GenerateGui import GenerateGui
 from client.window_order import shadow_fsm
 from client.API.AddRecord import Passwords
-import base64
 from .ShadowInsertUsername import ShadowInserUsername
 
 class AddRecord(State):

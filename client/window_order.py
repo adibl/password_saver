@@ -29,6 +29,7 @@ shadow_fsm = Fysom({ 'initial': 'key_logger', 'final': 'end',
                     {'name': 'no_url', 'src': 'add_record', 'dst': 'key_logger'},
                     {'name': 'to_key_logger', 'src': 'add_record', 'dst': 'key_logger'},
                     {'name': 'to_key_logger', 'src': 'insert_password', 'dst': 'key_logger'},
+                    {'name': 'close', 'src': '.', 'dst': 'end'},
               ] })
 
 

@@ -47,4 +47,4 @@ class State(object):
 
     @staticmethod
     def test_lenguge_data(data):
-        return langid.classify(data)[0] == 'en'
+        return isinstance(data, str)

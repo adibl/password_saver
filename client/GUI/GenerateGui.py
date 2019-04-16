@@ -51,10 +51,11 @@ class GenerateGui(tk.Tk):
         self.Button1.place(relx=0.4, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
         self.Button1.configure(command=self.quit)
         self.Button1.configure(text='''Finish''')
+        self.lift()
+        self.attributes("-topmost", True)
 
     def auto_generate(self):
         self.entry_password.insert(0, self.generate_strong_password())
-
 
     def generate_strong_password(self):
         import string
@@ -66,7 +67,7 @@ class GenerateGui(tk.Tk):
         password += random.choice(string.punctuation)
         password += random.choice(string.lowercase)
         password += random.choice(string.uppercase)
-        password +=[random.choice(string.letters+ string.punctuation + string.digits) for i in range(16)]
+        password += [random.choice(string.letters+ string.punctuation + string.digits) for i in range(16)]
         random.shuffle(password)
         return ''.join(password)
 

@@ -19,12 +19,21 @@ class Passwords(object):
     def handle(cls, url, username, password):
         return cls.POST(url, username, password)
 
+    @classmethod
+    def GET(cls):
+        auto = cls.read_jwt()
+        responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)})
+        if responce.status_code == 200:
+            return json.loads(responce.text)
+        else:
+            return {'general': 'general error'}
+
 
     @classmethod
     def POST(cls, url, username, password):
         auto = cls.read_jwt()
         print base64.urlsafe_b64encode(url)
-        encode_url =base64.urlsafe_b64encode(url)
+        encode_url = base64.urlsafe_b64encode(url)
         responce = requests.post(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)}
                                 , json={'username': username, 'password': password, 'program_id': encode_url}) #FIXME: encode
         if responce.status_code == 200:
