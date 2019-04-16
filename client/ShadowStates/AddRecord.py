@@ -6,6 +6,9 @@ description
 from .state import State
 import uiautomation as automation
 from .GenerateGui import GenerateGui
+from client.window_order import shadow_fsm
+from client.API.AddRecord import Passwords
+import base64
 
 class AddRecord(State):
     URL = None
@@ -18,9 +21,20 @@ class AddRecord(State):
         :return:
         """
         print 'start add record'
-        cls.URL = cls.get_url()
+        try:
+            cls.URL = cls.get_url()
+        except:
+            shadow_fsm.no_url()
+            return
         gui = GenerateGui()
-        gui.mainloop()
+
+        return_value = None
+        while return_value is not True:
+            gui.mainloop()
+            return_value = Passwords.handle(base64.b64encode(cls.URL), *gui.get_data())
+            gui.handle_errors(return_value)
+        gui.destroy()
+        shadow_fsm.to_key_logger()
 
 
 

@@ -11,7 +11,6 @@ class GenerateGui(tk.Tk):
     _HIGH_ALL = 0.07
     _WITH_LABLE = 0.15
     _RELX_LABLE = 0.05
-    _AFTER_ENTITY_RELX = _RELX_ENTITY + _WITH_ENTITY
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -38,11 +37,7 @@ class GenerateGui(tk.Tk):
         self.entry_password.place(relx=self._RELX_ENTITY, rely=0.225, relheight=self._HIGH_ALL,
                                   relwidth=self._WITH_ENTITY)
         self.entry_password.configure(font="-family {Courier New} -size 12")
-
-        self.Button1 = tk.Button(self)
-        self.Button1.place(relx=0.4, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
-        self.Button1.configure(command=self.quit)
-        self.Button1.configure(text='''Finish''')
+        self.entry_password.insert(0, self.generate_strong_password())
 
         self.label_general_error = tk.Label(self)
         self.label_general_error.place(relx=self._RELX_ENTITY, rely=0.31, relheight=self._HIGH_ALL * 2
@@ -50,14 +45,30 @@ class GenerateGui(tk.Tk):
         self.label_general_error.configure(foreground="#ff1f1f")
 
         self.Button1 = tk.Button(self)
-        self.Button1.place(relx=self._AFTER_ENTITY_RELX, rely=0.225, relheight=self._HIGH_ALL, relwidth=0.2)
-        self.Button1.configure(command=self.auto_generate)
-        self.Button1.configure(text='''Auto Generate Password''')
-
+        self.Button1.place(relx=0.4, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
+        self.Button1.configure(command=self.quit)
+        self.Button1.configure(text='''Finish''')
 
     def auto_generate(self):
         self.entry_password.insert(0, self.generate_strong_password())
 
 
     def generate_strong_password(self):
-        return 'Qazwsx12#' #TODO:
+        import string
+        import random
+        import os
+        password = []
+        random.seed(os.urandom(16))
+        password += random.choice(string.digits)
+        password += random.choice(string.punctuation)
+        password += random.choice(string.lowercase)
+        password += random.choice(string.uppercase)
+        password +=[random.choice(string.letters+ string.punctuation + string.digits) for i in range(16)]
+        random.shuffle(password)
+        return ''.join(password)
+
+    def get_data(self):
+        return self.entry_username.get(), self.entry_password.get()
+
+    def handle_errors(self, errors):
+        print errors

