@@ -15,13 +15,14 @@ except ImportError:
 from client.States.Register import RegisterState
 from client.States.Login import LoginState
 from client.States.SeeAll import SeeAllState
-FSM_TO_CLASS = {'register' : RegisterState, 'login': LoginState, 'see_all': SeeAllState}
+from client.States.Edit import EditState
+FSM_TO_CLASS = {'register' : RegisterState, 'login': LoginState, 'see_all': SeeAllState, 'edit': EditState}
 
 
 
 
 class TopLevel(tk.Tk):
-    PAGES = (RegisterState, LoginState, SeeAllState)
+    PAGES = (RegisterState, LoginState, SeeAllState, EditState)
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)

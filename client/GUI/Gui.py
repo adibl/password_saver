@@ -12,6 +12,7 @@ except ImportError:
 class Gui(tk.Frame, object):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
+        self.parent = parent
         self.variable = tk.BooleanVar(value=False, name='quit var')
 
     def wait_until_end(self):

@@ -15,7 +15,8 @@ fsm = Fysom({ 'initial': 'login', 'final': 'end',
 
                     {'name': 'to_register', 'src': 'login', 'dst': 'register'},
                     {'name': 'logedin', 'src': 'login', 'dst': 'see_all'},
-                    {'name': 'insert_pass', 'src': 'see_all', 'dst': 'end'},
+                    {'name': 'edit', 'src': 'see_all', 'dst': 'edit'},
+                    {'name': 'return', 'src': 'edit', 'dst': 'see_all'},
               ] })
 
 

@@ -7,11 +7,12 @@ try:
     import Tkinter as tk
 except ImportError:
     import tkinter as tk
+import ttk
 from client.API.AddRecord import Passwords
 import base64
 import re
 import numpy
-from .Gui import Gui
+from client.GUI.Gui import Gui
 
 class SeeAllGui(Gui):
     URL_RE = re.compile('^https?://(?:\w+\.)?(\w+)\.(\w+).*')
@@ -57,42 +58,31 @@ class SeeAllGui(Gui):
             return
         print data
 
-        lable = tk.Label(self)
-        lable.place(relx=self._RELX_LABLE_SITE, rely=0, relheight=self._HIGH_ALL, relwidth=self._WITH_LABLE_SITE)
-        lable.configure(anchor='w')
-        lable.configure(font="-family {Segoe UI} -size 12")
-        lable.configure(text='program name')
+        style = ttk.Style()
+        style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
+                        font=('Calibri', 12))  # Modify the font of the body
+        style.configure("mystyle.Treeview.Heading", font=('Calibri', 14))  # Modify the font of the headings
+        style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])  # Remove the borders
 
-        lable = tk.Label(self)
-        lable.place(relx=self._RELX_LABLE_USERNAME, rely=0, relheight=self._HIGH_ALL, relwidth=self._WITH_LABLE_SITE)
-        lable.configure(anchor='w')
-        lable.configure(font="-family {Segoe UI} -size 12")
-        lable.configure(text='username')
+        self.table = ttk.Treeview(self.parent, columns=('A'), style="mystyle.Treeview")
+        self.table.place(relx=0, rely=0, relheight=0.9, relwidth=1)
 
-        button_high = 0.8 / len(data)
-        for record, rely in zip(data, numpy.arange(0.1, 0.9, button_high)):
+        self.table.heading("#0", text="program name")
+        self.table.column("#0", width=100)
+
+        self.table.heading("A", text="username")
+        self.table.column("A", width=100)
+
+        self.records = {}
+        for record in data:
             username = record['username']
             program_name = self.url_to_name(record['program_id'])
-            lable = tk.Label(self)
-            lable.place(relx=self._RELX_LABLE_SITE, rely=rely, relheight=self._HIGH_ALL, relwidth=self._WITH_LABLE_SITE)
-            lable.configure(anchor='w')
-            lable.configure(font="-family {Segoe UI} -size 12")
-            lable.configure(text=str(program_name))
+            program_id = base64.urlsafe_b64decode(str(record['program_id']))
+            id = self.table.insert('', 'end', text=program_name, values=(username))
+            self.records[id] = program_id
+            self.table.bind(sequence="<Double-1>", func=self.edit_record)
+        print self.records
 
-            lable = tk.Label(self)
-            lable.place(relx=self._RELX_LABLE_USERNAME, rely=rely, relheight=self._HIGH_ALL, relwidth=self._WITH_LABLE_USERNAME)
-            lable.configure(anchor='w')
-            lable.configure(font="-family {Segoe UI} -size 12")
-            lable.configure(text=str(username))
-
-            button = tk.Button(self)
-            button.place(relx=self._REL_X_BUTTON_1, rely=rely, relheight=self._HIGH_ALL, relwidth=self._WITH_BUTTON)
-            #button.configure(command=lambda : self.delete(program_name)) TODO: add delete user interface
-            button.configure(text='''Edit''')
-            button = tk.Button(self)
-            button.place(relx=self._REL_X_BUTTON_2, rely=rely, relheight=self._HIGH_ALL, relwidth=self._WITH_BUTTON)
-            # button.configure(command=lambda : self.delete(program_name)) TODO: add delete user interface
-            button.configure(text='''Delete''')
 
     @classmethod
     def url_to_name(cls, url):
@@ -102,8 +92,12 @@ class SeeAllGui(Gui):
             return grops[0]
 
 
+
+
+
 if __name__ == '__main__':
-    v = SeeAllGui(None)
-    v.run_before()
-    v.mainloop()
+    root = tk.Tk()
+    v = SeeAllGui(root)
+    v.show_records([{"username": "bleyer23", "sec_level": 0, "program_id": "aHR0cHM6Ly93ZWIubWFzaG92LmluZm8vc3R1ZGVudHMvIyEvbG9naW4v"}, {"username": "sgfdfdsg", "sec_level": 0, "program_id": "aHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvMTYzNzM4ODcvaG93LXRvLXNldC10aGUtdGV4dC12YWx1ZS1jb250ZW50LW9mLWFuLWVudHJ5LXdpZGdldC11c2luZy1hLWJ1dHRvbi1pbi10a2ludGVy"}, {"username": "qewr", "sec_level": 0, "program_id": "aHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvMjI3NTExMDAvdGtpbnRlci1tYWluLXdpbmRvdy1mb2N1cw=="}])
+    root.mainloop()
 
