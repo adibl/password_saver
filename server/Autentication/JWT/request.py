@@ -13,7 +13,6 @@ from server.request import AuthenticatedRequestScema
 
 class AuthenticatedRequestJWT(AuthenticatedRequestScema):
     RE_VALIDATE = re.compile(r"^Authorization: Bearer (.*)$", re.M)
-    SEC_LEVEL = 1
 
     @classmethod
     def is_fit(cls, request):
