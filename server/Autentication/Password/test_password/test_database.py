@@ -4,10 +4,13 @@ date:
 description
 """
 import time
-from server.Autentication.Password import database
+
 import pytest
+
 import server.Resorce.database as resorce_database
+from server.Autentication.Password import database
 from server.database_errors import *
+
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
@@ -16,8 +19,6 @@ def run_around_tests():
     time.sleep(2)
     yield
     database._immidiate_delete('aaaaaaaaaaaaaaaaaaaaaaaa')
-
-
 
 
 def test_immidiate_delete():
@@ -38,6 +39,7 @@ def test_add_user():
 
 def test_add_user_username_already_exzist():
     assert database.add('user', 'password', 'a', 'b') == DUPLIKATE_KEY_ERROR
+
 
 def test_delete_user():
     identifier = 'aaaaaaaaaaaaaaaaaaaaaaaa'

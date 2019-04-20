@@ -4,14 +4,16 @@ date:
 description
 """
 
+import time
+
+import win32api
+import win32gui
 from pynput import keyboard
 from pynput.keyboard import Key, Controller
-import time
-import win32gui, win32api
+
 
 def on_press(key):
     if key == Key.insert:
-
         window_handle = win32gui.GetForegroundWindow()
         result = win32api.SendMessage(window_handle, 0x0050, 0, 67699721)
         keyboard = Controller()
@@ -29,6 +31,7 @@ def on_release(key):
     if key == keyboard.Key.esc:
         # Stop listener
         return False
+
 
 # Collect events until released
 with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:

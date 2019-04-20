@@ -3,21 +3,22 @@ name:
 date:
 description
 """
-import logging
 from datetime import datetime
 
 import pymongo
 from bson.objectid import ObjectId
 from passlib.hash import bcrypt
-from server.database_errors import *
-from HTTPtolls import *
 
 import server.Resorce.database as resorce_database
+from HTTPtolls import *
+from server.database_errors import *
 
-EXPIRE_TIME_HOUERS = 48 #FIXME: should be the same as resorce database
+EXPIRE_TIME_HOUERS = 48  # FIXME: should be the same as resorce database
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 USERNAME_OR_PASSWORD_INCORRECT = 2
-#FIXME: hash the answer to the question
+
+
+# FIXME: hash the answer to the question
 
 def connect(f):
     @wraps(f)
@@ -38,7 +39,7 @@ def create_database():
     client = pymongo.MongoClient(CONN_STR)
     db = client.Autentication
     collection = db.passwords
-    collection.create_index('delete_time', expireAfterSeconds=60*60*EXPIRE_TIME_HOUERS)
+    collection.create_index('delete_time', expireAfterSeconds=60 * 60 * EXPIRE_TIME_HOUERS)
     collection.create_index('username', unique=True)
 
 
@@ -52,12 +53,13 @@ def add(collection, username, password, question, anser):
     :return: the client id if created None otherwise.
     :rtype: ObjectId
     """
-    d = {'username': username, 'password':  bcrypt.using(rounds=13).hash(password), 'question': question, 'ans': anser}
-    ret = collection.insert_one(d) #QUESTION: how match rounds to do??
+    d = {'username': username, 'password': bcrypt.using(rounds=13).hash(password), 'question': question, 'ans': anser}
+    ret = collection.insert_one(d)  # QUESTION: how match rounds to do??
     if resorce_database.add_user(ret.inserted_id):
         return str(ret.inserted_id)
     else:
         return None
+
 
 @handle_general_eror
 @connect
@@ -93,6 +95,7 @@ def validate(collection, username, password):
     else:
         logging.debug('password incorrect')
         return USERNAME_OR_PASSWORD_INCORRECT
+
 
 @handle_general_eror
 @connect
@@ -140,8 +143,6 @@ def __add_id(collection, ID, username, password):
     :return:
     """
     d = {'_id': ObjectId(ID), 'username': username, 'password': bcrypt.using(rounds=13).hash(password)}
-    ret = collection.insert_one(d) #QUESTION: how match rounds to do??
+    ret = collection.insert_one(d)  # QUESTION: how match rounds to do??
     resorce_database.add_user(ID)
     return ret.inserted_id
-
-

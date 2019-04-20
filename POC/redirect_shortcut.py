@@ -1,6 +1,7 @@
 import glob
-import win32com.client
 import os
+
+import win32com.client
 
 program = 'C:\\Program Files (x86)\\Ubisoft\\Ubisoft Game Launcher\\Uplay.exe'
 

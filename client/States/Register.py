@@ -3,10 +3,11 @@ name:
 date:
 description
 """
-from client.window_order import fsm
-from client.GUI.Register import RegisterGui
 from client.API.Register import Register
+from client.GUI.Register import RegisterGui
+from client.window_order import fsm
 from .state import State
+
 
 class RegisterState(RegisterGui, State):
 
@@ -16,14 +17,13 @@ class RegisterState(RegisterGui, State):
     def run_after(self):
         return self.entry_username.get(), self.entry_password.get()
 
-
     def get_data(self, data):
         print data
 
     def run(self, *args):
         print 'runnn'
         data = [self.entry_username.get(), self.entry_password.get(), self.Spinbox_question.get(),
-                              self.entry_aswer.get()]
+                self.entry_aswer.get()]
         if all(self.test_lenguge_data(lable) for lable in data):
             ret = Register.handle(self.entry_username.get(), self.entry_password.get(), self.Spinbox_question.get(),
                                   self.entry_aswer.get())
@@ -49,8 +49,6 @@ class RegisterState(RegisterGui, State):
             self.clean_errors()
             fsm.registered()
             self.end()
-
-
 
     def username_error(self, error):
         self.lable_username_error.config(text=error)

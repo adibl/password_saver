@@ -5,10 +5,9 @@ user managmet requests handler
 
 """
 from Autentication.Password.request import AuthenticatedRequestPassword
-from Autentication.request import AuthenticatedRequest
 from UserManagment.API import Register, Login, Reset
-from server.request import Request
 from server.HTTPtolls import *
+from server.request import Request
 
 
 class RegisterRequest(AuthenticatedRequestPassword):
@@ -33,14 +32,11 @@ class RegisterRequest(AuthenticatedRequestPassword):
             else:
                 d = {key: 'must have this lable in data' for key in ['question', 'answer']}
             return Responce.unexpected_entity(d)
-        return UNAUTHORIZED #FIXME: if auterization is in the wrong level what to do
-
-
+        return UNAUTHORIZED  # FIXME: if auterization is in the wrong level what to do
 
     def get_question_ans(self):
         request = Request(self.request)
-        return request.get_data_as_dictionery()['question'],  request.get_data_as_dictionery()['answer']
-
+        return request.get_data_as_dictionery()['question'], request.get_data_as_dictionery()['answer']
 
     def process_request(self):
         """
@@ -88,7 +84,7 @@ class ResetRequest(Request):
 
     @classmethod
     def validate(cls, request):
-        return super(ResetRequest, cls).validate(request) #FIXME: add somthing
+        return super(ResetRequest, cls).validate(request)  # FIXME: add somthing
 
     def process_request(self):
         """

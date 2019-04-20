@@ -6,6 +6,7 @@ description
 
 from abc import abstractmethod
 
+
 class State(object):
     @abstractmethod
     def clean(self):
@@ -42,7 +43,6 @@ class State(object):
         get the data from last window
         """
         pass
-
 
     @staticmethod
     def test_lenguge_data(data):

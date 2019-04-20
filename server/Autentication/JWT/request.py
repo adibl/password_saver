@@ -3,11 +3,10 @@ name:
 date:
 description
 """
-import logging
 import re
 
-from server.Autentication import JWT
 from HTTPtolls import *
+from server.Autentication import JWT
 from server.request import AuthenticatedRequestScema
 
 
@@ -32,7 +31,7 @@ class AuthenticatedRequestJWT(AuthenticatedRequestScema):
                     return UNAUTHORIZED
             else:
                 logging.debug('Authentication header missing or wrong')
-                return BAD_REQUEST #QUESTION: eror type if Autentication filed is wrong??
+                return BAD_REQUEST  # QUESTION: eror type if Autentication filed is wrong??
         else:
             return status
 

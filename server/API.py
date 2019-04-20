@@ -4,14 +4,13 @@ date: 1.18.19
 the main file of the server.
 runs the server and wrap up everything.
 """
-import logging
 import logging.config
 import re
 import socket
 import threading
 
 from Resorce.request import ResorceRequest
-from UserManagment.request import RegisterRequest, LoginRequests,ResetRequest
+from UserManagment.request import RegisterRequest, LoginRequests, ResetRequest
 from __logs import handle_logging
 from request import Request
 from server.Autentication.request import AuthenticatedRequest
@@ -46,7 +45,8 @@ def receive(client_socket, func=lambda data: not re.search(".*\r\n\r\n(.*\r\n\r\
     while not re.search(".*\r\n\r\n", data):
         data += client_socket.recv(2048)
     logging.debug("RECV:" + data)
-    return data.replace('\r\n', '\n') #FIXME: ergent!!!!!
+    return data.replace('\r\n', '\n')  # FIXME: ergent!!!!!
+
 
 def handle_request(cl, request):
     code = cl.validate(request)
@@ -56,7 +56,6 @@ def handle_request(cl, request):
     else:
         responce = Responce.validate_erors(code)
     return responce
-
 
 
 def handle_client(conn):
@@ -81,12 +80,13 @@ def handle_client(conn):
                 else:
                     responce = Responce.not_found()
             else:
-               responce = Responce.validate_erors(code)
+                responce = Responce.validate_erors(code)
     else:
         responce = Responce.validate_erors(code)
     conn.sendall(responce)
     logging.debug('sent:' + responce)
     conn.close()
+
 
 def main():
     trd = handle_logging()

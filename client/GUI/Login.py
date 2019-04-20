@@ -46,7 +46,7 @@ class LoginGui(Gui):
 
         self.label_general_error = tk.Label(self)
         self.label_general_error.place(relx=self._RELX_ENTITY, rely=0.31, relheight=self._HIGH_ALL * 2
-                                        , relwidth=self._WITH_ENTITY)
+                                       , relwidth=self._WITH_ENTITY)
         self.label_general_error.configure(foreground="#ff1f1f")
 
         self.Button1 = tk.Button(self)
@@ -61,9 +61,7 @@ class LoginGui(Gui):
 
         self.Button1 = tk.Button(self)
         self.Button1.place(relx=0.1, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
-        self.Button1.configure(command=None) #FIXME
+        self.Button1.configure(command=None)  # FIXME
         self.Button1.configure(text='''forget password''')
 
         self.bind("<Escape>", self.run)
-
-

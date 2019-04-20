@@ -5,8 +5,6 @@
 #  in conjunction with Tcl version 8.6
 #    Apr 12, 2019 12:16:00 PM +0300  platform: Windows NT
 
-import sys
-
 try:
     import Tkinter as tk
 except ImportError:
@@ -14,10 +12,13 @@ except ImportError:
 
 try:
     import ttk
+
     py3 = False
 except ImportError:
     import tkinter.ttk as ttk
+
     py3 = True
+
 
 def set_Tk_var():
     global entity_username
@@ -29,11 +30,13 @@ def set_Tk_var():
     global entity_answer
     entity_answer = tk.StringVar()
 
+
 def init(top, gui, *args, **kwargs):
     global w, top_level, root
     w = gui
     top_level = top
     root = top
+
 
 def destroy_window():
     # Function which closes the window.
@@ -41,10 +44,8 @@ def destroy_window():
     top_level.destroy()
     top_level = None
 
+
 if __name__ == '__main__':
     import register
+
     register.vp_start_gui()
-
-
-
-

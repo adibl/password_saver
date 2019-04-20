@@ -3,10 +3,12 @@ name:
 date:
 description
 """
-from .state import State
-import win32api, win32gui
-from client.window_order import shadow_fsm
 import keyboard
+import win32api
+import win32gui
+
+from client.window_order import shadow_fsm
+from .state import State
 
 
 class ShadowInserPasswordState(State):
@@ -18,7 +20,7 @@ class ShadowInserPasswordState(State):
         keyboard.wait('insert')
         print 'shadow insert password'
         if not cls.to_english() == 0:
-            #shadow_fsm.dont_have_english()
+            # shadow_fsm.dont_have_english()
             win32api.LoadKeyboardLayout('00000409')
             if not cls.to_english() == 0:
                 return
@@ -35,4 +37,4 @@ class ShadowInserPasswordState(State):
         if 'password' in data:
             cls.PASSWORD = data['password']
         else:
-            pass #FIXME:
+            pass  # FIXME:

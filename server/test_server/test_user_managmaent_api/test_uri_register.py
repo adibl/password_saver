@@ -1,12 +1,13 @@
+import base64
+import json
+import time
 
+import pymongo
 import pytest
 import requests
-import base64
-from server.Autentication.JWT import create
+
 from Autentication.Password import database
-import time
-import json
-import pymongo
+from server.Autentication.JWT import create
 
 
 @pytest.fixture()
@@ -28,33 +29,42 @@ def delete_user():
 def JWT():
     return create('aaaaaaaaaaaaaaaaaaaaaaaa', 25)
 
+
 URI = 'http://127.0.0.1:50007'
 
 
 def test_POST_valid_request(delete_user):
     auto = base64.b64encode('username:Secretpass123')
-    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)}, json={'question': 'b', 'answer' : 'c'})
+    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
+                             json={'question': 'b', 'answer': 'c'})
     assert responce.status_code == 200
 
 
 def test_POST_unvalid_JWT_autentication(JWT, delete_user):
-    responce = requests.post(URI + '/register', headers={'Authorization': 'Bearer {0}'.format(JWT)}, json={'question': 'b', 'answer' : 'c'})
+    responce = requests.post(URI + '/register', headers={'Authorization': 'Bearer {0}'.format(JWT)},
+                             json={'question': 'b', 'answer': 'c'})
     assert responce.status_code == 401
+
 
 def test_POST_username_already_exzist(delete_user):
     auto = base64.b64encode('username:Secretpass123')
-    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)}, json={'question': 'b', 'answer' : 'c'})
+    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
+                             json={'question': 'b', 'answer': 'c'})
     time.sleep(1)
-    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)}, json={'question': 'b', 'answer' : 'c'})
+    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
+                             json={'question': 'b', 'answer': 'c'})
     assert responce.status_code == 442
     data = json.loads(responce.text)
     assert 'username' in data
 
+
 def test_POST_pass_is_not_valid(delete_user):
     auto = base64.b64encode('username:Secretpass')
-    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)}, json={'question': 'b', 'answer' : 'c'})
+    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
+                             json={'question': 'b', 'answer': 'c'})
     time.sleep(1)
-    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)}, json={'question': 'b', 'answer' : 'c'})
+    responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
+                             json={'question': 'b', 'answer': 'c'})
     assert responce.status_code == 442
     data = json.loads(responce.text)
     assert 'password' in data

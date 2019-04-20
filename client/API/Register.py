@@ -2,19 +2,18 @@
 
 """
 import base64
+import json
 
 import requests
-import json
-from client.window_order import fsm
 
 URI = 'http://127.0.0.1:50007'
+
 
 class Register(object):
 
     @classmethod
     def handle(cls, username, password, question, answer):
         return cls.POST(username, password, question, answer)
-
 
     @classmethod
     def POST(cls, username, password, question, answer):

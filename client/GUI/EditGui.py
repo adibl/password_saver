@@ -3,8 +3,11 @@ name:
 date:
 description
 """
-from client.GUI.Gui import Gui
 import tkinter as tk
+
+from client.GUI.Gui import Gui
+
+
 class EditGui(Gui):
     _RELX_ENTITY = 0.25
     _WITH_ENTITY = 0.7
@@ -51,7 +54,6 @@ class EditGui(Gui):
         self.Button1.configure(command=self.quit)
         self.Button1.configure(text='''Delete''')
 
-
     def return_data(self):
         return self.entry_username.get(), self.entry_password.get()
 
@@ -61,4 +63,3 @@ class EditGui(Gui):
     def insert_username_and_pass(self, username, password):
         self.entry_username.insert(0, username)
         self.entry_password.insert(0, password)
-

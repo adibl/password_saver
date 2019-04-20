@@ -8,6 +8,7 @@ try:
 except ImportError:
     import tkinter as tk
 
+
 class GenerateGui(tk.Tk):
     _RELX_ENTITY = 0.25
     _WITH_ENTITY = 0.7
@@ -44,7 +45,7 @@ class GenerateGui(tk.Tk):
 
         self.label_general_error = tk.Label(self)
         self.label_general_error.place(relx=self._RELX_ENTITY, rely=0.31, relheight=self._HIGH_ALL * 2
-                                        , relwidth=self._WITH_ENTITY)
+                                       , relwidth=self._WITH_ENTITY)
         self.label_general_error.configure(foreground="#ff1f1f")
 
         self.Button1 = tk.Button(self)
@@ -67,7 +68,7 @@ class GenerateGui(tk.Tk):
         password += random.choice(string.punctuation)
         password += random.choice(string.lowercase)
         password += random.choice(string.uppercase)
-        password += [random.choice(string.letters+ string.punctuation + string.digits) for i in range(16)]
+        password += [random.choice(string.letters + string.punctuation + string.digits) for i in range(16)]
         random.shuffle(password)
         return ''.join(password)
 

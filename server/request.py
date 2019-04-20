@@ -3,8 +3,6 @@ name:
 date:
 description
 """
-import json
-import logging
 import re
 from abc import ABCMeta
 
@@ -16,18 +14,16 @@ class Request(object):
     RE_CONTENT_TYPE = re.compile("Content-Type: (application/x-www-form-urlencoded)", re.M)
     RE_DATA = re.compile("\n(.*)$")
 
-
     def __init__(self, data):
         self.request = data
 
     @classmethod
-    def validate(cls, request): #FIXME: add content type validation
+    def validate(cls, request):  # FIXME: add content type validation
         if cls.__validate_request_line(request):
             return OK
         else:
             logging.debug('general validation failed')
             return BAD_REQUEST
-
 
     @classmethod
     def __validate_request_line(cls, request):

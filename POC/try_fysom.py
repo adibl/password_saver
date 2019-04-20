@@ -1,4 +1,5 @@
-from transitions.core import Machine, State, MachineError
+from transitions.core import Machine, State
+
 
 class On(State):
     def __init__(self, *args, **kwargs):
@@ -7,6 +8,7 @@ class On(State):
     def enter(self, event_data):
         super(On, self).enter(event_data)
         print event_data['mss']
+
 
 class Off(State):
 
@@ -18,16 +20,14 @@ class Off(State):
         print 5555
 
     def exit(self, event_data):
-        event_data['mss'] =4654656
+        event_data['mss'] = 4654656
         super(Off, self).exit(event_data)
 
 
-
 class MyFsm(object):
-
     transitions = [
-        {'trigger': 'switchOff', 'source':'on', 'dest':'off', 'befor': 'get_vars'},
-        {'trigger': 'switchOn', 'source':'off', 'dest':'on'}
+        {'trigger': 'switchOff', 'source': 'on', 'dest': 'off', 'befor': 'get_vars'},
+        {'trigger': 'switchOn', 'source': 'off', 'dest': 'on'}
     ]
 
     def __init__(self):
@@ -40,16 +40,16 @@ class MyFsm(object):
 
 
 machine = MyFsm()
-#print(machine.state)  # >>> on
-#machine.switchOff()
-#print(machine.state)  # >>> off
-#try:
-    # this will raise a MachineException because there is no transition 'switchOff'
-    # defined in state 'off'
-    #machine.switchOff()  # raises MachineException
-    #raise Exception("This exception will not be raised")
-#except MachineError:
-    #pass
+# print(machine.state)  # >>> on
+# machine.switchOff()
+# print(machine.state)  # >>> off
+# try:
+# this will raise a MachineException because there is no transition 'switchOff'
+# defined in state 'off'
+# machine.switchOff()  # raises MachineException
+# raise Exception("This exception will not be raised")
+# except MachineError:
+# pass
 print(machine.state)  # >>> off
 machine.switchOn()
 print(machine.state)  # >>> on

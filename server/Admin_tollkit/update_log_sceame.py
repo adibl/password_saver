@@ -3,7 +3,8 @@ name:
 date:
 update the log settings to the setting in the file of the script argoment
 """
-import socket, struct
+import socket
+import struct
 import sys
 
 if len(sys.argv) == 1:

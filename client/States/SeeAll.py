@@ -3,16 +3,16 @@ name:
 date:
 description
 """
-from client.window_order import fsm, shadow_fsm
-from client.ShadowStates import runShadow
-from client.GUI.SeeAll import SeeAllGui
-from .state import State
 import multiprocessing
+
+from client.GUI.SeeAll import SeeAllGui
+from client.ShadowStates import runShadow
+from client.window_order import fsm
+from .state import State
 
 
 class SeeAllState(SeeAllGui, State):
     is_runed = False
-
 
     def run(self, *args):
         print 'runnn'
@@ -34,4 +34,3 @@ class SeeAllState(SeeAllGui, State):
             self.program_id = self.records[item]
             fsm.edit()
             self.end()
-

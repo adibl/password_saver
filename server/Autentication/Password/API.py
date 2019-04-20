@@ -4,8 +4,9 @@ date:
 description
 """
 
-import database
 import base64
+
+import database
 from server.HTTPtolls import *
 from server.database_errors import *
 
@@ -65,6 +66,3 @@ class passwordAutentication:
             return username_password.split(':')
         else:
             return None
-
-
-

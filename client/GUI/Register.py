@@ -2,8 +2,8 @@ try:
     import Tkinter as tk
 except ImportError:
     import tkinter as tk
-from client.API.Register import Register
 from .Gui import Gui
+
 
 class RegisterGui(Gui):
     _RELX_ENTITY = 0.25
@@ -88,5 +88,3 @@ class RegisterGui(Gui):
                                       , width=295)
         self.lable_answer_error.configure(font="-family {Segoe UI} -size 12")
         self.lable_answer_error.configure(foreground="#ff1f1f")
-
-

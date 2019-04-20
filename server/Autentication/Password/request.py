@@ -3,12 +3,10 @@ name:
 date:
 description
 """
-import logging
 import re
-import base64
 
-from server.Autentication.Password.API import passwordAutentication
 from HTTPtolls import *
+from server.Autentication.Password.API import passwordAutentication
 from server.request import AuthenticatedRequestScema
 
 
@@ -52,6 +50,3 @@ class AuthenticatedRequestPassword(AuthenticatedRequestScema):
     def get_username_password(self):
         auto = self.RE_VALIDATE.search(self.request).group(1)
         return passwordAutentication.get_username_password(auto)
-
-
-

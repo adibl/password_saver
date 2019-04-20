@@ -6,6 +6,7 @@ description
 
 from abc import abstractmethod
 
+
 class State(object):
 
     @abstractmethod

@@ -3,9 +3,12 @@ name:
 date:
 description
 """
-from server.Resorce import database
-import pytest
 import time
+
+import pytest
+
+from server.Resorce import database
+
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
@@ -48,7 +51,6 @@ def test_change_record():
     assert rec == {'username': 'adibleyer', 'password': 'changed', 'program_id': 'steam', 'sec_level': 0}
 
 
-
 @pytest.mark.run(order=1)
 def test_get_all_records():
     database.add_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam', 'adibleyer', '123456')
@@ -77,5 +79,3 @@ def test_delete_user():
     time.sleep(1)
     result = database.get_all_records('aaaaaaaaaaaaaaaaaaaaaaaa')
     assert 'delete_time' in result
-
-

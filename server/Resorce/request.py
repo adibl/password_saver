@@ -7,11 +7,8 @@ have defs to extract the data from the request.
 """
 from API import PasswordsUri, ProgramUri
 from server.Autentication.request import AuthenticatedRequest
-from server.request import Request
 from server.HTTPtolls import *
-
-
-# regex
+from server.request import Request
 
 
 class ResorceRequest(AuthenticatedRequest):
@@ -34,15 +31,3 @@ class ResorceRequest(AuthenticatedRequest):
         else:
             return Responce.not_found()
         return responce
-
-
-
-
-
-
-
-
-
-
-
-

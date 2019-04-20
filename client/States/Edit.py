@@ -4,11 +4,10 @@ date:
 description
 """
 
-from client.window_order import fsm, shadow_fsm
-from client.ShadowStates import runShadow
-from client.GUI.EditGui import EditGui
-from .state import State
 from client.API.ManageRecord import Record
+from client.GUI.EditGui import EditGui
+from client.window_order import fsm
+from .state import State
 
 
 class EditState(EditGui, State):
@@ -26,7 +25,6 @@ class EditState(EditGui, State):
         else:
             print ret
             raise ValueError
-
 
     def get_data(self, data):
         self.url = data[0]

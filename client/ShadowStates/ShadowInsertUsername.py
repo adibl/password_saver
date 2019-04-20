@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from client.GUI.SeeAll import SeeAllGui
-from .state import State
-import uiautomation as automation
-import win32api, win32gui
 import keyboard
-from client.window_order import shadow_fsm
+import uiautomation as automation
+import win32api
+import win32gui
+
 from client.API.ManageRecord import Record
+from client.window_order import shadow_fsm
+from .state import State
 
 
 class ShadowInserUsername(State):
     USERNAME = 'bleyer23'
     PASSWORD = 'qazwsx12'
-
 
     @classmethod
     def on_press(cls, *args):
@@ -34,7 +34,7 @@ class ShadowInserUsername(State):
             keyboard.write(ret['username'])
             cls.PASSWORD = ret['password']
         else:
-            raise ValueError #FIXME:
+            raise ValueError  # FIXME:
         shadow_fsm.username_inserted()
 
     @staticmethod

@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from time import sleep
+
 import uiautomation as automation
 
-def print_name(c,d):
+
+def print_name(c, d):
     if isinstance(c, automation.EditControl):
         if u"שורת חיפוש וכתובות אתרים" in unicode(c.Name) or u"Address and search bar" in unicode(c.Name):
             return True
@@ -25,6 +27,3 @@ if __name__ == '__main__':
     print control
     address_control = automation.FindControl(control, print_name)
     print address_control.CurrentValue()
-
-
-

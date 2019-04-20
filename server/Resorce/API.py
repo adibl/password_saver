@@ -3,13 +3,10 @@ name:
 date:
 description
 """
-import logging
 import re
 
 import database
 from server.HTTPtolls import *
-
-
 
 
 class PasswordsUri(Uri):
@@ -30,7 +27,6 @@ class PasswordsUri(Uri):
         else:
             return Responce.ok(data)
 
-
     def POST(self):
         """
         post new password, username, program id record to database
@@ -50,9 +46,7 @@ class PasswordsUri(Uri):
         d = {}
         for val in not_found:
             d[val] = 'data parameter must be added'
-        return Responce.unexpected_entity(d) #FIXME : this is not bad request + add test to it
-
-
+        return Responce.unexpected_entity(d)  # FIXME : this is not bad request + add test to it
 
 
 class ProgramUri(Uri):
@@ -107,16 +101,5 @@ class ProgramUri(Uri):
         if database.delete_record(clientID, programID):
             return Responce.ok()
         else:
-            #FIXME: dont have user not valid/ program not valid difference
+            # FIXME: dont have user not valid/ program not valid difference
             return Responce.not_found()
-
-
-
-
-
-
-
-
-
-
-

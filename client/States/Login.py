@@ -4,11 +4,12 @@ date:
 description
 """
 
-from client.window_order import fsm
-from client.GUI.Login import LoginGui
-from client.API.Login import Login
-from .state import State
 import Tkinter as tk
+
+from client.API.Login import Login
+from client.GUI.Login import LoginGui
+from client.window_order import fsm
+from .state import State
 
 
 class LoginState(LoginGui, State):

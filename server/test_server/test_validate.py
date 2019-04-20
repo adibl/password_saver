@@ -4,6 +4,7 @@ date:
 description
 """
 import pytest
+
 from server import request
 from server.Autentication.JWT import create
 from server.HTTPtolls import *
@@ -11,6 +12,7 @@ from server.HTTPtolls import *
 
 def valid_JWT():
     return create('aaaaaaaaaaaaaaaaaaaaaaaa')
+
 
 @pytest.mark.parametrize("packege,uri", [
     ("GET /client/try?id=123 HTTP/1.1\r\n", "/client/try"),

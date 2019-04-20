@@ -3,15 +3,13 @@ name:
 date:
 description
 """
-import logging
 import re
-import base64
 
-from server.Autentication.Password.API import passwordAutentication as database
-from server.Autentication.Password.API import database as errors
-from server.HTTPtolls import *
 from server import database_errors
 from server.Autentication.JWT import create
+from server.Autentication.Password.API import database as errors
+from server.Autentication.Password.API import passwordAutentication as database
+from server.HTTPtolls import *
 from server.database_errors import *
 
 
@@ -21,7 +19,7 @@ class Register(Uri):
 
     MIN_LEN = 8
     RE_CHRACTERS = re.compile('^(?=\S{6,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])')
-    PASS_POLICY ='must contain 6-20 characters\r\n1 capital letter\r\n1 letter\r\n1 difit'
+    PASS_POLICY = 'must contain 6-20 characters\r\n1 capital letter\r\n1 letter\r\n1 difit'
 
     def POST(self):
         """
@@ -31,7 +29,7 @@ class Register(Uri):
         ret = self.__get_username_password()
         if ret is None:
             logging.debug('username password is formated wrong')
-            return Responce.bad_request() #FIXME: what this is realy
+            return Responce.bad_request()  # FIXME: what this is realy
         username, password = ret
         question, ansear = self.request.get_question_ans()
         ret = self.__test_password(password)
@@ -85,7 +83,8 @@ class Login(Uri):
         """
         identifier = self.request.get_user_id()
         if identifier is None:
-            return Responce.unexpected_entity({AUTENTICATION: 'invalid username password structure'}) #FIXME: eror if autentication cradentials are wrong
+            return Responce.unexpected_entity({
+                                                  AUTENTICATION: 'invalid username password structure'})  # FIXME: eror if autentication cradentials are wrong
         jwt = create(identifier)
         return Responce.ok({AUTENTICATION: jwt})
 
@@ -99,11 +98,10 @@ class Reset(Uri):
         if data is None:
             return Responce.unexpected_entity({'username': 'username must be in data'})  # FIXME: USER data is wrong
         elif 'username' not in data:
-            return Responce.unexpected_entity({'username': 'username must be in data'}) #FIXME: USER data is wrong
+            return Responce.unexpected_entity({'username': 'username must be in data'})  # FIXME: USER data is wrong
         q = database.get_question(data['username'])
         if q == errors.USERNAME_OR_PASSWORD_INCORRECT:
             return Responce.unexpected_entity({USERNAME: 'username is wrong'})
         if q in ERRORS:
             return Responce.validate_erors(q)
         return Responce.ok({'question': q})
-

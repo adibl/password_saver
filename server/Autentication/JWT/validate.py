@@ -5,16 +5,20 @@ description
 """
 import ast
 import logging
-from jwcrypto import jwt, jwe, jwk
-from jwcrypto.common import json_decode
 import os
-from database import validate_JWT_time
 import time
 
-with open(os.path.join(os.path.dirname(__file__), 'public_signing.pem'), 'rb') as f: #FIXME: take files from other directory
+from jwcrypto import jwt, jwe, jwk
+from jwcrypto.common import json_decode
+
+from database import validate_JWT_time
+
+with open(os.path.join(os.path.dirname(__file__), 'public_signing.pem'),
+          'rb') as f:  # FIXME: take files from other directory
     KEY = json_decode(f.read())
 with open(os.path.join(os.path.dirname(__file__), 'public_encrypte_private.pem'), 'rb') as f:
     ENC_KEY = json_decode(f.read())
+
 
 def decrypte(Token):
     """
@@ -60,6 +64,6 @@ def validate(Token):
         return False
     return True
 
+
 def get_data(token):
     return decrypte(token)
-

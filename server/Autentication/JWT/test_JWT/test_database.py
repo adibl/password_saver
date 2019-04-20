@@ -4,14 +4,17 @@ date:
 description
 """
 import time
-from server.Autentication.JWT import database
+
 import pytest
+
+from server.Autentication.JWT import database
 
 
 @pytest.fixture(autouse=True)
 def run_around_tests():
     yield
     database.delete('aaaaaaaaaaaaaaaaaaaaaaaa')
+
 
 @pytest.mark.parametrize("userID,reset_time,result", [
     ('aaaaaaaaaaaaaaaaaaaaaaaa', int(time.time()) + 10000, True),
@@ -22,7 +25,6 @@ def test_insert_get(userID, reset_time, result):
     database.add(userID)
     time.sleep(0.5)
     assert database.validate_JWT_time(userID, reset_time) is result
-
 
 
 @pytest.mark.parametrize("userID,reset_time,result", [

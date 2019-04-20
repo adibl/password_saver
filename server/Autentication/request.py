@@ -3,11 +3,12 @@ name:
 date:
 description
 """
-from server.request import AuthenticatedRequestScema
+import FA
 from server.Autentication.JWT.request import AuthenticatedRequestJWT
 from server.Autentication.Password.request import AuthenticatedRequestPassword
 from server.HTTPtolls import *
-import FA
+from server.request import AuthenticatedRequestScema
+
 
 class AuthenticatedRequest(AuthenticatedRequestScema):
     SEC_LEVEL = {AuthenticatedRequestJWT: 0, AuthenticatedRequestPassword: 1}
@@ -27,7 +28,6 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
     def validate(cls, request):
         return cls.is_fit(request).validate(request)
 
-
     def __init__(self, request):
         """
         create Autenticated request that provide all nececery interface.
@@ -41,7 +41,7 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
             self.backend = AuthenticatedRequestJWT(request)
         else:
             raise ValueError
-            pass #FIXME: waht to do here????
+            pass  # FIXME: waht to do here????
 
     def get_user_id(self):
         """
@@ -61,18 +61,3 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
 
     def verify_2FA(self):
         return FA.verify()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

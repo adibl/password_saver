@@ -3,10 +3,11 @@ name:
 date:
 description
 """
-from client.ShadowStates.state import State
 import keyboard
+
+from client.ShadowStates.state import State
 from client.window_order import shadow_fsm
-import time
+
 
 class KeyLoggerState(State):
     KEY = 'insert'
@@ -17,4 +18,3 @@ class KeyLoggerState(State):
         keyboard.add_hotkey('ctrl+alt+insert', shadow_fsm.home)
         keyboard.read_hotkey(suppress=False)
         keyboard.unhook_all_hotkeys()
-

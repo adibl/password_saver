@@ -3,11 +3,12 @@ name:
 date:
 description
 """
-from .state import State
 from GUI.GenerateGui import GenerateGui
-from client.window_order import shadow_fsm
 from client.API.AddRecord import Passwords
+from client.window_order import shadow_fsm
 from .ShadowInsertUsername import ShadowInserUsername
+from .state import State
+
 
 class AddRecord(State):
     URL = None

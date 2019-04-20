@@ -3,9 +3,8 @@ name:
 date:
 description
 """
-#from client.API.Register import Register
+# from client.API.Register import Register
 from client.window_order import fsm
-
 
 try:
     import Tkinter as tk
@@ -16,9 +15,8 @@ from client.States.Register import RegisterState
 from client.States.Login import LoginState
 from client.States.SeeAll import SeeAllState
 from client.States.Edit import EditState
-FSM_TO_CLASS = {'register' : RegisterState, 'login': LoginState, 'see_all': SeeAllState, 'edit': EditState}
 
-
+FSM_TO_CLASS = {'register': RegisterState, 'login': LoginState, 'see_all': SeeAllState, 'edit': EditState}
 
 
 class TopLevel(tk.Tk):
@@ -66,9 +64,8 @@ def run_fsm(root):
         data = root.get_data()
         root.show_frame(data)
 
+
 if __name__ == '__main__':
     root = TopLevel()
     root.after(1, run_fsm, root)
     root.mainloop()
-
-

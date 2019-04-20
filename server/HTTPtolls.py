@@ -3,9 +3,9 @@ name:
 date:
 description
 """
-from abc import abstractmethod
 import json
 import logging
+from abc import abstractmethod
 
 OK = 200
 METHOD_NOT_ALLOWED = 405
@@ -19,6 +19,7 @@ PASS = 'password'
 PROGRAM = 'program_id'
 AUTENTICATION = 'Autentication'
 QUESTION = 'auto_question'
+
 
 class Responce(object):
 
@@ -53,7 +54,6 @@ class Responce(object):
         else:
             logging.critical('code {0} is not valid type+ {1}'.format(code, type(code)))
             responce = cls.bad_request()
-
 
     @staticmethod
     def not_found():
@@ -93,8 +93,8 @@ class Responce(object):
     def unauthorized(header=''):
         s = ''
         s += "HTTP/1.1 401 UNAUTHORIZED\r\n"
-        s+= header
-        s+= '\r\n'
+        s += header
+        s += '\r\n'
         s += '\r\n'
         return s
 
@@ -125,7 +125,7 @@ class Responce(object):
 
 
 class Uri(Responce):
-    URI = NotImplemented #re compiled
+    URI = NotImplemented  # re compiled
     METODES = NotImplemented
 
     def __init__(self, request):
@@ -154,11 +154,10 @@ class Uri(Responce):
         except NotImplementedError as err:
             return self.method_not_allowed()
 
-
     def method_not_allowed(self):
         s = ''
         s += "HTTP/1.1 405 NOT FOUND\r\n"
-        s+= 'Allow:' + ' '.join(self.METODES) + '\r\n'
+        s += 'Allow:' + ' '.join(self.METODES) + '\r\n'
         s += "\r\n"
         return s
 
