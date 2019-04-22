@@ -23,11 +23,9 @@ class LoginState(LoginGui, State):
                     if error == 'general':
                         self.general_error(ret[error])
             self.wait_until_end()
-            self.end()
-        else:
-            fsm.logedin()
-            self.clean_errors()
-            self.end()
+        fsm.logedin()
+        self.clean_errors()
+        self.end()
 
     def to_register(self):
         fsm.to_register()

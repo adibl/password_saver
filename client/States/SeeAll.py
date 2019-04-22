@@ -19,6 +19,7 @@ class SeeAllState(SeeAllGui, State):
 
     def run_before(self):
         if not self.is_runed:
+            self.program_id = None
             print 'run prosses'
             self.proses = multiprocessing.Process(target=runShadow.main)
             self.proses.start()
@@ -26,7 +27,8 @@ class SeeAllState(SeeAllGui, State):
         super(SeeAllState, self).run_before()
 
     def run_after(self):
-        return [self.program_id, ]
+        if self.program_id is not None:
+            return [self.program_id, ]
 
     def edit_record(self, event):
         item = self.table.identify_row(event.y)
@@ -36,4 +38,5 @@ class SeeAllState(SeeAllGui, State):
             self.end()
 
     def delete_user(self):
-        pass
+        fsm.to_delete()
+        self.end()

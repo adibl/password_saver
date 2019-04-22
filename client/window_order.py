@@ -18,6 +18,8 @@ fsm = Fysom({'initial': 'login', 'final': 'end',
                  {'name': 'logedin', 'src': 'login', 'dst': 'see_all'},
                  {'name': 'edit', 'src': 'see_all', 'dst': 'edit'},
                  {'name': 'return', 'src': 'edit', 'dst': 'see_all'},
+                {'name': 'to_delete', 'src': 'see_all', 'dst': 'delete_user'},
+                 {'name': 'sucsees', 'src': 'delete_user', 'dst': 'end'},
              ]})
 
 shadow_fsm = Fysom({'initial': 'key_logger', 'final': 'end',

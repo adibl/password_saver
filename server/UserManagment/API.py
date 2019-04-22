@@ -113,7 +113,7 @@ class Delete(Uri):
     def DELETE(self):
         id = self.request.get_user_id()
         if id == 2:
-            return Responce.unexpected_entity({'general':'username or passwords is wrong'})
+            return Responce.unexpected_entity({'general': 'username or passwords is wrong'})
         elif database.delete(id):
             return Responce.ok()
         else:

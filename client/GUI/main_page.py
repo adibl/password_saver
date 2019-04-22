@@ -15,12 +15,13 @@ from client.States.Register import RegisterState
 from client.States.Login import LoginState
 from client.States.SeeAll import SeeAllState
 from client.States.Edit import EditState
+from client.States.DeleteUser import DeleteUser
 
-FSM_TO_CLASS = {'register': RegisterState, 'login': LoginState, 'see_all': SeeAllState, 'edit': EditState}
+FSM_TO_CLASS = {'register': RegisterState, 'login': LoginState, 'see_all': SeeAllState, 'edit': EditState, 'delete_user':DeleteUser}
 
 
 class TopLevel(tk.Tk):
-    PAGES = (RegisterState, LoginState, SeeAllState, EditState)
+    PAGES = (FSM_TO_CLASS.values())
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -61,8 +62,10 @@ class TopLevel(tk.Tk):
 def run_fsm(root):
     root.show_frame()
     while not fsm.is_finished():
+        print fsm.current
         data = root.get_data()
         root.show_frame(data)
+    root.destroy()
 
 
 if __name__ == '__main__':
