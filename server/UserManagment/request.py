@@ -5,7 +5,7 @@ user managmet requests handler
 
 """
 from Autentication.Password.request import AuthenticatedRequestPassword
-from UserManagment.API import Register, Login, Reset
+from UserManagment.API import Register, Login, Reset, Delete
 from server.HTTPtolls import *
 from server.request import Request
 
@@ -50,7 +50,7 @@ class RegisterRequest(AuthenticatedRequestPassword):
 
 
 class LoginRequests(AuthenticatedRequestPassword):
-    ResorceURI = [Login.URI]
+    ResorceURI = [Login.URI, Delete.URI]
 
     @classmethod
     def IsResorceURL(cls, request):
@@ -70,6 +70,8 @@ class LoginRequests(AuthenticatedRequestPassword):
         """
         if Login.is_uri(self.get_URI()):
             return Login(self).handle_request()
+        elif Delete.is_uri(self.get_URI()):
+            return Delete(self).handle_request()
         else:
             return Responce.not_found()
 

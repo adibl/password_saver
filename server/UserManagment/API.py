@@ -105,3 +105,16 @@ class Reset(Uri):
         if q in ERRORS:
             return Responce.validate_erors(q)
         return Responce.ok({'question': q})
+
+class Delete(Uri):
+    URI = re.compile('^/delete$')
+    METODES = ['DELETE']
+
+    def DELETE(self):
+        id = self.request.get_user_id()
+        if id == 2:
+            return Responce.unexpected_entity({'general':'username or passwords is wrong'})
+        elif database.delete(id):
+            return Responce.ok()
+        else:
+            return Responce.internal_eror()
