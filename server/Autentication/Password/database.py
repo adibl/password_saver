@@ -120,11 +120,8 @@ def delete_user(collection, clientID):
     :return bool: True if update seceded, False otherwise
     """
 
-    if resorce_database.delete_user(clientID) is True:
-        ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
-        return ret.modified_count == 1
-    else:
-        return False
+    resorce_database._immidiate_delete(clientID)
+    return collection.delete_one({'_id': ObjectId(clientID)}).deleted_count == 1
 
 
 @connect
@@ -133,7 +130,7 @@ def _immidiate_delete(collection, clientID):
     immediately delete user FOR TEST ONLY!!
     """
     resorce_database._immidiate_delete(clientID)
-    return collection.delete_one({'_id': ObjectId(clientID)})
+    return collection.delete_one({'_id': ObjectId(clientID)}).deleted_count == 1
 
 
 @connect

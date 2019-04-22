@@ -34,3 +34,6 @@ class SeeAllState(SeeAllGui, State):
             self.program_id = self.records[item]
             fsm.edit()
             self.end()
+
+    def delete_user(self):
+        pass

@@ -36,8 +36,6 @@ class MyFsm(object):
         off = Off(name='off', ignore_invalid_triggers=False)
         self.machine = Machine(model=self, states=[on, off], transitions=self.transitions, initial='off')
 
-    def get_vars(self):
-
 
 machine = MyFsm()
 # print(machine.state)  # >>> on

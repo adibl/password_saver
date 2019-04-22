@@ -10,7 +10,7 @@ from server.HTTPtolls import *
 
 
 class Request(object):
-    RE_URI = re.compile(r"^(GET|PUT|POST|PATCH|DELETE) ((/\w+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
+    RE_URI = re.compile(r"^(GET|PUT|POST|PATCH|DELETE) ((/[\w|=]+)+)(\?\w+=\w+(&\w+=\w+)*)? (HTTP/1.1|HTTP/1.0)")
     RE_CONTENT_TYPE = re.compile("Content-Type: (application/x-www-form-urlencoded)", re.M)
     RE_DATA = re.compile("\n(.*)$")
 

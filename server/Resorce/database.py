@@ -119,13 +119,7 @@ def delete_record(collection, clientID, programID):
     :param programID: the program identifier to get the cradentials to
     :return: True if succeed, false otherwise
     """
-    res = collection.update_one(
-        {
-            '_id': ObjectId(clientID),
-            'records': {'$elemMatch': {'program_id': programID}}
-        },
-        {'$set': {"records.$.delete_time": datetime.utcnow()}}
-    )
+    res = collection.update_one({'_id': ObjectId(clientID), }, {'$pull': {'records': {'program_id': programID}}})
     return res.modified_count == 1
 
 
@@ -153,8 +147,7 @@ def delete_user(collection, clientID):
     :param clientID: the client id to delete
     :return bool: True if update seceded, False otherwise
     """
-    ret = collection.update_one({'_id': ObjectId(clientID)}, {'$set': {'delete_time': datetime.utcnow()}})
-
+    ret = collection.delete_one({'_id': ObjectId(clientID)})
     return ret.modified_count == 1
 
 

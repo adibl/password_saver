@@ -51,7 +51,7 @@ class EditGui(Gui):
 
         self.Button1 = tk.Button(self)
         self.Button1.place(relx=0.1, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
-        self.Button1.configure(command=self.quit)
+        self.Button1.configure(command=self.delete)
         self.Button1.configure(text='''Delete''')
 
     def return_data(self):
@@ -61,5 +61,8 @@ class EditGui(Gui):
         print errors
 
     def insert_username_and_pass(self, username, password):
+        self.entry_username.delete(0, tk.END)
         self.entry_username.insert(0, username)
+        self.entry_password.delete(0, tk.END)
         self.entry_password.insert(0, password)
+

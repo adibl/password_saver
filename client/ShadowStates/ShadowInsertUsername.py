@@ -8,7 +8,8 @@ import win32gui
 
 from client.API.ManageRecord import Record
 from client.window_order import shadow_fsm
-from .state import State
+from client.ShadowStates.state import State
+import re
 
 
 class ShadowInserUsername(State):
@@ -33,9 +34,10 @@ class ShadowInserUsername(State):
         if 'username' in ret.keys() and 'password' in ret.keys():
             keyboard.write(ret['username'])
             cls.PASSWORD = ret['password']
+            shadow_fsm.username_inserted()
         else:
-            raise ValueError  # FIXME:
-        shadow_fsm.username_inserted()
+            shadow_fsm.no_url()
+
 
     @staticmethod
     def get_url():
@@ -49,7 +51,9 @@ class ShadowInserUsername(State):
         else:
             control = controlList[1]
         address_control = automation.FindControl(control, find_search_bar)
-        return address_control.CurrentValue()
+        url = address_control.CurrentValue()
+        URL_RE = re.compile('^https?://([\w|.]*)/')
+        return URL_RE.search(url).group(1)
 
     @classmethod
     def pass_data(cls):

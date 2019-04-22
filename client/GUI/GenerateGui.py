@@ -76,4 +76,11 @@ class GenerateGui(tk.Tk):
         return self.entry_username.get(), self.entry_password.get()
 
     def handle_errors(self, errors):
-        print errors
+        self.label_general_error.config(text=errors.values())
+
+
+    def insert_username_and_pass(self, username, password):
+        self.entry_username.delete(0, tk.END)
+        self.entry_username.insert(0, username)
+        self.entry_password.delete(0, tk.END)
+        self.entry_password.insert(0, password)

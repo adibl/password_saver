@@ -34,7 +34,7 @@ URI = 'http://127.0.0.1:50007'
 
 
 def test_POST_valid_request(delete_user):
-    auto = base64.b64encode('username:Secretpass123')
+    auto = base64.b64encode('username:Secretpass123#')
     responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
                              json={'question': 'b', 'answer': 'c'})
     assert responce.status_code == 200
@@ -47,7 +47,7 @@ def test_POST_unvalid_JWT_autentication(JWT, delete_user):
 
 
 def test_POST_username_already_exzist(delete_user):
-    auto = base64.b64encode('username:Secretpass123')
+    auto = base64.b64encode('username:Secretpass123#')
     responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
                              json={'question': 'b', 'answer': 'c'})
     time.sleep(1)

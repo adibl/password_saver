@@ -46,7 +46,7 @@ class PasswordsUri(Uri):
         d = {}
         for val in not_found:
             d[val] = 'data parameter must be added'
-        return Responce.unexpected_entity(d)  # FIXME : this is not bad request + add test to it
+        return Responce.unexpected_entity(d)
 
 
 class ProgramUri(Uri):

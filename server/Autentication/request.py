@@ -58,6 +58,3 @@ class AuthenticatedRequest(AuthenticatedRequestScema):
         :rtype: int
         """
         return self.SEC_LEVEL[type(self.backend)]
-
-    def verify_2FA(self):
-        return FA.verify()

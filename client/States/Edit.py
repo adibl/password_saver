@@ -28,3 +28,12 @@ class EditState(EditGui, State):
 
     def get_data(self, data):
         self.url = data[0]
+
+    def delete(self):
+        ret = Record.DELETE(self.url)
+        if ret:
+            fsm.trigger('return')
+            self.end()
+        else:
+            print ret
+            raise ValueError
