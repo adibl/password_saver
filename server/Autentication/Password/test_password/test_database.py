@@ -41,10 +41,8 @@ def test_add_user_username_already_exzist():
     assert database.add('user', 'password', 'a', 'b') == DUPLIKATE_KEY_ERROR
 
 
-def test_delete_user():
+def test_delete_user(): #QUESTION: here to test delete user with hold (fecher that was deleted)
     identifier = 'aaaaaaaaaaaaaaaaaaaaaaaa'
     assert database.delete_user(identifier)
     time.sleep(1)
-    ret = resorce_database.get_all_records(identifier)
-    print ret
-    assert 'delete_time' in ret
+    assert resorce_database.get_all_records(identifier) is None

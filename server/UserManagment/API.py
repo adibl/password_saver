@@ -11,6 +11,7 @@ from server.Autentication.Password import database as errors
 from server.Autentication.Password.API import passwordAutentication as database
 from server.HTTPtolls import *
 from server.database_errors import *
+from server.Autentication.JWT import database as jwt_database
 
 
 class Register(Uri):
@@ -67,7 +68,6 @@ class Register(Uri):
         if ret == []:
             return True
         else:
-            print ret
             return '\r\n'.join(ret)
 
 
@@ -95,9 +95,9 @@ class Reset(Uri):
     def GET(self):
         data = self.request.get_data_as_dictionery()
         if data is None:
-            return Responce.unexpected_entity({'username': 'username must be in data'})  # FIXME: USER data is wrong
+            return Responce.unexpected_entity({'username': 'username must be in data'})
         elif 'username' not in data:
-            return Responce.unexpected_entity({'username': 'username must be in data'})  # FIXME: USER data is wrong
+            return Responce.unexpected_entity({'username': 'username must be in data'})
         q = database.get_question(data['username'])
         if q == errors.USERNAME_OR_PASSWORD_INCORRECT:
             return Responce.unexpected_entity({USERNAME: 'username is wrong'})
@@ -122,9 +122,9 @@ class Reset(Uri):
                     changelist['password'] = data['NewPassword']
                 if len(changelist) > 0:
                     if database.change_user_cradencials(id, **changelist):
+                        jwt_database.add(id)
                         return Responce.ok()
                     else:
-                        print 'change failed'
                         return Responce.internal_eror()
                 else:
                     return Responce.unexpected_entity({'general': 'must have new username or new password'})

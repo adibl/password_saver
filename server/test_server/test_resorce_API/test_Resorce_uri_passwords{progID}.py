@@ -65,16 +65,7 @@ def test_DELETE_valid_request(JWT):
 
     # test that GET return the delete time
     responce = requests.get(URI + '/passwords/steam', headers={'Authorization': 'Bearer {0}'.format(JWT)})
-    assert responce.status_code == 200
-    data = json.loads(responce.text)
-    assert 'delete_time' in data
-
-    responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT)})
-    assert responce.status_code == 200
-    data = json.loads(responce.text)
-    for program in data['records']:
-        if program['program_id'] == 'steam':
-            assert 'delete_time' in program
+    assert responce.status_code == 404
 
 
 @pytest.mark.run(order=1)

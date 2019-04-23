@@ -148,7 +148,7 @@ def delete_user(collection, clientID):
     :return bool: True if update seceded, False otherwise
     """
     ret = collection.delete_one({'_id': ObjectId(clientID)})
-    return ret.modified_count == 1
+    return ret.deleted_count == 1
 
 
 @handle_general_eror

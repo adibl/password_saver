@@ -69,7 +69,7 @@ def test_delete_record():
     database.delete_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam')
     time.sleep(1)
     result = database.get_record('aaaaaaaaaaaaaaaaaaaaaaaa', 'steam')
-    assert 'delete_time' in result
+    assert result == {}
 
 
 def test_delete_user():
@@ -78,4 +78,4 @@ def test_delete_user():
     database.delete_user('aaaaaaaaaaaaaaaaaaaaaaaa')
     time.sleep(1)
     result = database.get_all_records('aaaaaaaaaaaaaaaaaaaaaaaa')
-    assert 'delete_time' in result
+    assert result is None

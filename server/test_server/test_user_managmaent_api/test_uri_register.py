@@ -14,7 +14,7 @@ from server.Autentication.JWT import create
 def delete_user():
     yield
     try:
-        id = database.validate('username', 'Secretpass123')
+        id = database.validate('username', 'Secretpass123#')
         if len(str(id)) > 10:
             database._immidiate_delete(id)
 
@@ -70,7 +70,7 @@ def test_POST_pass_is_not_valid(delete_user):
     assert 'password' in data
 
 
-def test_POST_without_question(delete_user):
+def test_POST_without_question_and_pass_in_not_valid(delete_user):
     auto = base64.b64encode('username:Secretpass')
     responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)})
     assert responce.status_code == 442

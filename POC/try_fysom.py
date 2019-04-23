@@ -7,7 +7,6 @@ class On(State):
 
     def enter(self, event_data):
         super(On, self).enter(event_data)
-        print event_data['mss']
 
 
 class Off(State):
