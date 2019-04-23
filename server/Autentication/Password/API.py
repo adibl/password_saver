@@ -9,8 +9,6 @@ import base64
 import database
 from server.HTTPtolls import *
 from server.database_errors import *
-
-
 class passwordAutentication:
 
     @staticmethod
@@ -32,8 +30,8 @@ class passwordAutentication:
     @staticmethod
     def validate_question(username, ans):
         ret = database.validate_question(username, ans)
-        if ret == database.USERNAME_OR_PASSWORD_INCORRECT:
-            return UNEXPECTED_ENTITY
+        if ret in [database.USERNAME_OR_PASSWORD_INCORRECT, database.WRONG_ANSWER]:
+            return ret
         elif ret == None:
             return INTERNAL_ERROR
         elif ret in ERRORS:
@@ -46,6 +44,10 @@ class passwordAutentication:
         return database.validate(username, password)
 
     @staticmethod
+    def get_id_without_password(username):
+        return database.get_id(username)
+
+    @staticmethod
     def get_question(username):
         return database.get_question(username)
 
@@ -53,6 +55,9 @@ class passwordAutentication:
     def delete(userID):
         return database.delete_user(userID)
 
+    @staticmethod
+    def change_user_cradencials(clientID, username=None, password=None):
+        return database.change_user_cradencials(clientID, username, password)
     @classmethod
     def get_username_password(cls, auto):
         """

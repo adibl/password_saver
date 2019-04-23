@@ -14,8 +14,10 @@ from HTTPtolls import *
 from server.database_errors import *
 
 EXPIRE_TIME_HOUERS = 48  # FIXME: should be the same as resorce database
+ROUNDS = 13
 CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
 USERNAME_OR_PASSWORD_INCORRECT = 2
+WRONG_ANSWER = 3
 
 
 # FIXME: hash the answer to the question
@@ -53,12 +55,39 @@ def add(collection, username, password, question, anser):
     :return: the client id if created None otherwise.
     :rtype: ObjectId
     """
-    d = {'username': username, 'password': bcrypt.using(rounds=13).hash(password), 'question': question, 'ans': anser}
+    d = {'username': username, 'password': bcrypt.using(rounds=ROUNDS).hash(password), 'question': question, 'ans': bcrypt.using(rounds=ROUNDS).hash(anser)}
     ret = collection.insert_one(d)  # QUESTION: how match rounds to do??
     if resorce_database.add_user(ret.inserted_id):
         return str(ret.inserted_id)
     else:
         return None
+
+
+@handle_general_eror
+@connect
+def change_user_cradencials(collection, clientID, username=None, password=None):
+    """
+    change username and password to user.
+    :param collection:
+    :param clientID: the client id to change
+    :param username: the new username or None (if you don't want to change)
+    :param password: the new password or None (if you don't want to change)
+    :return: True if operatoin sucseed, False otherwise
+    """
+    d = {}
+    if username is not None:
+        d['username'] = username
+    if password is not None:
+        d['password'] = bcrypt.using(rounds=ROUNDS).hash(password)
+    print d
+    res = collection.update_one(
+        {
+            '_id': ObjectId(clientID),
+        },
+        {'$set': d}
+    )
+    print res.modified_count
+    return res.modified_count == 1
 
 
 @handle_general_eror
@@ -81,7 +110,7 @@ def validate(collection, username, password):
     """
     validate user cradentials
     :param username:
-    :param password:
+    :param password: the hashed password
     :return: the id if the password is correct and None otherwise
     :rtype: str
     """
@@ -99,16 +128,34 @@ def validate(collection, username, password):
 
 @handle_general_eror
 @connect
+def get_id(collection, username):
+    """
+    get user id from username
+    :param username:
+    :return: the id if the username is correct and None otherwise
+    :rtype: str
+    """
+
+    prog = collection.find_one({'username': username})
+    if prog is None:
+        logging.debug('username incorrect')
+        return USERNAME_OR_PASSWORD_INCORRECT
+    else:
+        return prog['_id']
+
+
+@handle_general_eror
+@connect
 def validate_question(collection, username, anser):
     prog = collection.find_one({'username': username})
     if prog is None:
         logging.debug('username incorrect')
         return USERNAME_OR_PASSWORD_INCORRECT
-    elif prog['ans'] == anser:
+    elif bcrypt.verify(anser, prog['ans']):
         return str(prog['_id'])
     else:
-        logging.debug('password incorrect')
-        return USERNAME_OR_PASSWORD_INCORRECT
+        logging.debug('answer incorrect')
+        return WRONG_ANSWER
 
 
 @handle_general_eror
@@ -139,7 +186,7 @@ def __add_id(collection, ID, username, password):
     add user with predefined ID , FOR TESTS ONLY!!!!
     :return:
     """
-    d = {'_id': ObjectId(ID), 'username': username, 'password': bcrypt.using(rounds=13).hash(password)}
+    d = {'_id': ObjectId(ID), 'username': username, 'password': bcrypt.using(rounds=ROUNDS).hash(password)}
     ret = collection.insert_one(d)  # QUESTION: how match rounds to do??
     resorce_database.add_user(ID)
     return ret.inserted_id

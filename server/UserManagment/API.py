@@ -7,7 +7,7 @@ import re
 
 from server import database_errors
 from server.Autentication.JWT import create
-from server.Autentication.Password.API import database as errors
+from server.Autentication.Password import database as errors
 from server.Autentication.Password.API import passwordAutentication as database
 from server.HTTPtolls import *
 from server.database_errors import *
@@ -18,8 +18,6 @@ class Register(Uri):
     METODES = ['POST']
 
     MIN_LEN = 8
-    RE_CHRACTERS = re.compile('^(?=\S{6,20}$)(?=.*?\d)(?=.*?[a-z])(?=.*?[A-Z])')
-    PASS_POLICY = 'must contain 6-20 characters\r\n1 capital letter\r\n1 letter\r\n1 difit'
 
     def POST(self):
         """
@@ -32,7 +30,7 @@ class Register(Uri):
             return Responce.bad_request()  # FIXME: what this is realy
         username, password = ret
         question, ansear = self.request.get_question_ans()
-        ret = self.__test_password(password)
+        ret = self.test_password(password)
         if ret is True:
             ret = database.add(username, password, question, ansear)
             if ret == database_errors.DUPLIKATE_KEY_ERROR:
@@ -47,7 +45,8 @@ class Register(Uri):
     def __get_username_password(self):
         return self.request.get_username_password()
 
-    def __test_password(self, password):
+    @staticmethod
+    def test_password(password):
         """
         test password aginst the policy
         
@@ -91,7 +90,7 @@ class Login(Uri):
 
 class Reset(Uri):
     URI = re.compile('^/reset$')
-    METODES = ['GET', 'POST']
+    METODES = ['GET', 'PATCH']
 
     def GET(self):
         data = self.request.get_data_as_dictionery()
@@ -105,6 +104,39 @@ class Reset(Uri):
         if q in ERRORS:
             return Responce.validate_erors(q)
         return Responce.ok({'question': q})
+
+
+    def PATCH(self):
+        data = self.request.get_data_as_dictionery()
+        if 'answer' in data and 'username' in data:
+            ret = database.validate_question(data['username'], data['answer'])
+            if ret is OK:
+                id = database.get_id_without_password(data['username'])
+                changelist = {}
+                if 'NewUsername' in data:
+                    changelist['username'] = data['NewUsername']
+                if 'NewPassword' in data:
+                    ret = Register.test_password(data['NewPassword'])
+                    if ret is not True:
+                        return Responce.unexpected_entity({'password': ret})
+                    changelist['password'] = data['NewPassword']
+                if len(changelist) > 0:
+                    if database.change_user_cradencials(id, **changelist):
+                        return Responce.ok()
+                    else:
+                        print 'change failed'
+                        return Responce.internal_eror()
+                else:
+                    return Responce.unexpected_entity({'general': 'must have new username or new password'})
+            elif ret == errors.USERNAME_OR_PASSWORD_INCORRECT:
+                return Responce.unexpected_entity({'username': 'username is wrong'})
+            elif ret == errors.WRONG_ANSWER:
+                return Responce.unexpected_entity({'answer': 'answer is wrong'})
+            else:
+                return Responce.validate_erors(ret)
+        else:
+            return Responce.unexpected_entity({'general': 'answer and old username fields must be in request'})
+
 
 class Delete(Uri):
     URI = re.compile('^/delete$')
