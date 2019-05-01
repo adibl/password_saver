@@ -28,7 +28,7 @@ class Register(Uri):
         ret = self.__get_username_password()
         if ret is None:
             logging.debug('username password is formated wrong')
-            return Responce.bad_request()  # FIXME: what this is realy
+            return Responce.bad_request()  # FIXME: what this is really
         username, password = ret
         question, ansear = self.request.get_question_ans()
         ret = self.test_password(password)
