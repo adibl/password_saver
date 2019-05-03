@@ -27,7 +27,8 @@ class EditState(EditGui, State):
             raise ValueError
 
     def get_data(self, data):
-        self.url = data[0]
+        if 'url' in data:
+            self.url = data['url']
 
     def delete(self):
         ret = Record.DELETE(self.url)

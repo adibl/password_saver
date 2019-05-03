@@ -28,7 +28,7 @@ class SeeAllState(SeeAllGui, State):
 
     def run_after(self):
         if self.program_id is not None:
-            return [self.program_id, ]
+            return {'url': self.program_id}
 
     def edit_record(self, event):
         item = self.table.identify_row(event.y)

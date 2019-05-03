@@ -99,7 +99,7 @@ def get_question(collection, username):
         logging.debug('username incorrect')
         return USERNAME_OR_PASSWORD_INCORRECT
     elif 'ans' in prog:
-        return str(prog['ans'])
+        return str(prog['question'])
     else:
         logging.debug('no question in database')
         return INTERNAL_ERROR

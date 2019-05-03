@@ -23,12 +23,17 @@ class LoginState(LoginGui, State):
                     if error == 'general':
                         self.general_error(ret[error])
             self.wait_until_end()
-        fsm.logedin()
-        self.clean_errors()
-        self.end()
+        else:
+            fsm.logedin()
+            self.clean_errors()
+            self.end()
 
     def to_register(self):
         fsm.to_register()
+        self.end()
+
+    def to_forgot_password(self):
+        fsm.to_forgot_password()
         self.end()
 
     def general_error(self, error):
@@ -39,10 +44,15 @@ class LoginState(LoginGui, State):
         self.label_general_error.config(text=' ')
 
     def get_data(self, data):
-        self.entry_username.delete(0, tk.END)
-        self.entry_username.insert(0, data[0])
-        self.entry_password.delete(0, tk.END)
-        self.entry_password.insert(0, data[1])
+        if 'username' in data:
+            self.entry_username.delete(0, tk.END)
+            self.entry_username.insert(0, data['username'])
+        if 'password' in data:
+            self.entry_password.delete(0, tk.END)
+            self.entry_password.insert(0, data['password'])
 
     def clean(self):
         self.clean_errors()
+
+    def run_after(self):
+        return {'username': self.entry_username.get(), 'password': self.entry_password.get()}

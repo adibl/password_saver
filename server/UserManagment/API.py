@@ -125,7 +125,7 @@ class Reset(Uri):
                         jwt_database.add(id)
                         return Responce.ok()
                     else:
-                        return Responce.internal_eror()
+                        return Responce.unexpected_entity({'general':'cant change username of password to the current one'})
                 else:
                     return Responce.unexpected_entity({'general': 'must have new username or new password'})
             elif ret == errors.USERNAME_OR_PASSWORD_INCORRECT:

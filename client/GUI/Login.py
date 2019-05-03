@@ -28,7 +28,7 @@ class LoginGui(UsernamePasswordGui):
 
         self.Button3 = tk.Button(self)
         self.Button3.place(relx=0.1, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
-        self.Button3.configure(command=None)  # FIXME
+        self.Button3.configure(command=self.to_forgot_password)  # FIXME
         self.Button3.configure(text='''forget password''')
 
         self.bind("<Escape>", self.run)

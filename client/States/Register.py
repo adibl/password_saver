@@ -15,7 +15,7 @@ class RegisterState(RegisterGui, State):
         self.clean_errors()
 
     def run_after(self):
-        return self.entry_username.get(), self.entry_password.get()
+        return {'username': self.entry_username.get(), 'password': self.entry_password.get()}
 
     def get_data(self, data):
         print data

@@ -16,8 +16,11 @@ from client.States.Login import LoginState
 from client.States.SeeAll import SeeAllState
 from client.States.Edit import EditState
 from client.States.DeleteUser import DeleteUser
+from client.States.GetSecurityQuestion import GetSecurityQuestionState
+from client.States.ResetPassword import ResetPasswordState
 
-FSM_TO_CLASS = {'register': RegisterState, 'login': LoginState, 'see_all': SeeAllState, 'edit': EditState, 'delete_user':DeleteUser}
+FSM_TO_CLASS = {'register': RegisterState, 'login': LoginState, 'see_all': SeeAllState, 'get_answer': ResetPasswordState,
+                'edit': EditState, 'delete_user':DeleteUser, 'get_security_question': GetSecurityQuestionState}
 
 
 class TopLevel(tk.Tk):
