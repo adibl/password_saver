@@ -5,8 +5,7 @@ import base64
 import json
 
 import requests
-
-URI = 'http://127.0.0.1:50007'
+from .connection import Request
 
 
 class Register(object):
@@ -18,7 +17,7 @@ class Register(object):
     @classmethod
     def POST(cls, username, password, question, answer):
         auto = base64.b64encode(username + ':' + password)
-        responce = requests.post(URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
+        responce = conn = Request().get_conn().post(Request.URI + '/register', headers={'Authorization': 'Basic {0}'.format(auto)},
                                  json={'question': question, 'answer': answer})
         if responce.status_code == 200:
             return True

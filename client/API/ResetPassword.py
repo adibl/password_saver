@@ -7,8 +7,7 @@ import base64
 import json
 
 import requests
-
-URI = 'http://127.0.0.1:50007'
+from .connection import Request
 
 
 class ForgotPassword(object):
@@ -19,7 +18,7 @@ class ForgotPassword(object):
 
     @classmethod
     def GET(cls, username):
-        responce = requests.get(URI + '/reset', json={'username': username})
+        responce = conn = Request().get_conn().get(Request.URI + '/reset', json={'username': username})
         if responce.status_code == 200:
             data = json.loads(responce.text)
             if 'question' in data:
@@ -38,7 +37,7 @@ class ForgotPassword(object):
             d['NewPassword'] = new_password
         if not new_username in [None, '']:
             d['NewUsername'] = new_username
-        responce = requests.patch(URI + '/reset',json=d)
+        responce = conn = Request().get_conn().patch(Request.URI + '/reset',json=d)
         if responce.status_code == 200:
             return True
         elif responce.status_code == 442:

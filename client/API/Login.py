@@ -8,8 +8,7 @@ import json
 import os
 
 import requests
-
-URI = 'http://127.0.0.1:50007'
+from .connection import Request
 
 
 class Login(object):
@@ -22,7 +21,7 @@ class Login(object):
     @classmethod
     def GET(cls, username, password):
         auto = base64.b64encode(username + ':' + password)
-        responce = requests.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)}, )
+        responce = conn = Request().get_conn().get(Request.URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)}, )
         if responce.status_code == 200:
             cls.save_jwt_in_file(responce.text)
             return True

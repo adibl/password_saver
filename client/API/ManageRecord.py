@@ -2,8 +2,7 @@ import base64
 import json
 
 import requests
-
-URI = 'http://127.0.0.1:50007'
+from .connection import Request
 
 
 class Record(object):
@@ -13,7 +12,7 @@ class Record(object):
     def GET(cls, url):
         auto = cls.read_jwt()
         encode_url = base64.urlsafe_b64encode(url)
-        responce = requests.get(URI + '/passwords/' + encode_url, headers={'Authorization': 'Bearer {0}'.format(auto)})
+        responce = conn = Request().get_conn().get(Request.URI + '/passwords/' + encode_url, headers={'Authorization': 'Bearer {0}'.format(auto)})
         if responce.status_code == 200:
             return json.loads(responce.text)
         else:
@@ -23,7 +22,7 @@ class Record(object):
     def PATCH(cls, url, **kargs):
         auto = cls.read_jwt()
         encode_url = base64.urlsafe_b64encode(url)
-        responce = requests.patch(URI + '/passwords/' + encode_url,
+        responce = conn = Request().get_conn().patch(Request.URI + '/passwords/' + encode_url,
                                   headers={'Authorization': 'Bearer {0}'.format(auto)},
                                   json=kargs)
         if responce.status_code == 200:
@@ -35,7 +34,7 @@ class Record(object):
     def DELETE(cls, url):
         auto = cls.read_jwt()
         encode_url = base64.urlsafe_b64encode(url)
-        responce = requests.delete(URI + '/passwords/' + encode_url,
+        responce = conn = Request().get_conn().delete(Request.URI + '/passwords/' + encode_url,
                                   headers={'Authorization': 'Bearer {0}'.format(auto)})
         if responce.status_code == 200:
             return True

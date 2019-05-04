@@ -7,9 +7,7 @@ import base64
 import json
 
 import requests
-
-URI = 'http://127.0.0.1:50007'
-
+from .connection import Request
 
 class Passwords(object):
     FILE_NAME = 'token.txt'
@@ -21,7 +19,7 @@ class Passwords(object):
     @classmethod
     def GET(cls):
         auto = cls.read_jwt()
-        responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)})
+        responce = conn = Request().get_conn().get(Request.URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)})
         if responce.status_code == 200:
             return json.loads(responce.text)
         else:
@@ -32,7 +30,7 @@ class Passwords(object):
         auto = cls.read_jwt()
         print base64.urlsafe_b64encode(url)
         encode_url = base64.urlsafe_b64encode(url)
-        responce = requests.post(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)}
+        responce = conn = Request().get_conn().post(Request.URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)}
                                  , json={'username': username, 'password': password,
                                          'program_id': encode_url})  # FIXME: encode
         if responce.status_code == 200:
