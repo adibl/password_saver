@@ -12,8 +12,9 @@ import requests
 from server.Autentication.JWT import create
 from server.Autentication.Password import database as pass_database
 from server.Resorce import database
+import ssl
 
-URI = 'http://127.0.0.1:50007'
+URI = 'https://192.168.0.109:50007'
 
 
 @pytest.fixture(autouse=True)
@@ -35,7 +36,12 @@ def JWT():
 
 @pytest.mark.run(order=0)
 def test_GET_valid_requet(JWT):
-    responce = requests.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT), })
+    s = requests.Session()
+    sertificate = ssl.get_server_certificate(('192.168.0.109', 50007), ssl_version=ssl.PROTOCOL_SSLv23)
+    with open('cert.cert', 'wb') as handle:
+        handle.write(sertificate)
+    s.verify = r'D:\adi\Documents\password_saver\server\test_server\test_resorce_API\cert.cert'
+    responce = s.get(URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(JWT), })
     assert responce.status_code == 200
     data = json.loads(responce.text)
     assert data['records'] == [{"username": "adibl", "program_id": "steam", 'sec_level': 0},

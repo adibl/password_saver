@@ -8,6 +8,7 @@ import logging.config
 import re
 import socket
 import threading
+import ssl
 
 from Resorce.request import ResorceRequest
 from UserManagment.request import RegisterRequest, LoginRequests, ResetRequest
@@ -16,7 +17,7 @@ from request import Request
 from server.Autentication.request import AuthenticatedRequest
 from server.HTTPtolls import *
 
-HOST = '127.0.0.1'
+HOST = '0.0.0.0'
 PORT = 50007
 CONN_LOG = "connect IP:{0} PORT:{1}"
 
@@ -27,6 +28,7 @@ def lisening():
     :return: None
     """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, server_side=True, certfile=r'C:\Users\adi\openssl\server.cert', keyfile=r'C:\Users\adi\openssl\private.pem')
     s.bind((HOST, PORT))
     s.listen(10)
     while True:

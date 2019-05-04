@@ -37,7 +37,7 @@ class SeeAllGui(Gui):
         button = tk.Button(self)
         button.place(relx=0.4, rely=0.9, relheight=0.1, relwidth=0.2)
         button.configure(command=self.run_before)
-        button.configure(text='''reset''')
+        button.configure(text='''reload''')
 
         button = tk.Button(self)
         button.place(relx=0.7, rely=0.9, relheight=0.1, relwidth=0.2)
