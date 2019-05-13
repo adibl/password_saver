@@ -65,5 +65,5 @@ class GetSecurityQuestionState(GetSecurityQuestionGui, State):
     def clean(self):
         self.clean_errors()
 
-    def run_after(self):
+    def pass_data(self):
         return {'username': self.username, 'question': self.question}

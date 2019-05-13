@@ -8,6 +8,9 @@ from client.ShadowStates.KeyLogger import KeyLoggerState
 from client.ShadowStates.ShadowInsertPassword import ShadowInserPasswordState
 from client.ShadowStates.ShadowInsertUsername import ShadowInserUsername
 from client.window_order import shadow_fsm
+import win32api, win32gui, win32con
+import sys
+import threading
 
 SHADOW_FSM_TO_CLASS = {'insert_username': ShadowInserUsername, 'insert_password': ShadowInserPasswordState,
                        'key_logger': KeyLoggerState, 'add_record': AddRecord}

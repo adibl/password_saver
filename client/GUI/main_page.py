@@ -20,7 +20,7 @@ from client.States.GetSecurityQuestion import GetSecurityQuestionState
 from client.States.ResetPassword import ResetPasswordState
 
 FSM_TO_CLASS = {'register': RegisterState, 'login': LoginState, 'see_all': SeeAllState, 'get_answer': ResetPasswordState,
-                'edit': EditState, 'delete_user':DeleteUser, 'get_security_question': GetSecurityQuestionState}
+                'edit': EditState, 'delete_user': DeleteUser, 'get_security_question': GetSecurityQuestionState}
 
 
 class TopLevel(tk.Tk):
@@ -32,6 +32,7 @@ class TopLevel(tk.Tk):
                    top is the toplevel containing window.'''
         self.geometry("500x500")
         self.title("New Toplevel")
+        self.bind("<Destroy>", self._destroy)
 
         self.frames = {}
         self.last_frame = None
@@ -43,24 +44,30 @@ class TopLevel(tk.Tk):
             frame.place(relx=0.0, rely=0.0, relheight=1, relwidth=1)
 
     def show_frame(self, data=''):
-        frame = self.frames[FSM_TO_CLASS[fsm.current]]
+        self.frame = self.frames[FSM_TO_CLASS[fsm.current]]
         if self.last_frame is not None:
-            data = self.last_frame.run_after()
+            data = self.last_frame.pass_data()
             self.last_frame.clean()
             if data is not None:
-                frame.get_data(data)
+                self.frame.get_data(data)
 
-        frame.tkraise()
-        frame.run_before()
-        frame.focus_set()
-        self.last_frame = frame
-        frame.wait_until_end()
+        self.frame.tkraise()
+        self.frame.run_before()
+        self.frame.focus_set()
+        self.last_frame = self.frame
+        self.frame.wait_until_end()
 
     def get_data(self):
-        ret = self.last_frame.run_after()
+        ret = self.last_frame.pass_data()
         self.last_frame.clean()
         return ret
 
+    def _destroy(self, *args):
+        self.bind('<Destroy>', self._ignore)
+        fsm.close()
+        self.frame.end()
+
+    def _ignore(self, e): pass
 
 def run_fsm(root):
     root.show_frame()
@@ -68,7 +75,7 @@ def run_fsm(root):
         print fsm.current
         data = root.get_data()
         root.show_frame(data)
-    root.destroy()
+
 
 
 if __name__ == '__main__':

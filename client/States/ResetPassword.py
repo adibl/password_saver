@@ -51,7 +51,7 @@ class ResetPasswordState(ResetPasswordGui, State):
         if 'general' in data:
             self.label_general_error.configure(text=data['general'])
 
-    def run_after(self):
+    def pass_data(self):
         data = self.entry_username.get()
         if data == '':
             data = self.username

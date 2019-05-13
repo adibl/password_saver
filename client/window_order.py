@@ -10,7 +10,7 @@ from fysom import Fysom
 # from client.GUI.main_page import SeaofBTCapp
 
 
-fsm = Fysom({'initial': 'login', 'final': 'end',
+fsm = Fysom({'initial': 'see_all', 'final': 'end',
              'events': [
                  {'name': 'registered', 'src': 'register', 'dst': 'login'},
 
@@ -23,6 +23,8 @@ fsm = Fysom({'initial': 'login', 'final': 'end',
                  {'name': 'return', 'src': 'edit', 'dst': 'see_all'},
                 {'name': 'to_delete', 'src': 'see_all', 'dst': 'delete_user'},
                  {'name': 'sucsees', 'src': 'delete_user', 'dst': 'end'},
+{'name': 'close', 'src': '*', 'dst': 'end'},
+{'name': 'unautorized', 'src': '*', 'dst': 'login'},
              ]})
 
 shadow_fsm = Fysom({'initial': 'key_logger', 'final': 'end',

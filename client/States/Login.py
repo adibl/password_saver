@@ -54,5 +54,5 @@ class LoginState(LoginGui, State):
     def clean(self):
         self.clean_errors()
 
-    def run_after(self):
+    def pass_data(self):
         return {'username': self.entry_username.get(), 'password': self.entry_password.get()}

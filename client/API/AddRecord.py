@@ -23,7 +23,7 @@ class Passwords(object):
         if responce.status_code == 200:
             return json.loads(responce.text)
         else:
-            return {'general': 'general error'}
+            return {'general': responce.status_code}
 
     @classmethod
     def POST(cls, url, username, password):

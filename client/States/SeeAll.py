@@ -26,7 +26,7 @@ class SeeAllState(SeeAllGui, State):
             self.is_runed = True
         super(SeeAllState, self).run_before()
 
-    def run_after(self):
+    def pass_data(self):
         if self.program_id is not None:
             return {'url': self.program_id}
 

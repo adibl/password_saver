@@ -26,7 +26,7 @@ class State(object):
         """
         pass
 
-    def run_after(self):
+    def pass_data(self):
         """
         run after the window finish, return the data for future windows
         """
