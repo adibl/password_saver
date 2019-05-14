@@ -12,7 +12,6 @@ from .state import State
 import tkMessageBox
 import tkinter as tk
 
-
 class AddRecord(State):
     URL = None
 
