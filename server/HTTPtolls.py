@@ -119,10 +119,6 @@ class Responce(object):
     def method_not_allowed(self):
         pass
 
-    @abstractmethod
-    def prosses_request(self):
-        pass
-
 
 class Uri(Responce):
     URI = NotImplemented  # re compiled
