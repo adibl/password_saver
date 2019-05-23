@@ -11,10 +11,10 @@ from .Gui import Gui
 
 
 class ResetPasswordGui(Gui):
-    _RELX_ENTITY = 0.25
+    _RELX_ENTITY = 0.30
     _WITH_ENTITY = 0.7
     _HIGH_ALL = 0.07
-    _WITH_LABLE = 0.15
+    _WITH_LABLE = 0.25
     _RELX_LABLE = 0.05
 
     def __init__(self, parent):

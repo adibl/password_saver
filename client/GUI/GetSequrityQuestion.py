@@ -37,7 +37,7 @@ class GetSecurityQuestionGui(Gui):
         self.label_general_error.configure(foreground="#ff1f1f")
 
         self.Button1 = tk.Button(self)
-        self.Button1.place(relx=0.4, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.2)
+        self.Button1.place(relx=0.3, rely=0.845, relheight=self._HIGH_ALL, relwidth=0.4)
         self.Button1.configure(command=self.run)
         self.Button1.configure(text='''get security question''')
         self.bind("<Escape>", self.run)

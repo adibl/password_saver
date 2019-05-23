@@ -11,6 +11,7 @@ class RegisterGui(Gui):
     _HIGH_ALL = 0.07
     _WITH_LABLE = 0.15
     _RELX_LABLE = 0.05
+    QESTIONS = ['What was your childhood nickname?']
 
     def __init__(self, parent):
         super(RegisterGui, self).__init__(parent)
@@ -53,8 +54,7 @@ class RegisterGui(Gui):
         self.Spinbox_question.place(relx=self._RELX_ENTITY, rely=0.479, relheight=self._HIGH_ALL
                                     , relwidth=self._WITH_ENTITY)
         self.Spinbox_question.configure(font="-family {Segoe UI} -size 12")
-        self.value_list = [1, 2, 6, 79, ]
-        self.Spinbox_question.configure(values=self.value_list)
+        self.Spinbox_question.configure(values=self.QESTIONS)
 
         self.Label3 = tk.Label(self)
         self.Label3.place(relx=self._RELX_LABLE, rely=0.479, relheight=self._HIGH_ALL, relwidth=self._WITH_LABLE)
