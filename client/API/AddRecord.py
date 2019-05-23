@@ -5,8 +5,8 @@ description
 """
 import base64
 import json
-
 import requests
+import os
 from .connection import Request
 
 class Passwords(object):
@@ -19,6 +19,8 @@ class Passwords(object):
     @classmethod
     def GET(cls):
         auto = cls.read_jwt()
+        if auto is None:
+            return {'general': 401}
         responce = conn = Request().get_conn().get(Request.URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)})
         if responce.status_code == 200:
             return json.loads(responce.text)
@@ -28,6 +30,8 @@ class Passwords(object):
     @classmethod
     def POST(cls, url, username, password):
         auto = cls.read_jwt()
+        if auto is None:
+            return {'general': 401}
         print base64.urlsafe_b64encode(url)
         encode_url = base64.urlsafe_b64encode(url)
         responce = conn = Request().get_conn().post(Request.URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)}
@@ -42,6 +46,9 @@ class Passwords(object):
 
     @classmethod
     def read_jwt(cls):
-        with open(cls.FILE_NAME, 'rb')as handel:
-            jwt = handel.read()
-        return jwt
+        if os.path.isfile(cls.FILE_NAME):
+            with open(cls.FILE_NAME, 'rb')as handel:
+                jwt = handel.read()
+            return jwt
+        else:
+            return None
