@@ -1,0 +1,4 @@
+openssl genrsa -out C:\Users\adi\openssl\private.pem 2048
+openssl req -new -x509 -key C:\Users\adi\openssl\private.pem -out C:\Users\adi\openssl\server.cert -days 3650 -subj /CN=192.168.1.120
+openssl rsa -pubout -in C:\Users\adi\openssl\private.pem -out C:\Users\adi\openssl\public.pem
+ip.src==192.168.0.109 and ip.dst==192.168.0.109
