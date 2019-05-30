@@ -3807,3 +3807,51 @@ Allow:GET PATCH DELETE
 2019-05-23 17:06:59,438 - 10432 - INFO - connect IP:127.0.0.1 PORT:56510
 2019-05-23 17:08:08,657 - 10432 - INFO - connect IP:127.0.0.1 PORT:56536
 2019-05-23 17:08:08,698 - 10432 - INFO - connect IP:127.0.0.1 PORT:56537
+2019-05-30 17:18:38,233 - 1364 - INFO - start logging changes server
+2019-05-30 17:18:41,348 - 1364 - INFO - connect IP:127.0.0.1 PORT:52622
+2019-05-30 17:18:41,516 - 1364 - INFO - connect IP:127.0.0.1 PORT:52623
+2019-05-30 17:18:41,530 - 22832 - INFO - send expired token
+2019-05-30 17:19:22,141 - 1364 - INFO - connect IP:127.0.0.1 PORT:52625
+2019-05-30 17:19:30,523 - 1364 - INFO - connect IP:127.0.0.1 PORT:52630
+2019-05-30 17:20:09,579 - 1720 - INFO - start logging changes server
+2019-05-30 17:20:13,595 - 1720 - INFO - connect IP:127.0.0.1 PORT:52647
+2019-05-30 17:20:13,630 - 1720 - INFO - connect IP:127.0.0.1 PORT:52648
+2019-05-30 17:20:13,642 - 19712 - INFO - send expired token
+2019-05-30 17:21:06,601 - 1720 - INFO - connect IP:127.0.0.1 PORT:52698
+2019-05-30 17:21:10,657 - 1720 - INFO - connect IP:127.0.0.1 PORT:52707
+2019-05-30 17:21:22,575 - 22568 - INFO - Could not connect to server: SSL handshake failed: passsaver-shard-00-00-k4jpt.mongodb.net:27017: [Errno 10054] An existing connection was forcibly closed by the remote host
+2019-05-30 17:22:00,983 - 1720 - INFO - connect IP:127.0.0.1 PORT:52716
+2019-05-30 17:22:04,566 - 1720 - INFO - connect IP:127.0.0.1 PORT:52725
+2019-05-30 17:22:19,520 - 7520 - INFO - Could not connect to server: passsaver-shard-00-00-k4jpt.mongodb.net:27017: [Errno 10061] No connection could be made because the target machine actively refused it
+2019-05-30 17:23:27,934 - 8816 - INFO - start logging changes server
+2019-05-30 17:23:29,727 - 8816 - INFO - connect IP:127.0.0.1 PORT:52747
+2019-05-30 17:23:29,769 - 8816 - INFO - connect IP:127.0.0.1 PORT:52748
+2019-05-30 17:23:53,071 - 5432 - INFO - Could not connect to server: passsaver-shard-00-00-k4jpt.mongodb.net:27017: timed out
+2019-05-30 17:23:53,073 - 5432 - CRITICAL - user id 5ce52d3b23464c4794b2fafd send valid JWT but the user not exzisting
+2019-05-30 17:24:11,259 - 8816 - INFO - connect IP:127.0.0.1 PORT:52763
+2019-05-30 17:24:15,102 - 8816 - INFO - connect IP:127.0.0.1 PORT:52772
+2019-05-30 17:24:43,210 - 8816 - INFO - connect IP:127.0.0.1 PORT:52791
+2019-05-30 17:24:43,256 - 8816 - INFO - connect IP:127.0.0.1 PORT:52792
+2019-05-30 17:25:13,063 - 22828 - INFO - Could not connect to server: passsaver-shard-00-00-k4jpt.mongodb.net:27017: [Errno 10061] No connection could be made because the target machine actively refused it
+2019-05-30 19:13:27,141 - 20844 - INFO - start logging changes server
+2019-05-30 19:13:29,437 - 20844 - INFO - connect IP:127.0.0.1 PORT:53290
+2019-05-30 19:13:29,490 - 20844 - INFO - connect IP:127.0.0.1 PORT:53291
+2019-05-30 19:13:29,502 - 22104 - INFO - send expired token
+2019-05-30 19:13:46,983 - 20844 - INFO - connect IP:127.0.0.1 PORT:53294
+2019-05-30 19:14:18,413 - 20844 - INFO - connect IP:127.0.0.1 PORT:53308
+2019-05-30 19:14:18,447 - 20844 - INFO - connect IP:127.0.0.1 PORT:53309
+2019-05-30 19:14:18,474 - 20288 - INFO - send expired token
+2019-05-30 19:14:24,703 - 20844 - INFO - connect IP:127.0.0.1 PORT:53312
+2019-05-30 19:14:33,690 - 20844 - INFO - connect IP:127.0.0.1 PORT:53321
+2019-05-30 19:15:05,506 - 20844 - INFO - connect IP:127.0.0.1 PORT:53365
+2019-05-30 19:15:05,542 - 20844 - INFO - connect IP:127.0.0.1 PORT:53366
+2019-05-30 19:15:16,753 - 18848 - INFO - Could not connect to server: SSL handshake failed: passsaver-shard-00-00-k4jpt.mongodb.net:27017: [Errno 10054] An existing connection was forcibly closed by the remote host
+2019-05-30 19:15:39,346 - 20844 - INFO - connect IP:127.0.0.1 PORT:53378
+2019-05-30 19:16:19,796 - 19900 - INFO - Could not connect to server: passsaver-shard-00-00-k4jpt.mongodb.net:27017: timed out
+2019-05-30 19:16:21,667 - 20844 - INFO - connect IP:127.0.0.1 PORT:53399
+2019-05-30 19:16:21,710 - 20844 - INFO - connect IP:127.0.0.1 PORT:53400
+2019-05-30 19:16:39,575 - 20844 - INFO - connect IP:127.0.0.1 PORT:53421
+2019-05-30 19:16:39,615 - 20844 - INFO - connect IP:127.0.0.1 PORT:53422
+2019-05-30 19:17:15,640 - 20844 - INFO - connect IP:127.0.0.1 PORT:53437
+2019-05-30 19:17:24,178 - 22128 - INFO - Could not connect to server: SSL handshake failed: passsaver-shard-00-00-k4jpt.mongodb.net:27017: [Errno 10054] An existing connection was forcibly closed by the remote host
+2019-05-30 19:17:41,756 - 20844 - INFO - connect IP:127.0.0.1 PORT:53443
