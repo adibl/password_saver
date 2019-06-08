@@ -26,13 +26,18 @@ def run_around_tests():
 def JWT():
     return create('aaaaaaaaaaaaaaaaaaaaaaaa', 25)
 
+@pytest.fixture
+def session():
+    s = requests.Session()
+    s.verify = False
+    return s
 
-URI = 'http://127.0.0.1:50007'
+URI = 'https://127.0.0.1:50007'
 
 
-def test_GET_valid_request():
+def test_GET_valid_request(session):
     auto = base64.b64encode('username:Secretpass123')
-    responce = requests.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)})
+    responce = session.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)})
     assert responce.status_code == 200
     data = json.loads(responce.text)
     print data
@@ -40,20 +45,20 @@ def test_GET_valid_request():
     assert validate(data[AUTENTICATION])
 
 
-def test_GET_unvalid_username():
+def test_GET_unvalid_username(session):
     auto = base64.b64encode('u:Secretpass123')
-    responce = requests.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)})
+    responce = session.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)})
     assert responce.status_code == 442
 
 
-def test_GET_unvalid_password():
+def test_GET_unvalid_password(session):
     auto = base64.b64encode('username:Secretpass123456789')
-    responce = requests.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)})
+    responce = session.get(URI + '/login', headers={'Authorization': 'Basic {0}'.format(auto)})
     assert responce.status_code == 442
 
 
-def test_GET_JWT_autentication():
+def test_GET_JWT_autentication(session):
     auto = base64.b64encode('username:Secretpass123456789')
-    responce = requests.get(URI + '/login',
+    responce = session.get(URI + '/login',
                             headers={'Authorization': 'Bearer {0}'.format(create('aaaaaaaaaaaaaaaaaaaaaaaa'))})
     assert responce.status_code == 401

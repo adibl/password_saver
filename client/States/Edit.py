@@ -8,6 +8,7 @@ from client.API.ManageRecord import Record
 from client.GUI.EditGui import EditGui
 from client.window_order import fsm
 from .state import State
+from  tkinter import messagebox
 
 
 class EditState(EditGui, State):
@@ -15,6 +16,11 @@ class EditState(EditGui, State):
         data = Record.GET(self.url)
         if 'username' in data.keys() and 'password' in data.keys():
             self.insert_username_and_pass(data['username'], data['password'])
+        elif data['general'] == 404:
+            messagebox.showwarning('Error', "program don't exist")
+            fsm.trigger('return')
+        else:
+            messagebox.showerror('Error', 'unknown error')
 
     def run(self):
         print 'runned'
@@ -22,9 +28,11 @@ class EditState(EditGui, State):
         if ret:
             fsm.trigger('return')
             self.end()
+        elif ret['general'] == 404:
+            messagebox.showwarning('Error', "program don't exist")
+            fsm.trigger('return')
         else:
-            print ret
-            raise ValueError
+            messagebox.showerror('Error', 'unknown error')
 
     def get_data(self, data):
         if 'url' in data:
@@ -36,5 +44,4 @@ class EditState(EditGui, State):
             fsm.trigger('return')
             self.end()
         else:
-            print ret
-            raise ValueError
+            messagebox.showerror('Error', 'unknown error')

@@ -13,38 +13,43 @@ def run_around_tests():
     yield
     database._immidiate_delete(str(id))
 
+@pytest.fixture
+def session():
+    s = requests.Session()
+    s.verify = False
+    return s
 
-URI = 'http://127.0.0.1:50007'
+URI = 'https://127.0.0.1:50007'
 
 
-def test_GET_valid():
-    responce = requests.get(URI + '/reset', json={'username': 'username'})
+def test_GET_valid(session):
+    responce = session.get(URI + '/reset', json={'username': 'username'})
     assert responce.status_code == 200
 
 
-def test_GET_without_data():
-    responce = requests.get(URI + '/reset')
+def test_GET_without_data(session):
+    responce = session.get(URI + '/reset')
     assert responce.status_code == 442
     data = json.loads(responce.text)
     assert 'username' in data
 
 
-def test_GET_username_not_found():
-    responce = requests.get(URI + '/reset', json={'username': 'usernameDINT_EXZIST'})
+def test_GET_username_not_found(session):
+    responce = session.get(URI + '/reset', json={'username': 'usernameDINT_EXZIST'})
     assert responce.status_code == 442
     data = json.loads(responce.text)
     assert 'username' in data
 
-def test_PATCH_valid_request():
-    responce = requests.patch(URI + '/reset',
+def test_PATCH_valid_request(session):
+    responce = session.patch(URI + '/reset',
                               json={'username': 'username', 'NewUsername': 'aa',
                                     'NewPassword': 'Qazwsx12#', 'answer': 'ans'})
     assert responce.status_code == 200
     assert not database.validate('aa', 'Qazwsx12#') == database.USERNAME_OR_PASSWORD_INCORRECT
 
 
-def test_PATCH_wrong_answear():
-    responce = requests.patch(URI + '/reset',
+def test_PATCH_wrong_answear(session):
+    responce = session.patch(URI + '/reset',
                               json={'username': 'username', 'NewUsername': 'aa',
                                     'NewPassword': 'Qazwsx12#', 'answer': 'WRONG'})
     assert responce.status_code == 442
@@ -52,8 +57,8 @@ def test_PATCH_wrong_answear():
     assert 'answer' in json.loads(responce.text)
 
 
-def test_PATCH_wrong_username():
-    responce = requests.patch(URI + '/reset',
+def test_PATCH_wrong_username(session):
+    responce = session.patch(URI + '/reset',
                               json={'username': 'WRONG', 'NewUsername': 'aa',
                                     'NewPassword': 'Qazwsx12#', 'answer': 'ans'})
     assert responce.status_code == 442
@@ -62,19 +67,19 @@ def test_PATCH_wrong_username():
 
 
 
-def test_PATCH_new_pass_dont_in_password_cratirions():
-    responce = requests.patch(URI + '/reset',
+def test_PATCH_new_pass_dont_in_password_cratirions(session):
+    responce = session.patch(URI + '/reset',
                               json={'username': 'username', 'NewUsername': 'aa',
                                     'NewPassword': 'Qazwsx12', 'answer': 'ans'})
     assert responce.status_code == 442
     print json.loads(responce.text)
     assert 'password' in json.loads(responce.text)
 
-def test_use_jwt_after_password_reset():
+def test_use_jwt_after_password_reset(session):
 
     id = database.add('username2', 'Secretpass123#', 'question', 'ans')
     jwt = create(str(id))
-    responce = requests.patch(URI + '/reset',
+    responce = session.patch(URI + '/reset',
                               json={'username': 'username2', 'NewUsername': 'aa',
                                     'NewPassword': 'Qazwsx12#', 'answer': 'ans'})
     assert responce.status_code == 200

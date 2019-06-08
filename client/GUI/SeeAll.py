@@ -47,7 +47,7 @@ class SeeAllGui(Gui):
                 self.after(100, self.end)
             else:
                 print data
-                raise ValueError
+                raise ValueError #FIXME: ????
         else:
             self.show_records(data['records'])
 

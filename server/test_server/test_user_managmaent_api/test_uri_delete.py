@@ -22,24 +22,30 @@ def run_around_tests():
     if not (id == database.USERNAME_OR_PASSWORD_INCORRECT or id is None):
         database._immidiate_delete(id)
 
-URI = 'http://127.0.0.1:50007'
+@pytest.fixture
+def session():
+    s = requests.Session()
+    s.verify = False
+    return s
+
+URI = 'https://127.0.0.1:50007'
 
 
-def test_DELET_valid_request():
+def test_DELET_valid_request(session):
     auto = base64.b64encode('username:Secretpass123#')
-    responce = requests.delete(url=URI + '/delete', headers={'Authorization': 'Basic {0}'.format(auto)})
+    responce = session.delete(url=URI + '/delete', headers={'Authorization': 'Basic {0}'.format(auto)})
     assert responce.status_code == 200
     assert database.validate('username', 'Secretpass123#') ==  database.USERNAME_OR_PASSWORD_INCORRECT
 
 
-def test_DELET_worng_password():
+def test_DELET_worng_password(session):
     auto = base64.b64encode('username:SomeWrongPass')
-    responce = requests.delete(url=URI + '/delete', headers={'Authorization': 'Basic {0}'.format(auto)})
+    responce = session.delete(url=URI + '/delete', headers={'Authorization': 'Basic {0}'.format(auto)})
     assert responce.status_code == 442
 
 
-def test_DELET_wrong_username():
+def test_DELET_wrong_username(session):
     auto = base64.b64encode('usernameSecretpass123#')
-    responce = requests.delete(url=URI + '/delete', headers={'Authorization': 'Basic {0}'.format(auto)})
+    responce = session.delete(url=URI + '/delete', headers={'Authorization': 'Basic {0}'.format(auto)})
     assert responce.status_code == 400
 

@@ -13,7 +13,7 @@ import ttk
 
 from client.API.AddRecord import Passwords
 from client.GUI.Gui import Gui
-import tkMessageBox
+from client.window_order import fsm
 
 
 class SeeAllGui(Gui):
@@ -42,7 +42,11 @@ class SeeAllGui(Gui):
     def run_before(self):
         data = Passwords.GET()
         if any(x in data for x in ['general', 'error']):
-            raise ValueError  # FIXME:
+            if data['general'] == 401:
+                fsm.unautorized()
+                self.after(100, self.end)
+            else:
+                raise ValueError
         else:
             self.show_records(data['records'])
 

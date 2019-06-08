@@ -15,7 +15,7 @@ class Record(object):
         if responce.status_code == 200:
             return json.loads(responce.text)
         else:
-            return {'general': 'general error'}
+            return {'general': responce.status_code}
 
     @classmethod
     def PATCH(cls, url, **kargs):
@@ -27,7 +27,7 @@ class Record(object):
         if responce.status_code == 200:
             return True
         else:
-            return {'general': 'general error'}
+            return {'general': responce.status_code}
 
     @classmethod
     def DELETE(cls, url):
@@ -38,7 +38,7 @@ class Record(object):
         if responce.status_code == 200:
             return True
         else:
-            return {'general': 'general error'}
+            return {'general': responce.status_code}
 
     @classmethod
     def read_jwt(cls):

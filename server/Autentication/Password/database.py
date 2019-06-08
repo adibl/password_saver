@@ -15,7 +15,7 @@ from server.database_errors import *
 
 EXPIRE_TIME_HOUERS = 48  # FIXME: should be the same as resorce database
 ROUNDS = 13
-CONN_STR = 'mongodb://admin:LBGpC.hSJ2xvDk_@passsaver-shard-00-00-k4jpt.mongodb.net:27017,passsaver-shard-00-01-k4jpt.mongodb.net:27017,passsaver-shard-00-02-k4jpt.mongodb.net:27017/test?ssl=true&replicaSet=passSaver-shard-0&authSource=admin&retryWrites=true'
+PORT = 27017
 USERNAME_OR_PASSWORD_INCORRECT = 2
 WRONG_ANSWER = 3
 
@@ -25,7 +25,7 @@ WRONG_ANSWER = 3
 def connect(f):
     @wraps(f)
     def wrapper(*args, **kwds):
-        client = pymongo.MongoClient(CONN_STR)
+        client = pymongo.MongoClient(port=PORT)
         db = client.Autentication
         ret = f(db.passwords, *args, **kwds)
         client.close()
@@ -38,7 +38,7 @@ def create_database():
     """
     create the database with his indexes
     """
-    client = pymongo.MongoClient(CONN_STR)
+    client = pymongo.MongoClient(port=27017)
     db = client.Autentication
     collection = db.passwords
     collection.create_index('delete_time', expireAfterSeconds=60 * 60 * EXPIRE_TIME_HOUERS)
