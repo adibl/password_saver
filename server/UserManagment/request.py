@@ -86,7 +86,7 @@ class ResetRequest(Request):
 
     @classmethod
     def validate(cls, request):
-        return super(ResetRequest, cls).validate(request)  # FIXME: add somthing
+        return super(ResetRequest, cls).validate(request)
 
     def process_request(self):
         """

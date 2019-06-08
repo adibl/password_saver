@@ -83,7 +83,7 @@ class Login(Uri):
         identifier = self.request.get_user_id()
         if identifier is None:
             return Responce.unexpected_entity({
-                                                  AUTENTICATION: 'invalid username password structure'})  # FIXME: eror if autentication cradentials are wrong
+                                                  AUTENTICATION: 'invalid username password structure'})
         jwt = create(identifier)
         return Responce.ok({AUTENTICATION: jwt})
 

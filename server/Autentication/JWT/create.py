@@ -10,7 +10,7 @@ from jwcrypto import jwt, jwe, jwk
 from jwcrypto.common import json_decode
 
 with open(os.path.join(os.path.dirname(__file__), 'public_signing.pem'),
-          'rb') as f:  # FIXME: take files from other directory
+          'rb') as f:  # TODO: take files from other directory
     KEY = json_decode(f.read())
 with open(os.path.join(os.path.dirname(__file__), 'public_encrypte_public.pem'), 'rb') as f:
     ENC_KEY = json_decode(f.read())

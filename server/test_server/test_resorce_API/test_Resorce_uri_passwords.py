@@ -52,7 +52,7 @@ def test_GET_valid_requet(JWT):
 def test_GET_unvalid_user(JWT):
     responce = requests.get(URI + '/passwords',
                             headers={'Authorization': 'Bearer {0}'.format(create('111111111111111111111111', 25)), })
-    assert responce.status_code == 401  # QUESTION: NOT FOUND may be better
+    assert responce.status_code == 401
 
 
 @pytest.mark.run(order=1)

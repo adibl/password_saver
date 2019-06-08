@@ -36,7 +36,7 @@ class Passwords(object):
         encode_url = base64.urlsafe_b64encode(url)
         responce = conn = Request().get_conn().post(Request.URI + '/passwords', headers={'Authorization': 'Bearer {0}'.format(auto)}
                                  , json={'username': username, 'password': password,
-                                         'program_id': encode_url})  # FIXME: encode
+                                         'program_id': encode_url})
         if responce.status_code == 200:
             return True
         elif responce.status_code == 442:

@@ -87,7 +87,7 @@ class ProgramUri(Uri):
         if database.cange_record(clientID, programID, username, password):
             return Responce.ok()
         else:
-            # FIXME: dont have user not valid/ program not valid difference
+            # TODO: dont have user not valid/ program not valid difference
             return Responce.not_found()
 
     def DELETE(self):
@@ -101,5 +101,5 @@ class ProgramUri(Uri):
         if database.delete_record(clientID, programID):
             return Responce.ok()
         else:
-            # FIXME: dont have user not valid/ program not valid difference
+            # TODO: dont have user not valid/ program not valid difference
             return Responce.not_found()
