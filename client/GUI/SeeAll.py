@@ -61,17 +61,13 @@ class SeeAllGui(Gui):
         :param data: the records list of dictionaries
         :return: None
         """
-        if len(data) == 0:
-            return
-        print data
-
         style = ttk.Style()
         style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
                         font=('Calibri', 12))  # Modify the font of the body
         style.configure("mystyle.Treeview.Heading", font=('Calibri', 14))  # Modify the font of the headings
         style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])  # Remove the borders
 
-        self.table = ttk.Treeview(self.parent, columns=('A', ), style="mystyle.Treeview")
+        self.table = ttk.Treeview(self, columns=('A', ), style="mystyle.Treeview", selectmode='browse')
         self.table.place(relx=0, rely=0, relheight=1, relwidth=1)
 
         self.table.heading("#0", text="program name")
