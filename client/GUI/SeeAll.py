@@ -26,26 +26,20 @@ class SeeAllGui(Gui):
     _RELX_LABLE_SITE = 0.05
     _RELX_LABLE_USERNAME = _RELX_LABLE_SITE + _WITH_LABLE_SITE
     _WITH_LABLE_USERNAME = 0.3
-    _REL_X_BUTTON_1 = _RELX_LABLE_USERNAME + _WITH_LABLE_USERNAME
-    _REL_X_BUTTON_2 = _REL_X_BUTTON_1 + _WITH_BUTTON
 
     def __init__(self, parent):
         super(SeeAllGui, self).__init__(parent)
         self.place(relx=0.0, rely=0.0, relheight=1, relwidth=1)
         self.configure(width=455)
         self.lables = []
+        self.menu = tk.Menu(self)
+        self.menu.add_command(label='''reload''', command=self.run_before)
 
-        button = tk.Button(self)
-        button.place(relx=0.4, rely=0.9, relheight=0.1, relwidth=0.2)
-        button.configure(command=self.run_before)
-        button.configure(text='''reload''')
+        self.menu.add_command(label='''delete user''', command=self.delete_user)
 
-        button = tk.Button(self)
-        button.place(relx=0.7, rely=0.9, relheight=0.1, relwidth=0.2)
-        button.configure(command=self.delete_user)
-        button.configure(text='''delete user''')
 
     def run_before(self):
+        self.parent.configure(menu=self.menu)
         data = Passwords.GET()
         if any(x in data for x in ['general', 'error']):
             if data['general'] == 401:
@@ -56,6 +50,9 @@ class SeeAllGui(Gui):
                 raise ValueError
         else:
             self.show_records(data['records'])
+
+    def clean(self):
+        self.parent.configure(menu="")
 
     def show_records(self, data):
         """
@@ -75,7 +72,7 @@ class SeeAllGui(Gui):
         style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])  # Remove the borders
 
         self.table = ttk.Treeview(self.parent, columns=('A', ), style="mystyle.Treeview")
-        self.table.place(relx=0, rely=0, relheight=0.9, relwidth=1)
+        self.table.place(relx=0, rely=0, relheight=1, relwidth=1)
 
         self.table.heading("#0", text="program name")
         self.table.column("#0", width=100)
@@ -108,10 +105,5 @@ class SeeAllGui(Gui):
 if __name__ == '__main__':
     root = tk.Tk()
     v = SeeAllGui(root)
-    v.show_records([{"username": "bleyer23", "sec_level": 0,
-                     "program_id": "aHR0cHM6Ly93ZWIubWFzaG92LmluZm8vc3R1ZGVudHMvIyEvbG9naW4v"},
-                    {"username": "sgfdfdsg", "sec_level": 0,
-                     "program_id": "aHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvMTYzNzM4ODcvaG93LXRvLXNldC10aGUtdGV4dC12YWx1ZS1jb250ZW50LW9mLWFuLWVudHJ5LXdpZGdldC11c2luZy1hLWJ1dHRvbi1pbi10a2ludGVy"},
-                    {"username": "qewr", "sec_level": 0,
-                     "program_id": "aHR0cHM6Ly9zdGFja292ZXJmbG93LmNvbS9xdWVzdGlvbnMvMjI3NTExMDAvdGtpbnRlci1tYWluLXdpbmRvdy1mb2N1cw=="}])
+    v.show_records([{"username": "212054258", "sec_level": 0, "program_id": "d2ViLm1hc2hvdi5pbmZv"}, {"username": "try", "sec_level": 0, "program_id": "d3d3LnluZXQuY28uaWw="}])
     root.mainloop()

@@ -40,3 +40,6 @@ class SeeAllState(SeeAllGui, State):
     def delete_user(self):
         fsm.to_delete()
         self.end()
+
+    def clean(self):
+        super(SeeAllState, self).clean()
