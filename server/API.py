@@ -20,6 +20,7 @@ from server.HTTPtolls import *
 HOST = '0.0.0.0'
 PORT = 50007
 CONN_LOG = "connect IP:{0} PORT:{1}"
+CONTENT_LENGH = re.compile('Content-Length: (\d*)')
 
 
 def lisening():
@@ -37,17 +38,22 @@ def lisening():
         threading.Thread(target=handle_client, args=(conn,)).start()
 
 
-def receive(client_socket, func=lambda data: not re.search(".*\r\n\r\n(.*\r\n\r\n)?", data)):
+def receive(client_socket):
     """
     :param func: the exit funcsion of the while loop.
     :param client_socket: the comm socket
     :return: the data thet was recived from the socket
     """
     data = ""
+    size = 0
     while not re.search(".*\r\n\r\n", data):
-        data += client_socket.recv(2048)
+        data += client_socket.recv(1024)
+    if CONTENT_LENGH.search(data):
+        size = int(CONTENT_LENGH.search(data).group(1))
+        while not size == len(re.search('.*\r\n\r\n(.*)', data).group(1)):
+            data += client_socket.recv(1024)
     logging.debug("RECV:" + data)
-    return data.replace('\r\n', '\n')  # FIXME: ergent!!!!!
+    return data.replace('\r\n', '\n')
 
 
 def handle_request(cl, request):
