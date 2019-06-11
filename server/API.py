@@ -29,7 +29,7 @@ def lisening():
     :return: None
     """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, server_side=True, certfile=r'C:\Users\adi\openssl\server.cert', keyfile=r'C:\Users\adi\openssl\private.pem')
+    s = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_SSLv23, server_side=True, certfile=r'server\openssl\server.cert', keyfile=r'server\openssl\private.pem')
     s.bind((HOST, PORT))
     s.listen(10)
     while True:
