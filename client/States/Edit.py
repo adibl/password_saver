@@ -8,7 +8,7 @@ from client.API.ManageRecord import Record
 from client.GUI.EditGui import EditGui
 from client.window_order import fsm
 from .state import State
-from  tkinter import messagebox
+import tkMessageBox as messagebox
 
 
 class EditState(EditGui, State):

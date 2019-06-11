@@ -10,7 +10,10 @@ from client.window_order import shadow_fsm
 from .ShadowInsertUsername import ShadowInserUsername
 from .state import State
 import tkMessageBox
-import tkinter as tk
+try:
+    import Tkinter as tk
+except ImportError:
+    import tkinter as tk
 
 class AddRecord(State):
     URL = None

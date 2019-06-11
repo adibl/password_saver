@@ -6,9 +6,9 @@ description
 
 import requests
 import ssl
-IP = '127.0.0.1'
+IP = '172.16.50.53'
 PORT = 50007
-CERTIFICATION_PATH = r'D:\adi\Documents\password_saver\openssl\certification.cert'
+CERTIFICATION_PATH = r'certification.cert'
 
 class Singleton(type):
     URI = 'https://{0}:{1}'.format(IP, str(PORT))
