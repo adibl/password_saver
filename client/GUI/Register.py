@@ -11,7 +11,7 @@ class RegisterGui(Gui):
     _HIGH_ALL = 0.07
     _WITH_LABLE = 0.15
     _RELX_LABLE = 0.05
-    QESTIONS = ['What was your childhood nickname?']
+    QESTIONS = ['What was your childhood nickname?', 'In what town was your first job?', 'What was your favorite food as a child?', 'In what city does your nearest sibling live?']
 
     def __init__(self, parent):
         super(RegisterGui, self).__init__(parent)
