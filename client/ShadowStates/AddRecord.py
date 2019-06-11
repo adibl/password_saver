@@ -3,7 +3,7 @@ name:
 date:
 description
 """
-from GUI.GenerateGui import GenerateGui
+from client.GUI.GenerateGui import GenerateGui
 from client.API.AddRecord import Passwords
 from client.API.ManageRecord import Record
 from client.window_order import shadow_fsm

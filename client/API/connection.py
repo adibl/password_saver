@@ -6,7 +6,7 @@ description
 
 import requests
 import ssl
-IP = '172.16.50.53'
+IP = '172.16.87.76'
 PORT = 50007
 CERTIFICATION_PATH = r'certification.cert'
 
