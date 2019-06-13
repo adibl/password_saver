@@ -40,7 +40,7 @@ class RegisterGui(Gui):
                                         , relwidth=self._WITH_ENTITY)
         self.lable_username_error.configure(foreground="#ff1f1f")
 
-        self.entry_password = tk.Entry(self)
+        self.entry_password = tk.Entry(self, show='*')
         self.entry_password.place(relx=self._RELX_ENTITY, rely=0.225, relheight=self._HIGH_ALL,
                                   relwidth=self._WITH_ENTITY)
         self.entry_password.configure(font="-family {Courier New} -size 12")

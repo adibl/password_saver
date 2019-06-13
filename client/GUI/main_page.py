@@ -75,6 +75,7 @@ def run_fsm(root):
         print fsm.current
         data = root.get_data()
         root.show_frame(data)
+    root.destroy()
 
 
 

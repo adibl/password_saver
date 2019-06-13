@@ -3,11 +3,15 @@ name:
 date:
 description
 """
-
+import sys
 import requests
 import ssl
-IP = '172.16.87.76'
-PORT = 50007
+if len(sys.argv) == 3:
+    IP = sys.argv[1]
+    PORT = sys.argv[2]
+else:
+    IP = '127.0.0.1'
+    PORT = 50007
 CERTIFICATION_PATH = r'certification.cert'
 
 class Singleton(type):
